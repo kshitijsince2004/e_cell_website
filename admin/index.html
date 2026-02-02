@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Cell Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">E-Cell Admin Login</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+                    <div id="loginError" class="alert alert-danger mt-3 d-none"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Admin Panel -->
+    <div id="adminPanel" class="d-none">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h4><i class="fas fa-cogs"></i> E-Cell Admin</h4>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-link active" data-section="dashboard"
+                    onclick="adminPanel.showSection('dashboard'); return false;">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="#" class="nav-link" data-section="blogs"
+                    onclick="adminPanel.showSection('blogs'); return false;">
+                    <i class="fas fa-blog"></i> Manage Blogs
+                </a>
+                <a href="#" class="nav-link" data-section="events"
+                    onclick="adminPanel.showSection('events'); return false;">
+                    <i class="fas fa-calendar-alt"></i> Manage Events
+                </a>
+                <a href="#" class="nav-link" data-section="advertisements"
+                    onclick="adminPanel.showSection('advertisements'); return false;">
+                    <i class="fas fa-bullhorn"></i> Advertisements
+                </a>
+                <a href="#" class="nav-link" data-section="settings"
+                    onclick="adminPanel.showSection('settings'); return false;">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+                <a href="#" class="nav-link" id="logoutBtn" onclick="adminPanel.logout(); return false;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="content-section active">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Dashboard</h2>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card stats-card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="stats-icon bg-primary">
+                                        <i class="fas fa-blog"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h5 class="card-title">Total Blogs</h5>
+                                        <h3 id="totalBlogs">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card stats-card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="stats-icon bg-success">
+                                        <i class="fas fa-calendar-alt"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h5 class="card-title">Total Events</h5>
+                                        <h3 id="totalEvents">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card stats-card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="stats-icon bg-warning">
+                                        <i class="fas fa-bullhorn"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h5 class="card-title">Active Ads</h5>
+                                        <h3 id="totalAds">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blogs Section -->
+            <div id="blogs" class="content-section">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Manage Blogs</h2>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#blogModal"
+                        onclick="openBlogModal()">
+                        <i class="fas fa-plus"></i> Add New Blog
+                    </button>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Author</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="blogsTable">
+                                    <!-- Blogs will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Events Section -->
+            <div id="events" class="content-section">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Manage Events</h2>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#eventModal"
+                        onclick="openEventModal()">
+                        <i class="fas fa-plus"></i> Add New Event
+                    </button>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Date</th>
+                                        <th>Location</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="eventsTable">
+                                    <!-- Events will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advertisements Section -->
+            <div id="advertisements" class="content-section">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Manage Advertisements</h2>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#advertisementModal"
+                        onclick="openAdvertisementModal()">
+                        <i class="fas fa-plus"></i> Add New Advertisement
+                    </button>
+                </div>
+
+                <!-- Global Popup Control -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-toggle-on"></i> Global Popup Control</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <p class="mb-0">Control whether advertisement popups appear on the website</p>
+                                <small class="text-muted">When disabled, no popups will show regardless of active
+                                    advertisements</small>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="globalPopupToggle" checked>
+                                    <label class="form-check-label" for="globalPopupToggle">
+                                        <span id="popupStatusText">Popups Enabled</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advertisements Table -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Preview</th>
+                                        <th>Title</th>
+                                        <th>Linked Event</th>
+                                        <th>Status</th>
+                                        <th>Created</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="advertisementsTable">
+                                    <!-- Advertisements will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settings" class="content-section">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Settings</h2>
+                </div>
+
+                <!-- Google Form Settings -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-link"></i> Google Form Integration</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label for="googleFormLink" class="form-label">Google Form Link</label>
+                                    <input type="url" class="form-control" id="googleFormLink"
+                                        placeholder="https://forms.google.com/your-form-link">
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle"></i>
+                                        This link will be used for all "Join E-Cell" and "Become a Member" buttons
+                                        across the website.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Enable Google Form</label>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="googleFormEnabled">
+                                        <label class="form-check-label" for="googleFormEnabled">
+                                            <span id="googleFormStatusText">Disabled</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-text">
+                                        When disabled, buttons will redirect to contact page
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="button" class="btn btn-primary"
+                                    onclick="adminPanel.saveGoogleFormSettings()">
+                                    <i class="fas fa-save"></i> Save Settings
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary ms-2"
+                                    onclick="adminPanel.testGoogleFormLink()">
+                                    <i class="fas fa-external-link-alt"></i> Test Link
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Button Preview -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-eye"></i> Button Preview</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted mb-3">Preview how the buttons will appear on the website:</p>
+                        <div class="d-flex gap-3 flex-wrap">
+                            <button type="button" class="btn btn-primary" id="previewJoinBtn" disabled>
+                                Join E-Cell <i class="fa fa-arrow-right"></i>
+                            </button>
+                            <button type="button" class="btn btn-success" id="previewMemberBtn" disabled>
+                                Become a Member <i class="fa fa-arrow-right"></i>
+                            </button>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle"></i>
+                                These buttons will redirect to: <span id="buttonRedirectText">Contact Page (Google Form
+                                    disabled)</span>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blog Modal -->
+    <div class="modal fade" id="blogModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="blogModalTitle">Add New Blog</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="blogForm">
+                        <input type="hidden" id="blogId">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label for="blogTitle" class="form-label">Title</label>
+                                    <input type="text" class="form-control" id="blogTitle" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="blogAuthor" class="form-label">Author</label>
+                                    <input type="text" class="form-control" id="blogAuthor" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="blogDate" class="form-label">Date</label>
+                                    <input type="date" class="form-control" id="blogDate" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="blogStatus" class="form-label">Status</label>
+                                    <select class="form-control" id="blogStatus" required>
+                                        <option value="published">Published</option>
+                                        <option value="draft">Draft</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="blogImage" class="form-label">Featured Image URL</label>
+                            <input type="url" class="form-control" id="blogImage">
+                        </div>
+                        <div class="mb-3">
+                            <label for="blogExcerpt" class="form-label">Excerpt</label>
+                            <textarea class="form-control" id="blogExcerpt" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="blogContent" class="form-label">Content</label>
+                            <textarea class="form-control" id="blogContent" rows="8" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveBlog()">Save Blog</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Event Modal -->
+    <div class="modal fade" id="eventModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventModalTitle">Add New Event</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="eventForm">
+                        <input type="hidden" id="eventId">
+
+                        <!-- Basic Event Information -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h6 class="mb-0"><i class="fas fa-info-circle"></i> Basic Information</h6>
+                                <small class="text-warning">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    Currently saving basic fields only. Run database migration for full functionality.
+                                </small>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="mb-3">
+                                            <label for="eventTitle" class="form-label">Event Title *</label>
+                                            <input type="text" class="form-control" id="eventTitle" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="eventType" class="form-label">Event Type *</label>
+                                            <select class="form-control" id="eventType" required>
+                                                <option value="">Select Type</option>
+                                                <option value="Workshop">Workshop</option>
+                                                <option value="Competition">Competition</option>
+                                                <option value="Seminar">Seminar</option>
+                                                <option value="Hackathon">Hackathon</option>
+                                                <option value="Networking">Networking</option>
+                                                <option value="Conference">Conference</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="eventOrganizer" class="form-label">Organizer *</label>
+                                            <input type="text" class="form-control" id="eventOrganizer"
+                                                value="E-Cell Team" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="eventCategory" class="form-label">Category *</label>
+                                            <input type="text" class="form-control" id="eventCategory"
+                                                placeholder="e.g., Entrepreneurship, Innovation" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="eventDate" class="form-label">Date *</label>
+                                            <input type="date" class="form-control" id="eventDate" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="eventTime" class="form-label">Time *</label>
+                                            <input type="time" class="form-control" id="eventTime" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="eventDuration" class="form-label">Duration</label>
+                                            <input type="text" class="form-control" id="eventDuration"
+                                                placeholder="e.g., 4 Hours">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="eventVenue" class="form-label">Venue *</label>
+                                            <input type="text" class="form-control" id="eventVenue"
+                                                placeholder="e.g., Main Auditorium, College Campus" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="eventStatus" class="form-label">Status *</label>
+                                            <select class="form-control" id="eventStatus" required>
+                                                <option value="upcoming">Upcoming</option>
+                                                <option value="ongoing">Ongoing</option>
+                                                <option value="completed">Completed</option>
+                                                <option value="cancelled">Cancelled</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="eventImage" class="form-label">Event Image URL</label>
+                                    <input type="url" class="form-control" id="eventImage"
+                                        placeholder="https://example.com/image.jpg">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="eventDescription" class="form-label">Short Description *</label>
+                                    <textarea class="form-control" id="eventDescription" rows="3"
+                                        placeholder="Brief description for event cards" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Event Overview -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h6 class="mb-0"><i class="fas fa-file-alt"></i> Event Overview</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="eventOverview" class="form-label">Detailed Overview *</label>
+                                    <textarea class="form-control" id="eventOverview" rows="4"
+                                        placeholder="Comprehensive description of the event" required></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="eventLearning" class="form-label">What Participants Will Learn</label>
+                                    <textarea class="form-control" id="eventLearning" rows="3"
+                                        placeholder="Key learning outcomes and benefits"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Learning Points -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h6 class="mb-0"><i class="fas fa-list"></i> Learning Points</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Left Column Points</label>
+                                        <div class="mb-2">
+                                            <input type="text" class="form-control" id="learningPoint1"
+                                                placeholder="Learning point 1">
+                                        </div>
+                                        <div class="mb-2">
+                                            <input type="text" class="form-control" id="learningPoint2"
+                                                placeholder="Learning point 2">
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="text" class="form-control" id="learningPoint3"
+                                                placeholder="Learning point 3">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Right Column Points</label>
+                                        <div class="mb-2">
+                                            <input type="text" class="form-control" id="learningPoint4"
+                                                placeholder="Learning point 4">
+                                        </div>
+                                        <div class="mb-2">
+                                            <input type="text" class="form-control" id="learningPoint5"
+                                                placeholder="Learning point 5">
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="text" class="form-control" id="learningPoint6"
+                                                placeholder="Learning point 6">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Event Schedule -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h6 class="mb-0"><i class="fas fa-clock"></i> Event Schedule</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="scheduleDescription" class="form-label">Schedule Description</label>
+                                    <textarea class="form-control" id="scheduleDescription" rows="2"
+                                        placeholder="Overall description of the event schedule"></textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Morning Schedule</label>
+                                        <div class="mb-2">
+                                            <input type="text" class="form-control" id="schedule1"
+                                                placeholder="10:00 AM - Registration & Welcome Coffee">
+                                        </div>
+                                        <div class="mb-2">
+                                            <input type="text" class="form-control" id="schedule2"
+                                                placeholder="10:30 AM - Opening Keynote">
+                                        </div>
+                                        <div class="mb-2">
+                                            <input type="text" class="form-control" id="schedule3"
+                                                placeholder="11:30 AM - Workshop Session">
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="text" class="form-control" id="schedule4"
+                                                placeholder="12:30 PM - Panel Discussion">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Afternoon Schedule</label>
+                                        <div class="mb-2">
+                                            <input type="text" class="form-control" id="schedule5"
+                                                placeholder="1:30 PM - Networking Lunch">
+                                        </div>
+                                        <div class="mb-2">
+                                            <input type="text" class="form-control" id="schedule6"
+                                                placeholder="2:30 PM - Workshop Session">
+                                        </div>
+                                        <div class="mb-2">
+                                            <input type="text" class="form-control" id="schedule7"
+                                                placeholder="3:30 PM - Pitch Session">
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="text" class="form-control" id="schedule8"
+                                                placeholder="4:00 PM - Closing Remarks">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Registration Link -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h6 class="mb-0"><i class="fas fa-link"></i> Registration Link</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="registrationLink" class="form-label">Google Form Registration
+                                        Link</label>
+                                    <input type="url" class="form-control" id="registrationLink"
+                                        placeholder="https://forms.google.com/your-form-link">
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle"></i>
+                                        Paste your Google Form link here. This will be connected to the "Register Now"
+                                        button on the event details page.
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="registrationNote" class="form-label">Registration Instructions
+                                        (Optional)</label>
+                                    <textarea class="form-control" id="registrationNote" rows="2"
+                                        placeholder="Additional instructions for registration (e.g., 'Please bring your student ID', 'Registration closes 24 hours before event')"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Information -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h6 class="mb-0"><i class="fas fa-plus-circle"></i> Additional Information</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="eventRating" class="form-label">Event Rating (1-5)</label>
+                                            <select class="form-control" id="eventRating">
+                                                <option value="">Select Rating</option>
+                                                <option value="1">1 Star</option>
+                                                <option value="2">2 Stars</option>
+                                                <option value="3">3 Stars</option>
+                                                <option value="4">4 Stars</option>
+                                                <option value="5">5 Stars</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="contactEmail" class="form-label">Contact Email</label>
+                                            <input type="email" class="form-control" id="contactEmail"
+                                                placeholder="contact@ecell.com">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="eventTags" class="form-label">Tags (comma separated)</label>
+                                    <input type="text" class="form-control" id="eventTags"
+                                        placeholder="entrepreneurship, startup, innovation, workshop">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="specialNotes" class="form-label">Special Notes</label>
+                                    <textarea class="form-control" id="specialNotes" rows="2"
+                                        placeholder="Any special instructions or notes"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveEvent()">Save Event</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advertisement Modal -->
+    <div class="modal fade" id="advertisementModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="advertisementModalTitle">Add New Advertisement</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="advertisementForm">
+                        <input type="hidden" id="advertisementId">
+
+                        <!-- Basic Information -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h6 class="mb-0"><i class="fas fa-info-circle"></i> Advertisement Details</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="adTitle" class="form-label">Advertisement Title *</label>
+                                    <input type="text" class="form-control" id="adTitle" required
+                                        placeholder="Enter advertisement title">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="adImageUrl" class="form-label">Image URL *</label>
+                                    <input type="url" class="form-control" id="adImageUrl" required
+                                        placeholder="https://example.com/image.jpg">
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle"></i>
+                                        Image should have 4:5 aspect ratio (e.g., 400x500px) for best results
+                                    </div>
+                                </div>
+
+                                <!-- Image Preview -->
+                                <div class="mb-3">
+                                    <label class="form-label">Image Preview</label>
+                                    <div id="imagePreviewContainer" class="border rounded p-3 text-center"
+                                        style="min-height: 200px; background: #f8f9fa;">
+                                        <div id="imagePreviewPlaceholder" class="text-muted">
+                                            <i class="fas fa-image fa-3x mb-2"></i>
+                                            <p>Enter image URL above to see preview</p>
+                                        </div>
+                                        <img id="imagePreview" class="img-fluid"
+                                            style="max-height: 300px; display: none;" alt="Advertisement Preview">
+                                        <div id="aspectRatioWarning" class="alert alert-warning mt-2"
+                                            style="display: none;">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            Warning: Image aspect ratio is not 4:5. This may not display correctly in
+                                            the popup.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="adEventId" class="form-label">Linked Event (Optional)</label>
+                                    <select class="form-control" id="adEventId">
+                                        <option value="">No Event Link</option>
+                                        <!-- Events will be loaded here -->
+                                    </select>
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle"></i>
+                                        When users click the advertisement, they will be redirected to this event's
+                                        details page
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="adStatus" class="form-label">Status *</label>
+                                    <select class="form-control" id="adStatus" required>
+                                        <option value="inactive">Inactive</option>
+                                        <option value="active">Active</option>
+                                    </select>
+                                    <div class="form-text">
+                                        <i class="fas fa-exclamation-triangle text-warning"></i>
+                                        Only ONE advertisement can be active at a time. Activating this will deactivate
+                                        others.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Preview Section -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0"><i class="fas fa-eye"></i> Popup Preview</h6>
+                            </div>
+                            <div class="card-body text-center">
+                                <button type="button" class="btn btn-outline-primary" id="previewAdBtn" disabled>
+                                    <i class="fas fa-eye"></i> Preview Popup
+                                </button>
+                                <div class="form-text">
+                                    Enter image URL above to enable preview
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveAdvertisement()">Save
+                        Advertisement</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/admin.js"></script>
+</body>
+
+</html>

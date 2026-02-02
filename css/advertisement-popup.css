@@ -1,0 +1,226 @@
+/* =============================================
+   E-Cell Advertisement Popup Styles
+   ============================================= */
+
+/* Popup Overlay */
+.ad-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.ad-popup-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Popup Container */
+.ad-popup-container {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transform: scale(0.8) translateY(20px);
+    transition: all 0.3s ease;
+}
+
+.ad-popup-overlay.show .ad-popup-container {
+    transform: scale(1) translateY(0);
+}
+
+/* Close Button */
+.ad-popup-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 35px;
+    height: 35px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 10001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.ad-popup-close:hover {
+    background: rgba(0, 0, 0, 0.9);
+    transform: scale(1.1);
+}
+
+/* Advertisement Image */
+.ad-popup-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.ad-popup-image:hover {
+    transform: scale(1.02);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .ad-popup-container {
+        max-width: 95vw;
+        max-height: 85vh;
+        margin: 20px;
+    }
+    
+    .ad-popup-close {
+        top: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ad-popup-container {
+        max-width: 98vw;
+        max-height: 80vh;
+        margin: 10px;
+        border-radius: 8px;
+    }
+    
+    .ad-popup-close {
+        top: 8px;
+        right: 8px;
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+    }
+}
+
+/* Desktop Specific Styles */
+@media (min-width: 769px) {
+    .ad-popup-container {
+        /* Maintain 4:5 aspect ratio for desktop */
+        width: 400px;
+        height: 500px;
+    }
+    
+    .ad-popup-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+/* Tablet Specific Styles */
+@media (min-width: 481px) and (max-width: 768px) {
+    .ad-popup-container {
+        width: 320px;
+        height: 400px;
+    }
+    
+    .ad-popup-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+/* Mobile Specific Styles */
+@media (max-width: 480px) {
+    .ad-popup-container {
+        width: 280px;
+        height: 350px;
+    }
+    
+    .ad-popup-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+/* Loading State */
+.ad-popup-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 400px;
+    height: 500px;
+    background: #f8f9fa;
+}
+
+.ad-popup-loading::after {
+    content: '';
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e3e3e3;
+    border-top: 4px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Animation Classes */
+.ad-popup-fade-in {
+    animation: fadeIn 0.3s ease forwards;
+}
+
+.ad-popup-fade-out {
+    animation: fadeOut 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+    }
+}
+
+/* Accessibility */
+.ad-popup-overlay:focus-within .ad-popup-close {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+    .ad-popup-overlay {
+        display: none !important;
+    }
+}

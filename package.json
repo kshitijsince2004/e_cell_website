@@ -1,0 +1,27 @@
+{
+  "name": "ecell-website",
+  "version": "1.0.0",
+  "description": "E-Cell NFSU TC - Entrepreneurship Cell Website with Admin Panel",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python -m http.server 8000",
+    "build": "echo 'Static site - no build required'",
+    "start": "python -m http.server 8000"
+  },
+  "keywords": [
+    "entrepreneurship",
+    "ecell",
+    "nfsu",
+    "startup",
+    "admin-panel"
+  ],
+  "author": "E-Cell NFSU TC",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "your-repository-url"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

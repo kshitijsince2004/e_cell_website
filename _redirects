@@ -1,0 +1,6 @@
+# Netlify redirects for admin panel access
+/admin /admin/index.html 200
+/admin/* /admin/index.html 200
+
+# Fallback for SPA-like behavior
+/* /index.html 200

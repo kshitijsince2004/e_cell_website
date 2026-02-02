@@ -1,0 +1,640 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>E-CELL NFSU TC</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="fontawesome-pro/css/all.min.css">
+    <link rel="stylesheet" href="css/dripicons.css">
+    <link rel="stylesheet" href="css/slick.css">
+    <link rel="stylesheet" href="css/meanmenu.css">
+    <link rel="stylesheet" href="css/swiper.min.css">
+    <link rel="stylesheet" href="css/default.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/advertisement-popup.css">
+    
+    <!-- Supabase -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <style>
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            border: 0.25em solid currentColor;
+            border-right-color: transparent;
+            border-radius: 50%;
+            animation: spinner-border .75s linear infinite;
+        }
+        
+        @keyframes spinner-border {
+            to { transform: rotate(360deg); }
+        }
+        
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
+        #loading-indicator {
+            color: #007bff;
+        }
+        
+        .pagination .page-item.active a {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+        }
+        
+        .pagination .page-item a {
+            color: #007bff;
+            text-decoration: none;
+            padding: 0.5rem 0.75rem;
+            margin: 0 0.125rem;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+        }
+        
+        .pagination .page-item a:hover {
+            background-color: #e9ecef;
+            border-color: #dee2e6;
+        }
+    </style>
+</head>
+
+<body>
+    <!--  Preloader  -->
+    <div id="preloader">
+        <div id="loading"> </div>
+    </div>
+    <!--  Preloader end  -->
+    <!-- header -->
+    <header class="header-area header mt-20 mb-20">
+        <div class="menu-area">
+            <div class="container">
+                <div class="second-menu">
+                    <div class="row align-items-center">
+                        <div class="col-xl-2 col-lg-2">
+                            <div class="logo">
+                                <a href="index.html"><img src="img/logo/elogo.png" alt="logo"></a>
+                            </div>
+                        </div>
+                        <div class="col-xl-8 col-lg-9">
+
+                            <div class="main-menu text-center">
+                                <nav id="mobile-menu">
+                                    <div class="menu-outer">
+                                        <ul>
+                                            <li><a href="index.html">Home</a></li>
+                                            <li><a href="about.html">About</a></li>
+                                            <li><a href="events.html">Events</a></li>
+                                            <li><a href="team.html">Team</a></li>
+                                            <li><a href="blog.html">Blog</a></li>
+                                            <li><a href="contact.html">Contact</a></li>
+                                        </ul>
+                                    </div>
+                                </nav>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-2 col-lg-3 text-right d-none d-xl-block">
+                            <div class="login">
+                                <ul>
+                                    <li>
+                                        <a href="about.html" class="btn3" data-animation="fadeInLeft" data-delay=".4s">lets talks <i class="fa-sharp fa-solid fa-arrow-up"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="mobile-menu"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- header-end -->
+    <!-- offcanvas-area -->
+    <div class="offcanvas-menu">
+        <span class="menu-close"><i class="fas fa-times"></i></span>
+        <form role="search" method="get" id="searchform" class="searchform" action="#">
+            <input type="text" name="s" id="search" placeholder="Search">
+            <button><i class="fa fa-search"></i></button>
+        </form>
+
+
+        <div id="cssmenu3" class="menu-one-page-menu-container">
+            <ul class="menu">
+                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="index.html">Home</a></li>
+                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="about.html">About Us</a></li>
+                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="services.html">Services</a></li>
+                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="pricing.html">Pricing </a></li>
+                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="team.html">Team </a></li>
+
+                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="projects.html">Cases Study</a></li>
+                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="blog.html">Blog</a></li>
+                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+
+        <div id="cssmenu2" class="menu-one-page-menu-container">
+            <ul id="menu-one-page-menu-12" class="menu">
+                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="tel:+919999882696"><span>+91 9999882696</span></a></li>
+                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="mailto:ecell@nfsutc.ac.in"><span>ecell@nfsutc.ac.in</span></a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="offcanvas-overly"></div>
+    <!-- offcanvas-end -->
+    <!-- main-area -->
+    <main>
+
+        <!-- search-popup -->
+        <div class="modal fade bs-example-modal-lg search-bg popup1" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content search-popup">
+                    <div class="text-center">
+                        <a href="#" class="close2" data-dismiss="modal" aria-label="Close">× close</a>
+                    </div>
+                    <div class="row search-outer">
+                        <div class="col-md-11"><input type="text" placeholder="Search for products..." /></div>
+                        <div class="col-md-1 text-right"><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /search-popup -->
+        <!-- breadcrumb-area -->
+        <section class="breadcrumb-area d-flex align-items-center" style="background-image:url(img/bg/bdrc-bg.png)">
+            <div class="container">
+                <div class="animations-01">
+                    <img src="img/bg/cta-ani-img-01.png" alt="img" class="img">
+                </div>
+                <div class="animations-02">
+                    <img src="img/bg/cta-ani-img-03.png" alt="img" class="img">
+                </div>
+                <div class="row align-items-center">
+                    <div class="col-xl-12 col-lg-12">
+                        <div class="breadcrumb-wrap text-center">
+                            <div class="breadcrumb-title mt-60">
+                                <h2>Blog</h2>
+                                <div class="breadcrumb-wrap">
+
+                                    <nav aria-label="breadcrumb">
+                                        <ol class="breadcrumb">
+                                            <li class="breadcrumb-item"><a href="index.html"><i class="fa-solid fa-house"></i> Home</a></li>
+                                            <li class="breadcrumb-item active" aria-current="page">Blog</li>
+                                        </ol>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <!-- breadcrumb-area-end -->
+        <!-- inner-blog -->
+        <section class="inner-blog pt-120 pb-70">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <!-- Loading indicator -->
+                        <div id="loading-indicator" class="text-center mb-50">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <p class="mt-3">Loading blog posts...</p>
+                        </div>
+                        
+                        <!-- Blog posts container -->
+                        <div id="blog-posts-container">
+                            <!-- Dynamic blog posts will be loaded here -->
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="pagination-wrap mb-50" id="pagination-container" style="display: none;">
+                            <nav>
+                                <ul class="pagination" id="pagination-list">
+                                    <!-- Pagination will be generated dynamically -->
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-4">
+                        <aside class="sidebar-widget">
+                            <section id="search-3" class="widget widget_search">
+                                <h2 class="widget-title">Search</h2>
+                                <form role="search" method="get" class="search-form" action="#">
+                                    <label>
+                                        <span class="screen-reader-text">Search for:</span>
+                                        <input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+                                    </label>
+                                    <input type="submit" class="search-submit" value="Search" />
+                                </form>
+                            </section>
+                            <section id="custom_html-5" class="widget_text widget widget_custom_html">
+                                <h2 class="widget-title">Follow Us</h2>
+                                <div class="textwidget custom-html-widget">
+                                    <div class="widget-social">
+                                        <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                                        <a href="#"><i class="fab fa-instagram"></i></a>
+                                        <a href="#"><i class="fab fa-wordpress"></i></a>
+                                    </div>
+                                </div>
+                            </section>
+                            <section id="categories-1" class="widget widget_categories">
+                                <h2 class="widget-title">Categories</h2>
+                                <ul>
+                                    <li class="cat-item cat-item-16"><a href="#">Branding</a> (4)</li>
+                                    <li class="cat-item cat-item-23"><a href="#">Corporat</a> (3)</li>
+                                    <li class="cat-item cat-item-18"><a href="#">Design</a> (3)</li>
+                                    <li class="cat-item cat-item-22"><a href="#">Gallery</a> (3)</li>
+                                </ul>
+                            </section>
+                            <section id="recent-posts-4" class="widget widget_recent_entries">
+                                <h2 class="widget-title">Recent Posts</h2>
+                                <ul>
+                                    <li>
+                                        <a href="#">User Experience Psychology And Performance Smshing</a>
+                                        <span class="post-date">August 19, 2024</span>
+                                    </li>
+                                    <li>
+                                        <a href="#">Monthly Web Development Up Cost Of JavaScript</a>
+                                        <span class="post-date">August 19, 2024</span>
+                                    </li>
+                                    <li>
+                                        <a href="#">There are many variation passages of like available.</a>
+                                        <span class="post-date">August 19, 2024</span>
+                                    </li>
+                                </ul>
+                            </section>
+                            <section id="tag_cloud-1" class="widget widget_tag_cloud">
+                                <h2 class="widget-title">Tag</h2>
+                                <div class="tagcloud">
+                                    <a href="#" class="tag-cloud-link tag-link-28 tag-link-position-1" style="font-size: 8pt;" aria-label="app (1 item)">app</a>
+                                    <a href="#" class="tag-cloud-link tag-link-17 tag-link-position-2" style="font-size: 8pt;" aria-label="Branding (1 item)">Branding</a>
+                                    <a href="#" class="tag-cloud-link tag-link-20 tag-link-position-3" style="font-size: 8pt;" aria-label="corporat (1 item)">corporat</a>
+                                    <a href="#" class="tag-cloud-link tag-link-24 tag-link-position-4" style="font-size: 16.4pt;" aria-label="Design (2 items)">Design</a>
+                                    <a href="#" class="tag-cloud-link tag-link-25 tag-link-position-5" style="font-size: 22pt;" aria-label="gallery (3 items)">gallery</a>
+                                    <a href="#" class="tag-cloud-link tag-link-26 tag-link-position-6" style="font-size: 8pt;" aria-label="video (1 item)">video</a>
+                                    <a href="#" class="tag-cloud-link tag-link-29 tag-link-position-7" style="font-size: 16.4pt;" aria-label="web design (2 items)">web design</a>
+                                </div>
+                            </section>
+                        </aside>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- inner-blog-end -->
+    </main>
+    <!-- main-area-end -->
+
+    <!-- footer -->
+    <footer class="footer-bg footer-p pt-90 fix" style="background-image: url(img/bg/footer-bg.png); background-size: cover; background-repeat:no-repeat;">
+        <div class="footer-top pb-70">
+            <div class="container f-logo-area">
+                <div class="row mb-30">
+                    <div class="col-lg-6">
+                        <div class="f-widget-title">
+                            <img src="img/logo/elogo.png" alt="E-Cell NFSU TC Logo">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        <div class="footer-social mt-10">
+                            <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row justify-content-between">
+                    <!-- About E-Cell Section -->
+                    <div class="col-xl-6 col-lg-6 col-sm-12">
+                        <div class="footer-widget mb-30">
+                            <h3 class="footer-title mb-20">Entrepreneurship Cell</h3>
+                            <p class="footer-desc mb-25">
+                                National Forensic Sciences University (NFSU TC)
+                            </p>
+                            <p class="footer-desc mb-25">
+                                Empowering students to innovate, build, and lead with responsibility.
+                            </p>
+                            <div class="footer-contact-info">
+                                <div class="contact-item mb-15">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>NFSU TC, VIP Rd, near Buddhamandir, Radha Nagar, Agartala, Tripura 799001</span>
+                                </div>
+                                <div class="contact-item mb-15">
+                                    <i class="fas fa-phone"></i>
+                                    <a href="tel:+919999882696">+91 9999882696</a>
+                                </div>
+                                <div class="contact-item mb-15">
+                                    <i class="fas fa-envelope"></i>
+                                    <a href="mailto:ecell@nfsutc.ac.in">ecell@nfsutc.ac.in</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Links -->
+                    <div class="col-xl-6 col-lg-6 col-sm-12">
+                        <div class="footer-widget mb-30">
+                            <div class="footer-link">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <ul>
+                                            <li><a href="index.html">Home</a></li>
+                                            <li><a href="about.html">About Us</a></li>
+                                            <li><a href="events.html">Events</a></li>
+                                            <li><a href="team.html">Our Team</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul>
+                                            <li><a href="blog.html">Blog</a></li>
+                                            <li><a href="contact.html">Contact</a></li>
+                                            <li><a href="about.html">Join E-Cell</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Copyright Section -->
+        <div class="copyright-wrap">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-12 text-center">
+                        <div class="copyright-text">
+                            © Entrepreneurship Cell, NFSU TC. All Rights Reserved.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- footer-end -->
+
+    <script src="js/vendor/jquery-3.7.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/slick.min.js"></script>
+    <script src="js/ajax-form.js"></script>
+    <script src="js/paroller.js"></script>
+    <script src="js/wow.min.js"></script>
+    <script src="js/js_isotope.pkgd.min.js"></script>
+    <script src="js/imagesloaded.min.js"></script>
+    <script src="js/parallax.min.js"></script>
+    <script src="js/jquery.waypoints.min.js"></script>
+    <script src="js/jquery.counterup.min.js"></script>
+    <script src="js/jquery.scrollUp.min.js"></script>
+    <script src="js/jquery.meanmenu.min.js"></script>
+    <script src="js/parallax-scroll.js"></script>
+    <script src="js/swiper.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/element-in-view.js"></script>
+    <script src="js/vanilla-tilt.js"></script>
+    <script src="js/gsap.min.js"></script>
+    <script src="js/ScrollTrigger.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/advertisement-popup.js"></script>
+
+    <script>
+        // Blog page specific functionality
+        class BlogPageManager {
+            constructor() {
+                this.supabaseUrl = "https://khxeesffponvgpgnszpz.supabase.co";
+                this.supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoeGVlc2ZmcG9udmdwZ25zenB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MjQ0OTcsImV4cCI6MjA4NTIwMDQ5N30.Nie54ajcJH6Ll51VBVTablRlZEETYUMOHxogWHbwThY";
+                this.client = null;
+                this.currentPage = 1;
+                this.postsPerPage = 6;
+                this.totalPosts = 0;
+                
+                this.initClient();
+            }
+
+            initClient() {
+                if (typeof supabase !== 'undefined') {
+                    this.client = supabase.createClient(this.supabaseUrl, this.supabaseKey);
+                    console.log('Blog Page Manager initialized');
+                    this.loadBlogs();
+                } else {
+                    setTimeout(() => this.initClient(), 100);
+                }
+            }
+
+            async loadBlogs(page = 1) {
+                try {
+                    this.showLoading();
+                    
+                    // Get total count
+                    const { count } = await this.client
+                        .from('blogs')
+                        .select('*', { count: 'exact', head: true })
+                        .eq('status', 'published');
+                    
+                    this.totalPosts = count || 0;
+                    
+                    // Get paginated blogs
+                    const offset = (page - 1) * this.postsPerPage;
+                    const { data: blogs, error } = await this.client
+                        .from('blogs')
+                        .select('*')
+                        .eq('status', 'published')
+                        .order('date', { ascending: false })
+                        .range(offset, offset + this.postsPerPage - 1);
+
+                    if (error) throw error;
+
+                    this.hideLoading();
+                    this.renderBlogs(blogs || []);
+                    this.renderPagination();
+                    
+                } catch (error) {
+                    console.error('Error loading blogs:', error);
+                    this.hideLoading();
+                    this.showError();
+                }
+            }
+
+            showLoading() {
+                document.getElementById('loading-indicator').style.display = 'block';
+                document.getElementById('blog-posts-container').style.display = 'none';
+            }
+
+            hideLoading() {
+                document.getElementById('loading-indicator').style.display = 'none';
+                document.getElementById('blog-posts-container').style.display = 'block';
+            }
+
+            showError() {
+                const container = document.getElementById('blog-posts-container');
+                container.innerHTML = `
+                    <div class="text-center mb-50">
+                        <h3>Unable to load blog posts</h3>
+                        <p>Please try again later or check your internet connection.</p>
+                        <button class="btn btn-primary" onclick="blogManager.loadBlogs()">Retry</button>
+                    </div>
+                `;
+                container.style.display = 'block';
+            }
+
+            renderBlogs(blogs) {
+                const container = document.getElementById('blog-posts-container');
+                
+                if (blogs.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center mb-50">
+                            <h3>No blog posts found</h3>
+                            <p>Check back later for new content!</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = blogs.map(blog => this.generateBlogHTML(blog)).join('');
+            }
+
+            generateBlogHTML(blog) {
+                const formattedDate = this.formatDate(blog.date);
+                const excerpt = this.truncateText(blog.content, 200);
+                const defaultImage = 'img/blog/inner_b1.jpg';
+                
+                return `
+                    <div class="bsingle__post mb-50">
+                        <div class="bsingle__post-thumb">
+                            <img src="${blog.image || defaultImage}" alt="${blog.title}" onerror="this.src='${defaultImage}'">
+                        </div>
+                        <div class="bsingle__content">
+                            <div class="meta-info">
+                                <ul>
+                                    <li><i class="fal fa-user"></i>By ${blog.author || 'E-Cell'}</li>
+                                    <li><i class="fal fa-calendar-alt"></i> ${formattedDate}</li>
+                                </ul>
+                            </div>
+                            <h2><a href="blog-details.html?id=${blog.id}">${blog.title}</a></h2>
+                            <p>${excerpt}</p>
+                            <div class="blog__btn">
+                                <a href="blog-details.html?id=${blog.id}" class="btn3">Read More <i class="fa-sharp fa-solid fa-arrow-up"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderPagination() {
+                const totalPages = Math.ceil(this.totalPosts / this.postsPerPage);
+                
+                if (totalPages <= 1) {
+                    document.getElementById('pagination-container').style.display = 'none';
+                    return;
+                }
+
+                const paginationList = document.getElementById('pagination-list');
+                let paginationHTML = '';
+
+                // Previous button
+                if (this.currentPage > 1) {
+                    paginationHTML += `<li class="page-item"><a href="#" onclick="blogManager.goToPage(${this.currentPage - 1})"><i class="fas fa-angle-double-left"></i></a></li>`;
+                }
+
+                // Page numbers
+                const startPage = Math.max(1, this.currentPage - 2);
+                const endPage = Math.min(totalPages, this.currentPage + 2);
+
+                if (startPage > 1) {
+                    paginationHTML += `<li class="page-item"><a href="#" onclick="blogManager.goToPage(1)">1</a></li>`;
+                    if (startPage > 2) {
+                        paginationHTML += `<li class="page-item"><a href="#">...</a></li>`;
+                    }
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
+                    const activeClass = i === this.currentPage ? 'active' : '';
+                    paginationHTML += `<li class="page-item ${activeClass}"><a href="#" onclick="blogManager.goToPage(${i})">${i}</a></li>`;
+                }
+
+                if (endPage < totalPages) {
+                    if (endPage < totalPages - 1) {
+                        paginationHTML += `<li class="page-item"><a href="#">...</a></li>`;
+                    }
+                    paginationHTML += `<li class="page-item"><a href="#" onclick="blogManager.goToPage(${totalPages})">${totalPages}</a></li>`;
+                }
+
+                // Next button
+                if (this.currentPage < totalPages) {
+                    paginationHTML += `<li class="page-item"><a href="#" onclick="blogManager.goToPage(${this.currentPage + 1})"><i class="fas fa-angle-double-right"></i></a></li>`;
+                }
+
+                paginationList.innerHTML = paginationHTML;
+                document.getElementById('pagination-container').style.display = 'block';
+            }
+
+            goToPage(page) {
+                this.currentPage = page;
+                this.loadBlogs(page);
+                // Scroll to top of blog section
+                document.querySelector('.inner-blog').scrollIntoView({ behavior: 'smooth' });
+            }
+
+            formatDate(dateString) {
+                const date = new Date(dateString);
+                const day = date.getDate();
+                const month = date.toLocaleDateString('en-US', { month: 'long' });
+                const year = date.getFullYear();
+                
+                const suffix = this.getOrdinalSuffix(day);
+                return `${day}${suffix} ${month} ${year}`;
+            }
+
+            getOrdinalSuffix(day) {
+                if (day > 3 && day < 21) return 'th';
+                switch (day % 10) {
+                    case 1: return 'st';
+                    case 2: return 'nd';
+                    case 3: return 'rd';
+                    default: return 'th';
+                }
+            }
+
+            truncateText(text, maxLength) {
+                if (!text) return '';
+                if (text.length <= maxLength) return text;
+                return text.substring(0, maxLength).trim() + '...';
+            }
+        }
+
+        // Initialize blog manager when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            window.blogManager = new BlogPageManager();
+        });
+    </script>
+</body>
+
+</html>
