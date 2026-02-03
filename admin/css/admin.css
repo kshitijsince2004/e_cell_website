@@ -41,6 +41,86 @@ body {
     border-color: rgba(255, 255, 255, 0.3);
 }
 
+/* Image Upload Styling */
+.image-upload-section {
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.image-upload-section:hover {
+    border-color: #007bff;
+    background-color: #f8f9ff;
+}
+
+.image-upload-section.dragover {
+    border-color: #007bff;
+    background-color: #e3f2fd;
+}
+
+.image-preview {
+    max-width: 200px;
+    max-height: 100px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Quill.js Custom Styling */
+.ql-toolbar {
+    border-top: 1px solid #ced4da !important;
+    border-left: 1px solid #ced4da !important;
+    border-right: 1px solid #ced4da !important;
+    border-bottom: none !important;
+    border-radius: 6px 6px 0 0 !important;
+    background: #f8f9fa !important;
+}
+
+.ql-container {
+    border-bottom: 1px solid #ced4da !important;
+    border-left: 1px solid #ced4da !important;
+    border-right: 1px solid #ced4da !important;
+    border-top: none !important;
+    border-radius: 0 0 6px 6px !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+}
+
+.ql-editor {
+    min-height: 250px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.ql-editor.ql-blank::before {
+    color: #6c757d;
+    font-style: normal;
+}
+
+/* Quill toolbar button styling */
+.ql-toolbar .ql-formats {
+    margin-right: 15px;
+}
+
+.ql-toolbar button:hover {
+    color: #007bff;
+}
+
+.ql-toolbar button.ql-active {
+    color: #007bff;
+}
+
+/* Form enhancements */
+.form-text {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+.form-text i {
+    margin-right: 4px;
+}
+
 .sidebar-nav {
     padding: 20px 0;
 }

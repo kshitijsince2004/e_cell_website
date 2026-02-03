@@ -1,11 +1,12 @@
 // Supabase Client for Main Website
 // This file handles fetching data from Supabase for the main E-Cell website
+// Uses ANON key for read-only public access
 
 class EcellDataManager {
     constructor() {
-        // Initialize Supabase client (same credentials as admin panel)
+        // Initialize Supabase client with ANON key (read-only)
         this.supabaseUrl = "https://khxeesffponvgpgnszpz.supabase.co";
-        this.supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoeGVlc2ZmcG9udmdwZ25zenB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MjQ0OTcsImV4cCI6MjA4NTIwMDQ5N30.Nie54ajcJH6Ll51VBVTablRlZEETYUMOHxogWHbwThY";
+        this.supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoeGVlc2ZmcG9udmdwZ25zenB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MjQ0OTcsImV4cCI6MjA4NTIwMDQ5N30.Nie54ajcJH6Ll51VBVTablRlZEETYUMOHxogWHbwThY"; // ANON KEY
         
         // Initialize client when Supabase library is loaded
         this.initClient();

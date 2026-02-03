@@ -7,24 +7,8 @@ document.addEventListener("DOMContentLoaded", function() {
         return;
     }
 
-    // Initialize Supabase
-    const SUPABASE_URL = "https://khxeesffponvgpgnszpz.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoeGVlc2ZmcG9udmdwZ25zenB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MjQ0OTcsImV4cCI6MjA4NTIwMDQ5N30.Nie54ajcJH6Ll51VBVTablRlZEETYUMOHxogWHbwThY";
-
-    // Create Supabase client
-    window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // Configuration
-    window.CONFIG = {
-        tables: {
-            BLOGS: 'blogs',
-            EVENTS: 'events',
-            ADVERTISEMENTS: 'advertisements',
-            SETTINGS: 'settings'
-        }
-    };
-
-    console.log('Supabase client initialized successfully');
+    // Supabase client is now initialized in secure-config.js
+    console.log('Supabase client loaded from secure-config.js');
 
     // Initialize admin panel
     window.adminPanel = new AdminPanel();
@@ -819,14 +803,12 @@ class AdminPanel {
 
             // Validate required fields
             if (!advertisement.title || !advertisement.image_url) {
-                throw new Error('Please fill in all required fields (Title and Image URL)');
+                throw new Error('Please fill in all required fields (Title and Image)');
             }
 
-            // Validate URL format
-            try {
-                new URL(advertisement.image_url);
-            } catch {
-                throw new Error('Please enter a valid image URL');
+            // Validate URL format (for both URLs and data URLs)
+            if (!advertisement.image_url.startsWith('data:') && !advertisement.image_url.startsWith('http')) {
+                throw new Error('Please enter a valid image URL or upload an image file');
             }
 
             const id = document.getElementById('advertisementId').value;
@@ -944,7 +926,7 @@ class AdminPanel {
         const eventId = document.getElementById('adEventId').value;
 
         if (!title || !imageUrl) {
-            this.showAlert('Please fill in title and image URL first', 'warning');
+            this.showAlert('Please fill in title and image (URL or upload)', 'warning');
             return;
         }
 

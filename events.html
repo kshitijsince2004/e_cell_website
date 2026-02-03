@@ -24,6 +24,30 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="css/advertisement-popup.css">
+    
+    <style>
+        /* Simple No Events Styling - Black Box with White Text */
+        .no-events-simple {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 40px 30px;
+            border-radius: 8px;
+            margin: 2rem auto;
+            max-width: 600px;
+        }
+        
+        .no-events-simple h4 {
+            color: #ffffff;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .no-events-simple p {
+            color: #ffffff;
+            margin-bottom: 0;
+            font-size: 1rem;
+        }
+    </style>
 </head>
 
 <body>
@@ -171,9 +195,8 @@
                                     <p class="mt-2">Loading events...</p>
                                 </div>
                                 <div class="col-12 text-center d-none" id="noEvents">
-                                    <div class="alert alert-info">
-                                        <i class="fas fa-info-circle"></i>
-                                        <h5>No Events Available</h5>
+                                    <div class="no-events-simple">
+                                        <h4>No Events Available</h4>
                                         <p>There are currently no events scheduled. Please check back later!</p>
                                     </div>
                                 </div>

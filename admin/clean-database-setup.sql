@@ -1,48 +1,23 @@
 -- =====================================================
--- E-CELL FRESH DATABASE SETUP
--- Complete database setup from scratch
--- This script creates a clean, optimized database structure
+-- E-CELL CLEAN DATABASE SETUP
+-- Fresh database creation with proper syntax
 -- =====================================================
 
--- Start transaction for safety
-BEGIN;
-
-DO $$
-BEGIN
-    RAISE NOTICE '🚀 Starting E-Cell Fresh Database Setup...';
-    RAISE NOTICE '📅 Timestamp: %', NOW();
-    RAISE NOTICE '';
-    RAISE NOTICE '⚠️  WARNING: This will delete ALL existing data!';
-    RAISE NOTICE '📋 Creating fresh database structure...';
-    RAISE NOTICE '';
-END $$;
-
--- =====================================================
--- STEP 1: DROP ALL EXISTING TABLES AND VIEWS
--- =====================================================
-
--- Drop views first
+-- Drop all existing tables and views
 DROP VIEW IF EXISTS published_blogs CASCADE;
 DROP VIEW IF EXISTS upcoming_events CASCADE;
 DROP VIEW IF EXISTS active_advertisements CASCADE;
-
--- Drop tables in correct order (foreign keys first)
 DROP TABLE IF EXISTS advertisements CASCADE;
 DROP TABLE IF EXISTS settings CASCADE;
 DROP TABLE IF EXISTS blogs CASCADE;
 DROP TABLE IF EXISTS events CASCADE;
-
--- Drop functions
 DROP FUNCTION IF EXISTS update_updated_at_column() CASCADE;
 DROP FUNCTION IF EXISTS generate_slug(TEXT) CASCADE;
 
-RAISE NOTICE '✓ Cleaned existing database structure';
-
 -- =====================================================
--- STEP 2: CREATE HELPER FUNCTIONS
+-- CREATE HELPER FUNCTIONS
 -- =====================================================
 
--- Update timestamp function
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -51,7 +26,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Slug generation function
 CREATE OR REPLACE FUNCTION generate_slug(title_text TEXT)
 RETURNS TEXT AS $$
 BEGIN
@@ -67,175 +41,113 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-RAISE NOTICE '✓ Created helper functions';
-
 -- =====================================================
--- STEP 3: CREATE BLOGS TABLE
+-- CREATE BLOGS TABLE
 -- =====================================================
 
 CREATE TABLE blogs (
-    -- Primary key
     id SERIAL PRIMARY KEY,
-    
-    -- Basic Information
     title VARCHAR(500) NOT NULL,
     author VARCHAR(255) NOT NULL,
     date DATE NOT NULL,
     status VARCHAR(50) DEFAULT 'published' CHECK (status IN ('published', 'draft')),
-    
-    -- Content
     image TEXT,
     image_alt TEXT,
     excerpt TEXT,
-    content TEXT NOT NULL, -- Rich HTML content from Quill.js
-    
-    -- SEO and Organization
+    content TEXT NOT NULL,
     slug VARCHAR(500) UNIQUE,
     meta_description TEXT,
     category VARCHAR(255),
-    tags TEXT, -- Comma-separated tags
-    
-    -- Analytics and Features
+    tags TEXT,
     view_count INTEGER DEFAULT 0,
     featured BOOLEAN DEFAULT FALSE,
-    
-    -- Timestamps
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     published_at TIMESTAMP WITH TIME ZONE
 );
 
-RAISE NOTICE '✓ Created blogs table';
-
 -- =====================================================
--- STEP 4: CREATE EVENTS TABLE
+-- CREATE EVENTS TABLE
 -- =====================================================
 
 CREATE TABLE events (
-    -- Primary key
     id SERIAL PRIMARY KEY,
-    
-    -- Basic Information
     title VARCHAR(500) NOT NULL,
-    event_type VARCHAR(100), -- Workshop, Competition, Seminar, etc.
+    event_type VARCHAR(100),
     organizer VARCHAR(255) DEFAULT 'E-Cell Team',
     category VARCHAR(255),
     date DATE NOT NULL,
     time TIME,
     duration VARCHAR(100),
     venue TEXT,
-    location TEXT, -- Legacy compatibility
+    location TEXT,
     status VARCHAR(50) DEFAULT 'upcoming' CHECK (status IN ('upcoming', 'ongoing', 'completed', 'cancelled')),
-    
-    -- Media
     image TEXT,
     image_alt TEXT,
-    gallery JSONB, -- Array of additional images
-    
-    -- Content
-    description TEXT NOT NULL, -- Short description for cards
-    overview TEXT, -- Detailed description (rich HTML)
+    gallery JSONB,
+    description TEXT NOT NULL,
+    overview TEXT,
     learning_description TEXT,
-    
-    -- Structured Data (JSON)
-    learning_points JSONB, -- Array of learning points
+    learning_points JSONB,
     schedule_description TEXT,
-    schedule JSONB, -- Array of schedule items
-    
-    -- Registration
+    schedule JSONB,
     registration_link TEXT,
     registration_note TEXT,
     max_capacity INTEGER,
     current_registrations INTEGER DEFAULT 0,
-    
-    -- Additional Info
     rating INTEGER CHECK (rating >= 1 AND rating <= 5),
     contact_email VARCHAR(255),
-    tags TEXT, -- Comma-separated tags
+    tags TEXT,
     special_notes TEXT,
     featured BOOLEAN DEFAULT FALSE,
-    
-    -- SEO
     slug VARCHAR(500) UNIQUE,
     meta_description TEXT,
-    
-    -- Timestamps
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-RAISE NOTICE '✓ Created events table';
-
 -- =====================================================
--- STEP 5: CREATE ADVERTISEMENTS TABLE
+-- CREATE ADVERTISEMENTS TABLE
 -- =====================================================
 
 CREATE TABLE advertisements (
-    -- Primary key
     id SERIAL PRIMARY KEY,
-    
-    -- Basic Information
     title VARCHAR(255) NOT NULL,
     description TEXT,
-    
-    -- Media (using image_url for admin panel compatibility)
     image_url TEXT NOT NULL,
     image_alt TEXT,
-    
-    -- Linking
     event_id INTEGER REFERENCES events(id) ON DELETE SET NULL,
     external_link TEXT,
-    
-    -- Display Settings
     status VARCHAR(50) DEFAULT 'active' CHECK (status IN ('active', 'inactive', 'scheduled')),
     display_type VARCHAR(50) DEFAULT 'popup' CHECK (display_type IN ('popup', 'banner', 'sidebar')),
-    
-    -- Scheduling
     start_date DATE,
     end_date DATE,
     display_frequency INTEGER DEFAULT 1,
-    
-    -- Targeting
-    target_pages JSONB, -- Array of pages where ad should appear
-    
-    -- Analytics
+    target_pages JSONB,
     view_count INTEGER DEFAULT 0,
     click_count INTEGER DEFAULT 0,
-    
-    -- Timestamps
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-RAISE NOTICE '✓ Created advertisements table with foreign key';
-
 -- =====================================================
--- STEP 6: CREATE SETTINGS TABLE
+-- CREATE SETTINGS TABLE
 -- =====================================================
 
 CREATE TABLE settings (
-    -- Primary key
     id SERIAL PRIMARY KEY,
-    
-    -- Setting identification
     setting_key VARCHAR(255) UNIQUE NOT NULL,
     setting_value TEXT,
     setting_type VARCHAR(50) DEFAULT 'string' CHECK (setting_type IN ('string', 'number', 'boolean', 'json')),
-    
-    -- Metadata
     description TEXT,
     category VARCHAR(100) DEFAULT 'general',
     is_public BOOLEAN DEFAULT FALSE,
-    
-    -- Timestamps
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-RAISE NOTICE '✓ Created settings table';
-
 -- =====================================================
--- STEP 7: CREATE INDEXES FOR PERFORMANCE
+-- CREATE INDEXES
 -- =====================================================
 
 -- Blogs indexes
@@ -258,20 +170,17 @@ CREATE INDEX idx_events_created_at ON events(created_at DESC);
 -- Advertisements indexes
 CREATE INDEX idx_advertisements_status ON advertisements(status);
 CREATE INDEX idx_advertisements_dates ON advertisements(start_date, end_date);
-CREATE INDEX idx_advertisements_linked_event ON advertisements(event_id);
+CREATE INDEX idx_advertisements_event_id ON advertisements(event_id);
 
 -- Settings indexes
 CREATE INDEX idx_settings_key ON settings(setting_key);
 CREATE INDEX idx_settings_category ON settings(category);
 CREATE INDEX idx_settings_public ON settings(is_public);
 
-RAISE NOTICE '✓ Created performance indexes';
-
 -- =====================================================
--- STEP 8: CREATE TRIGGERS
+-- CREATE TRIGGERS
 -- =====================================================
 
--- Update timestamp triggers
 CREATE TRIGGER update_blogs_updated_at 
     BEFORE UPDATE ON blogs 
     FOR EACH ROW 
@@ -292,21 +201,17 @@ CREATE TRIGGER update_settings_updated_at
     FOR EACH ROW 
     EXECUTE FUNCTION update_updated_at_column();
 
--- Auto-generate slugs and published_at
+-- Auto-generate blog fields
 CREATE OR REPLACE FUNCTION auto_generate_blog_fields()
 RETURNS TRIGGER AS $$
 BEGIN
-    -- Auto-generate slug if not provided
     IF NEW.slug IS NULL OR NEW.slug = '' THEN
         NEW.slug = generate_slug(NEW.title);
-        
-        -- Ensure uniqueness
         WHILE EXISTS (SELECT 1 FROM blogs WHERE slug = NEW.slug AND id != COALESCE(NEW.id, 0)) LOOP
             NEW.slug = NEW.slug || '-' || extract(epoch from now())::int;
         END LOOP;
     END IF;
     
-    -- Set published_at when status changes to published
     IF NEW.status = 'published' AND (OLD IS NULL OR OLD.status != 'published' OR OLD.published_at IS NULL) THEN
         NEW.published_at = NOW();
     END IF;
@@ -326,13 +231,10 @@ RETURNS TRIGGER AS $$
 BEGIN
     IF NEW.slug IS NULL OR NEW.slug = '' THEN
         NEW.slug = generate_slug(NEW.title);
-        
-        -- Ensure uniqueness
         WHILE EXISTS (SELECT 1 FROM events WHERE slug = NEW.slug AND id != COALESCE(NEW.id, 0)) LOOP
             NEW.slug = NEW.slug || '-' || extract(epoch from now())::int;
         END LOOP;
     END IF;
-    
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -342,46 +244,30 @@ CREATE TRIGGER auto_generate_event_slug_trigger
     FOR EACH ROW 
     EXECUTE FUNCTION auto_generate_event_slug();
 
-RAISE NOTICE '✓ Created triggers for auto-generation';
-
 -- =====================================================
--- STEP 9: INSERT DEFAULT SETTINGS
+-- INSERT DEFAULT SETTINGS
 -- =====================================================
 
 INSERT INTO settings (setting_key, setting_value, setting_type, description, category, is_public) VALUES
--- Google Form Integration
 ('google_form_enabled', 'false', 'boolean', 'Enable Google Form integration for membership', 'forms', true),
 ('google_form_link', '', 'string', 'Google Form link for membership registration', 'forms', true),
-
--- Advertisement Settings
 ('global_popup_enabled', 'true', 'boolean', 'Enable global advertisement popups', 'advertisements', true),
 ('popup_frequency', '1', 'number', 'How often to show popups (1 = every visit)', 'advertisements', false),
-
--- Website Settings
 ('site_title', 'E-Cell NFSU TC', 'string', 'Website title', 'general', true),
 ('site_description', 'Entrepreneurship Cell - National Forensic Sciences University', 'string', 'Website description', 'general', true),
 ('contact_email', 'ecell@nfsutc.ac.in', 'string', 'Primary contact email', 'contact', true),
 ('contact_phone', '+91 9999882696', 'string', 'Primary contact phone', 'contact', true),
-
--- Social Media
 ('instagram_url', 'https://www.instagram.com/ecell.nfsu.tc?igsh=Ym45bms0eTZwOHFs', 'string', 'Instagram profile URL', 'social', true),
 ('linkedin_url', '', 'string', 'LinkedIn profile URL', 'social', true),
-
--- Blog Settings
 ('blogs_per_page', '6', 'number', 'Number of blogs to show per page', 'blog', false),
 ('featured_blogs_count', '3', 'number', 'Number of featured blogs on homepage', 'blog', false),
-
--- Event Settings
 ('events_per_page', '9', 'number', 'Number of events to show per page', 'events', false),
 ('featured_events_count', '3', 'number', 'Number of featured events on homepage', 'events', false);
 
-RAISE NOTICE '✓ Inserted default settings';
-
 -- =====================================================
--- STEP 10: INSERT SAMPLE DATA
+-- INSERT SAMPLE DATA
 -- =====================================================
 
--- Insert sample blog
 INSERT INTO blogs (title, author, date, status, content, category, tags, featured, excerpt) VALUES
 (
     'Welcome to E-Cell NFSU TC',
@@ -395,7 +281,6 @@ INSERT INTO blogs (title, author, date, status, content, category, tags, feature
     'Welcome to the enhanced E-Cell blog with rich text editing and modern features!'
 );
 
--- Insert sample event
 INSERT INTO events (title, event_type, category, date, venue, description, overview, status, featured) VALUES
 (
     'Entrepreneurship Workshop 2024',
@@ -409,13 +294,10 @@ INSERT INTO events (title, event_type, category, date, venue, description, overv
     true
 );
 
-RAISE NOTICE '✓ Inserted sample data';
-
 -- =====================================================
--- STEP 11: CREATE USEFUL VIEWS
+-- CREATE VIEWS
 -- =====================================================
 
--- Published blogs view
 CREATE VIEW published_blogs AS
 SELECT 
     id, title, author, date, image, image_alt, excerpt, content, 
@@ -425,7 +307,6 @@ FROM blogs
 WHERE status = 'published' 
 ORDER BY published_at DESC NULLS LAST;
 
--- Upcoming events view
 CREATE VIEW upcoming_events AS
 SELECT 
     id, title, event_type, date, time, venue, image, image_alt, description,
@@ -434,7 +315,6 @@ FROM events
 WHERE status = 'upcoming' AND date >= CURRENT_DATE
 ORDER BY date ASC;
 
--- Active advertisements view
 CREATE VIEW active_advertisements AS
 SELECT 
     id, title, description, image_url, image_alt, event_id, external_link, 
@@ -443,90 +323,3 @@ FROM advertisements
 WHERE status = 'active' 
     AND (start_date IS NULL OR start_date <= CURRENT_DATE)
     AND (end_date IS NULL OR end_date >= CURRENT_DATE);
-
-RAISE NOTICE '✓ Created useful views';
-
--- =====================================================
--- STEP 12: ENABLE ROW LEVEL SECURITY (OPTIONAL)
--- =====================================================
-
--- Enable RLS for security (uncomment if needed)
--- ALTER TABLE blogs ENABLE ROW LEVEL SECURITY;
--- ALTER TABLE events ENABLE ROW LEVEL SECURITY;
--- ALTER TABLE advertisements ENABLE ROW LEVEL SECURITY;
--- ALTER TABLE settings ENABLE ROW LEVEL SECURITY;
-
--- Create policies for public read access (uncomment if RLS enabled)
--- CREATE POLICY "Enable read access for all users" ON blogs FOR SELECT USING (true);
--- CREATE POLICY "Enable read access for all users" ON events FOR SELECT USING (true);
--- CREATE POLICY "Enable read access for active advertisements" ON advertisements FOR SELECT USING (status = 'active');
--- CREATE POLICY "Enable read access for public settings" ON settings FOR SELECT USING (is_public = true);
-
--- =====================================================
--- STEP 13: FINAL VERIFICATION
--- =====================================================
-
-DO $$
-DECLARE
-    blog_count INTEGER;
-    event_count INTEGER;
-    setting_count INTEGER;
-    ad_count INTEGER;
-    blog_columns INTEGER;
-    event_columns INTEGER;
-BEGIN
-    -- Count records
-    SELECT COUNT(*) INTO blog_count FROM blogs;
-    SELECT COUNT(*) INTO event_count FROM events;
-    SELECT COUNT(*) INTO setting_count FROM settings;
-    SELECT COUNT(*) INTO ad_count FROM advertisements;
-    
-    -- Count columns
-    SELECT COUNT(*) INTO blog_columns FROM information_schema.columns 
-    WHERE table_name = 'blogs' AND table_schema = 'public';
-    
-    SELECT COUNT(*) INTO event_columns FROM information_schema.columns 
-    WHERE table_name = 'events' AND table_schema = 'public';
-    
-    RAISE NOTICE '';
-    RAISE NOTICE '📊 FRESH DATABASE STATUS:';
-    RAISE NOTICE '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━';
-    RAISE NOTICE 'Blogs: % records (% columns)', blog_count, blog_columns;
-    RAISE NOTICE 'Events: % records (% columns)', event_count, event_columns;
-    RAISE NOTICE 'Settings: % records', setting_count;
-    RAISE NOTICE 'Advertisements: % records', ad_count;
-    RAISE NOTICE '';
-END $$;
-
--- Commit transaction
-COMMIT;
-
--- =====================================================
--- FRESH SETUP COMPLETE!
--- =====================================================
-
-DO $$
-BEGIN
-    RAISE NOTICE '✅ E-CELL FRESH DATABASE SETUP COMPLETE!';
-    RAISE NOTICE '';
-    RAISE NOTICE '🎯 What''s Created:';
-    RAISE NOTICE '• Clean, optimized database structure';
-    RAISE NOTICE '• Rich text blog support (Quill.js ready)';
-    RAISE NOTICE '• Enhanced events with JSON fields';
-    RAISE NOTICE '• Advertisement system with proper relationships';
-    RAISE NOTICE '• Settings system for dynamic configuration';
-    RAISE NOTICE '• Performance indexes for fast queries';
-    RAISE NOTICE '• Auto-generated slugs and timestamps';
-    RAISE NOTICE '• Sample data to get started';
-    RAISE NOTICE '';
-    RAISE NOTICE '🚀 Admin Panel Features Ready:';
-    RAISE NOTICE '• Quill.js rich text editor';
-    RAISE NOTICE '• Image upload (image_url column)';
-    RAISE NOTICE '• Blog categorization and tagging';
-    RAISE NOTICE '• Event management with JSON fields';
-    RAISE NOTICE '• Advertisement popup system';
-    RAISE NOTICE '• Settings management interface';
-    RAISE NOTICE '';
-    RAISE NOTICE '🎉 Your fresh E-Cell database is ready!';
-    RAISE NOTICE 'Start creating amazing content with your admin panel.';
-END $$;

@@ -100,10 +100,63 @@ class AdvertisementPopup {
     }
 
     /**
-     * Load and show advertisement if available
+     * Check if popups should be shown based on settings and page type
+     */
+    async shouldShowPopup() {
+        try {
+            // Multiple ways to detect if we're on a details page
+            const currentPage = window.location.pathname.split('/').pop();
+            const hasIdParam = window.location.search.includes('id=');
+            const isBlogDetails = currentPage === 'blog-details.html' || 
+                                 currentPage.includes('blog-details') ||
+                                 document.title.includes('Blog Details') ||
+                                 document.querySelector('#blogContent') !== null;
+            const isEventDetails = currentPage === 'events-detail.html' || 
+                                  currentPage.includes('events-detail');
+            
+            const isDetailsPage = isBlogDetails || isEventDetails || hasIdParam;
+            
+            console.log('shouldShowPopup - Details page check:', isDetailsPage);
+            
+            if (isDetailsPage) {
+                console.log('❌ Popup blocked: Details page detected');
+                return false;
+            }
+            
+            // Check global popup settings from database
+            const { data: settings, error } = await this.client
+                .from('settings')
+                .select('setting_value')
+                .eq('setting_key', 'global_popup_enabled')
+                .single();
+            
+            if (error) {
+                console.log('Could not fetch popup settings, defaulting to enabled');
+                return true;
+            }
+            
+            const isEnabled = settings?.setting_value === 'true';
+            console.log('Global popup enabled:', isEnabled);
+            
+            return isEnabled;
+        } catch (error) {
+            console.error('Error checking popup settings:', error);
+            return true; // Default to showing popup if there's an error
+        }
+    }
+
+    /**
+     * Load and show advertisement if available and allowed
      */
     async loadAndShowAdvertisement() {
         try {
+            // Check if we should show popup
+            const shouldShow = await this.shouldShowPopup();
+            if (!shouldShow) {
+                console.log('Popup disabled by settings or page type');
+                return;
+            }
+            
             const advertisement = await this.fetchActiveAdvertisement();
             
             if (advertisement) {
@@ -319,6 +372,34 @@ class AdvertisementPopup {
 
 // Initialize advertisement popup when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
+    // Multiple ways to detect if we're on a details page
+    const currentPage = window.location.pathname.split('/').pop();
+    const hasIdParam = window.location.search.includes('id=');
+    const isBlogDetails = currentPage === 'blog-details.html' || 
+                         currentPage.includes('blog-details') ||
+                         document.title.includes('Blog Details') ||
+                         document.querySelector('#blogContent') !== null;
+    const isEventDetails = currentPage === 'events-detail.html' || 
+                          currentPage.includes('events-detail');
+    
+    const isDetailsPage = isBlogDetails || isEventDetails || hasIdParam;
+    
+    console.log('Advertisement Popup Debug:');
+    console.log('Current page:', currentPage);
+    console.log('Has ID param:', hasIdParam);
+    console.log('Is blog details:', isBlogDetails);
+    console.log('Is event details:', isEventDetails);
+    console.log('Is details page:', isDetailsPage);
+    console.log('Full URL:', window.location.href);
+    
+    // Don't show popup on any details pages
+    if (isDetailsPage) {
+        console.log('✅ Skipping advertisement popup on details page');
+        return;
+    }
+    
+    console.log('🎯 Initializing advertisement popup...');
+    
     // Wait a bit for other scripts to load
     setTimeout(() => {
         window.advertisementPopup = new AdvertisementPopup();

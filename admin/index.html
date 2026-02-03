@@ -8,6 +8,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/admin.css">
+
+    <!-- Quill.js Rich Text Editor -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 </head>
 
 <body>
@@ -378,8 +382,26 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="blogImage" class="form-label">Featured Image URL</label>
-                            <input type="url" class="form-control" id="blogImage">
+                            <label for="blogImage" class="form-label">Featured Image</label>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <input type="url" class="form-control" id="blogImage"
+                                        placeholder="Enter image URL or upload below">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="file" class="form-control" id="blogImageFile" accept="image/*"
+                                        onchange="handleImageUpload(this, 'blogImage')">
+                                </div>
+                            </div>
+                            <div class="form-text">
+                                <i class="fas fa-info-circle"></i>
+                                <strong>Recommended size:</strong> 800x400px (2:1 ratio) | Max file size: 2MB | Formats:
+                                JPG, PNG, WebP
+                            </div>
+                            <div id="blogImagePreview" class="mt-2" style="display: none;">
+                                <img id="blogImagePreviewImg" src="" alt="Preview"
+                                    style="max-width: 200px; max-height: 100px; border-radius: 5px; border: 1px solid #ddd;">
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="blogExcerpt" class="form-label">Excerpt</label>
@@ -387,7 +409,13 @@
                         </div>
                         <div class="mb-3">
                             <label for="blogContent" class="form-label">Content</label>
-                            <textarea class="form-control" id="blogContent" rows="8" required></textarea>
+                            <div class="form-text mb-2">
+                                <i class="fas fa-edit"></i>
+                                Use the rich text editor below to format your content with <strong>bold</strong>,
+                                <em>italic</em>, lists, links, and more.
+                            </div>
+                            <div id="blogContentEditor" style="height: 300px;"></div>
+                            <textarea class="form-control d-none" id="blogContent" rows="12" required></textarea>
                         </div>
                     </form>
                 </div>
@@ -501,9 +529,24 @@
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="eventImage" class="form-label">Event Image URL</label>
-                                    <input type="url" class="form-control" id="eventImage"
-                                        placeholder="https://example.com/image.jpg">
+                                    <label for="eventImage" class="form-label">Event Image</label>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <input type="url" class="form-control" id="eventImage"
+                                                placeholder="Enter image URL or upload below">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="file" class="form-control" id="eventImageFile" 
+                                                accept="image/*" onchange="handleEventImageUpload(this)">
+                                        </div>
+                                    </div>
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle"></i>
+                                        <strong>Recommended size:</strong> 800x400px (2:1 ratio) | Max file size: 2MB | Formats: JPG, PNG, WebP
+                                    </div>
+                                    <div id="eventImagePreview" class="mt-2" style="display: none;">
+                                        <img id="eventImagePreviewImg" src="" alt="Preview" style="max-width: 200px; max-height: 100px; border-radius: 5px; border: 1px solid #ddd;">
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="eventDescription" class="form-label">Short Description *</label>
@@ -728,12 +771,20 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="adImageUrl" class="form-label">Image URL *</label>
-                                    <input type="url" class="form-control" id="adImageUrl" required
-                                        placeholder="https://example.com/image.jpg">
+                                    <label for="adImage" class="form-label">Advertisement Image *</label>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <input type="url" class="form-control" id="adImageUrl" 
+                                                placeholder="Enter image URL or upload below">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="file" class="form-control" id="adImageFile" 
+                                                accept="image/*" onchange="handleAdImageUpload(this)">
+                                        </div>
+                                    </div>
                                     <div class="form-text">
                                         <i class="fas fa-info-circle"></i>
-                                        Image should have 4:5 aspect ratio (e.g., 400x500px) for best results
+                                        <strong>Recommended size:</strong> 400x500px (4:5 ratio) | Max file size: 2MB | Formats: JPG, PNG, WebP
                                     </div>
                                 </div>
 
@@ -812,7 +863,334 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/secure-config.js"></script>
     <script src="js/admin.js"></script>
+
+    <script>
+        // Initialize Quill.js Rich Text Editor
+        let quillEditor;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize Quill editor
+            quillEditor = new Quill('#blogContentEditor', {
+                theme: 'snow',
+                placeholder: 'Write your blog content here...',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                        [{ 'indent': '-1' }, { 'indent': '+1' }],
+                        [{ 'align': [] }],
+                        ['link', 'image', 'video'],
+                        ['blockquote', 'code-block'],
+                        ['clean']
+                    ]
+                }
+            });
+
+            // Sync Quill content with hidden textarea
+            quillEditor.on('text-change', function () {
+                const html = quillEditor.root.innerHTML;
+                document.getElementById('blogContent').value = html;
+            });
+        });
+
+        // Handle image upload and preview
+        function handleImageUpload(input, targetInputId) {
+            const file = input.files[0];
+            if (!file) return;
+
+            // Validate file type
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('Please select a valid image file (JPG, PNG, or WebP)');
+                input.value = '';
+                return;
+            }
+
+            // Validate file size (2MB max)
+            const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+            if (file.size > maxSize) {
+                alert('File size must be less than 2MB');
+                input.value = '';
+                return;
+            }
+
+            // Show loading state
+            const targetInput = document.getElementById(targetInputId);
+            const originalPlaceholder = targetInput.placeholder;
+            targetInput.placeholder = 'Uploading image...';
+            targetInput.disabled = true;
+
+            // Create FormData for upload
+            const formData = new FormData();
+            formData.append('image', file);
+
+            // For now, we'll use a placeholder URL since we don't have image upload backend
+            // In a real implementation, you would upload to your server or cloud storage
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                // Set the data URL as the image source (temporary solution)
+                targetInput.value = e.target.result;
+                targetInput.placeholder = originalPlaceholder;
+                targetInput.disabled = false;
+
+                // Show preview
+                showImagePreview(e.target.result, targetInputId);
+
+                // Note: In production, replace this with actual upload to server
+                console.log('Image loaded as data URL. In production, upload to server and use returned URL.');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Show image preview
+        function showImagePreview(imageSrc, targetInputId) {
+            const previewContainer = document.getElementById(targetInputId + 'Preview');
+            const previewImg = document.getElementById(targetInputId + 'PreviewImg');
+
+            if (previewContainer && previewImg) {
+                previewImg.src = imageSrc;
+                previewContainer.style.display = 'block';
+            }
+        }
+
+        // Update image preview when URL is typed
+        document.getElementById('blogImage').addEventListener('input', function () {
+            const url = this.value;
+            if (url && (url.startsWith('http') || url.startsWith('data:'))) {
+                showImagePreview(url, 'blogImage');
+            } else {
+                document.getElementById('blogImagePreview').style.display = 'none';
+            }
+        });
+
+        // Handle advertisement image upload
+        function handleAdImageUpload(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            // Validate file type
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('Please select a valid image file (JPG, PNG, or WebP)');
+                input.value = '';
+                return;
+            }
+
+            // Validate file size (2MB max)
+            const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+            if (file.size > maxSize) {
+                alert('File size must be less than 2MB');
+                input.value = '';
+                return;
+            }
+
+            // Show loading state
+            const urlInput = document.getElementById('adImageUrl');
+            const originalPlaceholder = urlInput.placeholder;
+            urlInput.placeholder = 'Uploading image...';
+            urlInput.disabled = true;
+
+            // Read file as data URL
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Set the data URL as the image source
+                urlInput.value = e.target.result;
+                urlInput.placeholder = originalPlaceholder;
+                urlInput.disabled = false;
+                
+                // Trigger the existing image preview system
+                const event = new Event('input', { bubbles: true });
+                urlInput.dispatchEvent(event);
+                
+                console.log('Advertisement image loaded as data URL. In production, upload to server and use returned URL.');
+            };
+            
+            reader.onerror = function() {
+                alert('Error reading file. Please try again.');
+                urlInput.placeholder = originalPlaceholder;
+                urlInput.disabled = false;
+                input.value = '';
+            };
+            
+            reader.readAsDataURL(file);
+        }
+
+        // Handle event image upload
+        function handleEventImageUpload(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            // Validate file type
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('Please select a valid image file (JPG, PNG, or WebP)');
+                input.value = '';
+                return;
+            }
+
+            // Validate file size (2MB max)
+            const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+            if (file.size > maxSize) {
+                alert('File size must be less than 2MB');
+                input.value = '';
+                return;
+            }
+
+            // Show loading state
+            const urlInput = document.getElementById('eventImage');
+            const originalPlaceholder = urlInput.placeholder;
+            urlInput.placeholder = 'Uploading image...';
+            urlInput.disabled = true;
+
+            // Read file as data URL
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Set the data URL as the image source
+                urlInput.value = e.target.result;
+                urlInput.placeholder = originalPlaceholder;
+                urlInput.disabled = false;
+                
+                // Show preview
+                showEventImagePreview(e.target.result);
+                
+                console.log('Event image loaded as data URL. In production, upload to server and use returned URL.');
+            };
+            
+            reader.onerror = function() {
+                alert('Error reading file. Please try again.');
+                urlInput.placeholder = originalPlaceholder;
+                urlInput.disabled = false;
+                input.value = '';
+            };
+            
+            reader.readAsDataURL(file);
+        }
+
+        // Show event image preview
+        function showEventImagePreview(imageSrc) {
+            const previewContainer = document.getElementById('eventImagePreview');
+            const previewImg = document.getElementById('eventImagePreviewImg');
+            
+            if (previewContainer && previewImg && imageSrc) {
+                previewImg.src = imageSrc;
+                previewContainer.style.display = 'block';
+            }
+        }
+
+        // Update event image preview when URL is typed
+        document.addEventListener('DOMContentLoaded', function() {
+            const eventImageInput = document.getElementById('eventImage');
+            if (eventImageInput) {
+                eventImageInput.addEventListener('input', function() {
+                    const url = this.value;
+                    if (url && (url.startsWith('http') || url.startsWith('data:'))) {
+                        showEventImagePreview(url);
+                    } else {
+                        const previewContainer = document.getElementById('eventImagePreview');
+                        if (previewContainer) {
+                            previewContainer.style.display = 'none';
+                        }
+                    }
+                });
+            }
+        });
+
+        // Enhanced blog saving function
+        function saveBlog() {
+            // Get content from Quill editor
+            const content = quillEditor.root.innerHTML;
+
+            // Update the textarea with Quill content
+            document.getElementById('blogContent').value = content;
+
+            // Validate required fields
+            const title = document.getElementById('blogTitle').value.trim();
+            const author = document.getElementById('blogAuthor').value.trim();
+            const date = document.getElementById('blogDate').value;
+
+            if (!title || !author || !date || !content.trim() || content === '<p><br></p>') {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            // Call the original save function from admin.js
+            if (typeof window.adminPanel !== 'undefined' && window.adminPanel.saveBlog) {
+                window.adminPanel.saveBlog();
+            } else {
+                console.error('Admin panel save function not found');
+            }
+        }
+
+        // Function to load blog data into editor (for editing)
+        function loadBlogIntoEditor(blogData) {
+            if (quillEditor && blogData.content) {
+                quillEditor.root.innerHTML = blogData.content;
+            }
+        }
+
+        // Clear form when modal is closed
+        document.getElementById('blogModal').addEventListener('hidden.bs.modal', function () {
+            // Clear Quill content
+            if (quillEditor) {
+                quillEditor.setContents([]);
+            }
+
+            // Clear form fields
+            document.getElementById('blogForm').reset();
+
+            // Clear image preview
+            document.getElementById('blogImagePreview').style.display = 'none';
+            document.getElementById('blogImageFile').value = '';
+        });
+
+        // Function to open blog modal (enhanced)
+        function openBlogModal(blogData = null) {
+            const modal = new bootstrap.Modal(document.getElementById('blogModal'));
+            const modalTitle = document.getElementById('blogModalTitle');
+
+            if (blogData) {
+                // Editing existing blog
+                modalTitle.textContent = 'Edit Blog';
+                document.getElementById('blogId').value = blogData.id;
+                document.getElementById('blogTitle').value = blogData.title;
+                document.getElementById('blogAuthor').value = blogData.author;
+                document.getElementById('blogDate').value = blogData.date;
+                document.getElementById('blogStatus').value = blogData.status;
+                document.getElementById('blogImage').value = blogData.image || '';
+                document.getElementById('blogExcerpt').value = blogData.excerpt || '';
+
+                // Load content into Quill editor
+                setTimeout(() => {
+                    if (quillEditor) {
+                        quillEditor.root.innerHTML = blogData.content || '';
+                    }
+                }, 100);
+
+                // Show image preview if image exists
+                if (blogData.image) {
+                    showImagePreview(blogData.image, 'blogImage');
+                }
+            } else {
+                // Adding new blog
+                modalTitle.textContent = 'Add New Blog';
+                document.getElementById('blogForm').reset();
+                document.getElementById('blogId').value = '';
+
+                // Clear Quill editor
+                setTimeout(() => {
+                    if (quillEditor) {
+                        quillEditor.setContents([]);
+                    }
+                }, 100);
+            }
+
+            modal.show();
+        }
+    </script>
 </body>
 
 </html>

@@ -1,6 +1,9 @@
 // Blog Details Page JavaScript
 class BlogDetailsManager {
     constructor() {
+        this.supabaseUrl = "https://khxeesffponvgpgnszpz.supabase.co";
+        this.supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoeGVlc2ZmcG9udmdwZ25zenB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MjQ0OTcsImV4cCI6MjA4NTIwMDQ5N30.Nie54ajcJH6Ll51VBVTablRlZEETYUMOHxogWHbwThY";
+        this.client = null;
         this.blogId = this.getBlogIdFromUrl();
         this.init();
     }
@@ -12,8 +15,22 @@ class BlogDetailsManager {
     }
 
     async init() {
+        console.log('Blog Details Manager initializing...');
+        console.log('Blog ID from URL:', this.blogId);
+        
         if (!this.blogId) {
+            console.error('No blog ID found in URL');
             this.showError();
+            return;
+        }
+
+        // Initialize Supabase client
+        if (typeof supabase !== 'undefined') {
+            this.client = supabase.createClient(this.supabaseUrl, this.supabaseKey);
+            console.log('Supabase client initialized');
+        } else {
+            console.error('Supabase library not loaded');
+            setTimeout(() => this.init(), 100);
             return;
         }
 
@@ -23,17 +40,40 @@ class BlogDetailsManager {
 
     async loadBlogDetails() {
         try {
-            // Wait for ecellData to be initialized
-            if (!window.ecellData || !window.ecellData.client) {
-                setTimeout(() => this.loadBlogDetails(), 100);
-                return;
+            console.log('Loading blog details for ID:', this.blogId);
+            
+            // Add a small delay to ensure DOM is fully ready
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            const { data: blog, error } = await this.client
+                .from('blogs')
+                .select('*')
+                .eq('id', this.blogId)
+                .eq('status', 'published')
+                .single();
+
+            if (error) {
+                console.error('Supabase error:', error);
+                
+                // If it's a "not found" error, show error state
+                if (error.code === 'PGRST116' || error.message.includes('No rows found')) {
+                    console.log('Blog not found in database');
+                    this.showError();
+                    return;
+                }
+                
+                throw error;
             }
 
-            const blog = await window.ecellData.getBlogById(this.blogId);
+            console.log('Blog data received:', blog);
             
             if (blog) {
-                this.displayBlog(blog);
+                // Ensure we don't show error state after successful load
+                setTimeout(() => {
+                    this.displayBlog(blog);
+                }, 50);
             } else {
+                console.log('No blog found with ID:', this.blogId);
                 this.showError();
             }
         } catch (error) {
@@ -43,8 +83,13 @@ class BlogDetailsManager {
     }
 
     displayBlog(blog) {
+        console.log('Displaying blog:', blog.title);
+        
         // Hide loading state
         document.getElementById('loadingState').classList.add('d-none');
+        
+        // Hide error state (in case it was shown before)
+        document.getElementById('errorState').classList.add('d-none');
         
         // Show blog content
         document.getElementById('blogContent').classList.remove('d-none');
@@ -55,7 +100,7 @@ class BlogDetailsManager {
 
         // Update blog details
         document.getElementById('blogAuthor').textContent = blog.author;
-        document.getElementById('blogDate').textContent = window.ecellData.formatDate(blog.date);
+        document.getElementById('blogDate').textContent = this.formatDate(blog.date);
         document.getElementById('blogStatus').textContent = blog.status;
 
         // Update blog image
@@ -78,12 +123,50 @@ class BlogDetailsManager {
 
         // Update social sharing
         this.setupSocialSharing(blog);
+        
+        console.log('Blog display completed successfully');
     }
 
     formatBlogContent(content) {
-        // Convert line breaks to paragraphs
+        // If content is already HTML (from Quill.js), return as is
+        if (content && (content.includes('<') || content.includes('&'))) {
+            return content;
+        }
+        
+        // Otherwise, convert line breaks to paragraphs
+        if (!content) return '<p>No content available.</p>';
+        
         const paragraphs = content.split('\n\n').filter(p => p.trim());
         return paragraphs.map(p => `<p>${p.trim()}</p>`).join('');
+    }
+
+    formatDate(dateString) {
+        const date = new Date(dateString);
+        const day = date.getDate();
+        const month = date.toLocaleDateString('en-US', { month: 'long' });
+        const year = date.getFullYear();
+        
+        const suffix = this.getOrdinalSuffix(day);
+        return `${day}${suffix} ${month} ${year}`;
+    }
+
+    getOrdinalSuffix(day) {
+        if (day > 3 && day < 21) return 'th';
+        switch (day % 10) {
+            case 1: return 'st';
+            case 2: return 'nd';
+            case 3: return 'rd';
+            default: return 'th';
+        }
+    }
+
+    formatBlogDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        }).toUpperCase();
     }
 
     setupSocialSharing(blog) {
@@ -106,16 +189,24 @@ class BlogDetailsManager {
 
     async loadRecentPosts() {
         try {
-            if (!window.ecellData || !window.ecellData.client) {
-                setTimeout(() => this.loadRecentPosts(), 100);
+            console.log('Loading recent posts...');
+            
+            const { data: recentBlogs, error } = await this.client
+                .from('blogs')
+                .select('id, title, date, image, excerpt')
+                .eq('status', 'published')
+                .order('date', { ascending: false })
+                .limit(5);
+
+            if (error) {
+                console.error('Error loading recent posts:', error);
                 return;
             }
-
-            const recentBlogs = await window.ecellData.getLatestBlogs(5);
             
             // Filter out current blog
             const otherBlogs = recentBlogs.filter(blog => blog.id != this.blogId);
             
+            console.log('Recent posts loaded:', otherBlogs.length);
             this.displayRecentPosts(otherBlogs.slice(0, 4));
         } catch (error) {
             console.error('Error loading recent posts:', error);
@@ -140,7 +231,7 @@ class BlogDetailsManager {
                     </div>
                     <div class="col-8">
                         <h6><a href="blog-details.html?id=${blog.id}" class="text-decoration-none">${blog.title}</a></h6>
-                        <small class="text-muted">${window.ecellData.formatBlogDate(blog.date)}</small>
+                        <small class="text-muted">${this.formatBlogDate(blog.date)}</small>
                     </div>
                 </div>
             </div>
@@ -148,15 +239,40 @@ class BlogDetailsManager {
     }
 
     showError() {
+        console.log('Showing error state for blog ID:', this.blogId);
         document.getElementById('loadingState').classList.add('d-none');
+        document.getElementById('blogContent').classList.add('d-none');
         document.getElementById('errorState').classList.remove('d-none');
     }
 }
 
 // Initialize blog details manager when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    // Wait for Supabase and ecellData to be ready
-    setTimeout(() => {
-        window.blogDetailsManager = new BlogDetailsManager();
-    }, 500);
+    console.log('DOM loaded, initializing blog details manager...');
+    
+    // Prevent multiple instances
+    if (window.blogDetailsManager) {
+        console.log('Blog details manager already exists, skipping initialization');
+        return;
+    }
+    
+    // Initialize immediately
+    window.blogDetailsManager = new BlogDetailsManager();
+    
+    // Also add a test to check if there are any blogs in the database
+    setTimeout(async () => {
+        if (window.blogDetailsManager && window.blogDetailsManager.client) {
+            try {
+                const { data: allBlogs, error } = await window.blogDetailsManager.client
+                    .from('blogs')
+                    .select('id, title, status')
+                    .limit(5);
+                
+                console.log('All blogs in database:', allBlogs);
+                if (error) console.log('Database query error:', error);
+            } catch (err) {
+                console.error('Error testing database connection:', err);
+            }
+        }
+    }, 1000);
 });
