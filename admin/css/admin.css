@@ -29,6 +29,18 @@ body {
     font-weight: 600;
 }
 
+.sidebar-header .btn {
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.sidebar-header .btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
 .sidebar-nav {
     padding: 20px 0;
 }
