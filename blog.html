@@ -27,6 +27,7 @@
 
     <!-- Supabase -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-manager.js"></script>
 
     <style>
         .spinner-border {
@@ -432,7 +433,9 @@
 
             initClient() {
                 if (typeof supabase !== 'undefined') {
-                    this.client = supabase.createClient(this.supabaseUrl, this.supabaseKey);
+                    this.client = window.supabaseManager ? 
+                        window.supabaseManager.getPublicClient() : 
+                        supabase.createClient(this.supabaseUrl, this.supabaseKey);
                     console.log('Blog Page Manager initialized');
                     this.loadBlogs();
                     this.loadRecentPosts();

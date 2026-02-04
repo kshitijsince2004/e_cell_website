@@ -24,9 +24,11 @@ class BlogDetailsManager {
             return;
         }
 
-        // Initialize Supabase client
+        // Initialize Supabase client using centralized manager
         if (typeof supabase !== 'undefined') {
-            this.client = supabase.createClient(this.supabaseUrl, this.supabaseKey);
+            this.client = window.supabaseManager ? 
+                window.supabaseManager.getPublicClient() : 
+                supabase.createClient(this.supabaseUrl, this.supabaseKey);
             console.log('Supabase client initialized');
         } else {
             console.error('Supabase library not loaded');

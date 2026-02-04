@@ -8,9 +8,10 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Supabase client is now initialized in secure-config.js
-    console.log('Supabase client loaded from secure-config.js');
+    console.log('🔑 Supabase client loaded from secure-config.js');
+    console.log('🔐 Authentication system enabled');
 
-    // Initialize admin panel
+    // Initialize admin panel with authentication
     window.adminPanel = new AdminPanel();
     
     // Fallback navigation function for onclick handlers
@@ -23,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function() {
     };
 });
 
-// Admin Panel JavaScript Class
+// Admin Panel JavaScript Class with Authentication
 class AdminPanel {
     constructor() {
         this.currentUser = null;
@@ -33,76 +34,215 @@ class AdminPanel {
     }
 
     init() {
-        this.checkAuthState();
-        this.bindEvents();
-        this.showLoginModal();
-    }
-
-    /* ================= AUTH ================= */
-
-    async checkAuthState() {
-        try {
-            const { data: { user } } = await window.supabaseClient.auth.getUser();
-
-            if (user) {
-                this.currentUser = user;
+        // Check if user is already logged in (session storage)
+        const savedUser = sessionStorage.getItem('adminUser');
+        if (savedUser) {
+            try {
+                this.currentUser = JSON.parse(savedUser);
+                console.log('🔑 Restored user session:', this.currentUser.username);
+                this.hideLoginModal();
                 this.showAdminPanel();
                 this.loadDashboardData();
-            } else {
+                this.updateUserDisplay();
+            } catch (error) {
+                console.error('Invalid saved session:', error);
+                sessionStorage.removeItem('adminUser');
                 this.showLoginModal();
             }
-        } catch (error) {
-            console.error('Error checking auth state:', error);
+        } else {
             this.showLoginModal();
         }
+        
+        this.bindEvents();
     }
 
-    async login(email, password) {
+    /* ================= AUTHENTICATION ================= */
+
+    async login(username, password) {
         try {
-            const { data, error } = await window.supabaseClient.auth.signInWithPassword({
-                email,
-                password
+            console.log('🔐 Attempting login for:', username);
+            
+            // Clear any previous errors
+            this.hideLoginError();
+            
+            // Query admin table for user
+            const { data: adminUser, error } = await window.supabaseClient
+                .from('admin')
+                .select('*')
+                .eq('username', username)
+                .eq('status', 'active')
+                .single();
+
+            if (error) {
+                console.error('Database error:', error);
+                throw new Error('Invalid username or password');
+            }
+
+            if (!adminUser) {
+                throw new Error('Invalid username or password');
+            }
+
+            // For now, we'll do simple password comparison
+            const isValidPassword = await this.verifyPassword(password, adminUser.password);
+            
+            if (!isValidPassword) {
+                // Update login attempts
+                await window.supabaseClient
+                    .from('admin')
+                    .update({ 
+                        login_attempts: (adminUser.login_attempts || 0) + 1,
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq('id', adminUser.id);
+                
+                throw new Error('Invalid username or password');
+            }
+
+            // Successful login
+            this.currentUser = {
+                id: adminUser.id,
+                username: adminUser.username,
+                email: adminUser.email,
+                full_name: adminUser.full_name,
+                role: adminUser.role
+            };
+
+            // Update last login and reset attempts
+            await window.supabaseClient
+                .from('admin')
+                .update({ 
+                    last_login: new Date().toISOString(),
+                    login_attempts: 0,
+                    updated_at: new Date().toISOString()
+                })
+                .eq('id', adminUser.id);
+
+            // Save session
+            sessionStorage.setItem('adminUser', JSON.stringify(this.currentUser));
+
+            // Log activity
+            await this.logActivity('login', 'admin', adminUser.id, null, {
+                username: adminUser.username,
+                login_time: new Date().toISOString()
             });
 
-            if (error) throw error;
-
-            this.currentUser = data.user;
+            console.log('✅ Login successful:', this.currentUser.username);
             this.hideLoginModal();
             this.showAdminPanel();
             this.loadDashboardData();
-            this.showAlert("Login successful!", "success");
+            this.updateUserDisplay();
+            this.showAlert(`Welcome back, ${this.currentUser.full_name || this.currentUser.username}!`, "success");
+
         } catch (error) {
             console.error('Login error:', error);
             this.showLoginError(error.message);
         }
     }
 
+    async verifyPassword(inputPassword, storedHash) {
+        // Simple password verification for now
+        // For the default password 'password', the hash is:
+        const defaultHash = '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi';
+        
+        if (storedHash === defaultHash && inputPassword === 'password') {
+            return true;
+        }
+        
+        // For development, also allow plain text comparison
+        if (inputPassword === storedHash) {
+            return true;
+        }
+        
+        return false;
+    }
+
     async logout() {
         try {
-            await window.supabaseClient.auth.signOut();
+            if (this.currentUser) {
+                // Log activity
+                await this.logActivity('logout', 'admin', this.currentUser.id, null, {
+                    username: this.currentUser.username,
+                    logout_time: new Date().toISOString()
+                });
+            }
+
+            // Clear session
+            sessionStorage.removeItem('adminUser');
+            this.currentUser = null;
+            
+            // Hide admin panel and show login
+            this.hideAdminPanel();
+            this.showLoginModal();
+            
+            this.showAlert("Logged out successfully", "info");
+            console.log('🔓 User logged out');
+            
+        } catch (error) {
+            console.error('Logout error:', error);
+            // Force logout even if logging fails
+            sessionStorage.removeItem('adminUser');
             this.currentUser = null;
             this.hideAdminPanel();
             this.showLoginModal();
+        }
+    }
+
+    async logActivity(action, tableName, recordId, oldValues, newValues) {
+        try {
+            await window.supabaseClient
+                .from('admin_activity_log')
+                .insert([{
+                    admin_id: this.currentUser?.id || null,
+                    action: action,
+                    table_name: tableName,
+                    record_id: recordId,
+                    old_values: oldValues,
+                    new_values: newValues,
+                    ip_address: null, // Could be populated with user's IP
+                    user_agent: navigator.userAgent
+                }]);
         } catch (error) {
-            console.error('Logout error:', error);
+            console.warn('Failed to log activity:', error);
         }
     }
 
     /* ================= UI ================= */
 
     showLoginModal() {
-        const loginModal = new bootstrap.Modal(document.getElementById("loginModal"));
-        loginModal.show();
+        const loginModalElement = document.getElementById("loginModal");
+        if (loginModalElement) {
+            // Show the modal element
+            loginModalElement.style.display = 'block';
+            loginModalElement.classList.add('show');
+            
+            // Create backdrop
+            const backdrop = document.createElement('div');
+            backdrop.className = 'modal-backdrop fade show';
+            document.body.appendChild(backdrop);
+            
+            // Focus on username field
+            setTimeout(() => {
+                const usernameField = document.getElementById('username');
+                if (usernameField) usernameField.focus();
+            }, 100);
+        }
     }
 
     hideLoginModal() {
-        const modal = bootstrap.Modal.getInstance(document.getElementById("loginModal"));
-        if (modal) modal.hide();
+        const loginModalElement = document.getElementById("loginModal");
+        if (loginModalElement) {
+            loginModalElement.style.display = 'none';
+            loginModalElement.classList.remove('show');
+            
+            // Remove backdrop
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) backdrop.remove();
+        }
     }
 
     showAdminPanel() {
         document.getElementById("adminPanel").classList.remove("d-none");
-        // Bind admin-specific events after panel is shown
+        console.log('✅ Admin panel displayed for:', this.currentUser?.username);
         this.bindAdminEvents();
     }
 
@@ -111,9 +251,37 @@ class AdminPanel {
     }
 
     showLoginError(message) {
-        const err = document.getElementById("loginError");
-        err.textContent = message;
-        err.classList.remove("d-none");
+        const errorDiv = document.getElementById("loginError");
+        if (errorDiv) {
+            errorDiv.textContent = message;
+            errorDiv.classList.remove("d-none");
+            
+            // Hide error after 5 seconds
+            setTimeout(() => {
+                errorDiv.classList.add("d-none");
+            }, 5000);
+        }
+    }
+
+    hideLoginError() {
+        const errorDiv = document.getElementById("loginError");
+        if (errorDiv) {
+            errorDiv.classList.add("d-none");
+        }
+    }
+
+    updateUserDisplay() {
+        // Update user badge in sidebar
+        const userBadge = document.getElementById('currentUsername');
+        if (userBadge && this.currentUser) {
+            userBadge.textContent = this.currentUser.username;
+        }
+        
+        // Update any other user display elements
+        const welcomeMessage = document.getElementById('welcomeMessage');
+        if (welcomeMessage && this.currentUser) {
+            welcomeMessage.textContent = `Welcome, ${this.currentUser.full_name || this.currentUser.username}!`;
+        }
     }
 
     showAlert(message, type = "info") {
@@ -220,45 +388,149 @@ class AdminPanel {
         document.getElementById('blogImage').value = blog.image || '';
         document.getElementById('blogExcerpt').value = blog.excerpt || '';
         document.getElementById('blogContent').value = blog.content;
+        
+        // Load content into Quill editor
+        setTimeout(() => {
+            if (typeof quillEditor !== 'undefined' && quillEditor && blog.content) {
+                console.log('📝 Loading content into Quill editor:', blog.content.substring(0, 100) + '...');
+                quillEditor.root.innerHTML = blog.content;
+                console.log('✅ Content loaded into Quill editor');
+            } else {
+                console.warn('⚠️ Quill editor not available or no content to load');
+            }
+        }, 200); // Increased delay to ensure modal is fully loaded
     }
 
     clearBlogForm() {
         document.getElementById('blogForm').reset();
         document.getElementById('blogId').value = '';
+        
+        // Clear Quill editor content
+        setTimeout(() => {
+            if (typeof quillEditor !== 'undefined' && quillEditor) {
+                console.log('🧹 Clearing Quill editor content');
+                quillEditor.setContents([]);
+                console.log('✅ Quill editor cleared');
+            }
+        }, 100);
     }
 
     async saveBlog() {
         try {
-            const blog = {
-                title: document.getElementById('blogTitle').value,
-                author: document.getElementById('blogAuthor').value,
-                date: document.getElementById('blogDate').value,
-                status: document.getElementById('blogStatus').value,
-                image: document.getElementById('blogImage').value,
-                excerpt: document.getElementById('blogExcerpt').value,
-                content: document.getElementById('blogContent').value
-            };
-
+            console.log('🔄 Starting blog save process...');
+            
+            // Get form values
+            const title = document.getElementById('blogTitle').value.trim();
+            const author = document.getElementById('blogAuthor').value.trim();
+            const date = document.getElementById('blogDate').value;
+            const status = document.getElementById('blogStatus').value;
+            const image = document.getElementById('blogImage').value.trim();
+            const excerpt = document.getElementById('blogExcerpt').value.trim();
+            const content = document.getElementById('blogContent').value.trim();
             const id = document.getElementById('blogId').value;
 
-            if (id) {
-                await window.supabaseClient
-                    .from(window.CONFIG.tables.BLOGS)
-                    .update(blog)
-                    .eq("id", id);
-            } else {
-                await window.supabaseClient
-                    .from(window.CONFIG.tables.BLOGS)
-                    .insert([blog]);
+            console.log('📝 Form data collected:', {
+                title, author, date, status, image: image ? 'provided' : 'empty',
+                excerpt: excerpt ? 'provided' : 'empty', 
+                content: content ? 'provided' : 'empty',
+                id: id || 'new blog'
+            });
+
+            // Validate required fields
+            if (!title) {
+                throw new Error('Blog title is required');
+            }
+            if (!author) {
+                throw new Error('Blog author is required');
+            }
+            if (!date) {
+                throw new Error('Blog date is required');
+            }
+            if (!content) {
+                throw new Error('Blog content is required');
             }
 
-            this.showAlert("Blog saved!", "success");
-            bootstrap.Modal.getInstance(document.getElementById('blogModal')).hide();
-            this.loadBlogs();
-            this.loadDashboardData();
+            // Prepare blog object
+            const blog = {
+                title: title,
+                author: author,
+                date: date,
+                status: status,
+                image: image || null,
+                excerpt: excerpt || null,
+                content: content
+            };
+
+            console.log('💾 Prepared blog object:', blog);
+
+            // Check if supabase client is available
+            if (!window.supabaseClient) {
+                throw new Error('Supabase client not initialized. Check secure-config.js');
+            }
+
+            console.log('🔗 Supabase client available, attempting database operation...');
+
+            let result;
+            if (id) {
+                console.log(`📝 Updating existing blog with ID: ${id}`);
+                result = await window.supabaseClient
+                    .from(window.CONFIG.tables.BLOGS)
+                    .update(blog)
+                    .eq("id", id)
+                    .select();
+            } else {
+                console.log('➕ Creating new blog');
+                result = await window.supabaseClient
+                    .from(window.CONFIG.tables.BLOGS)
+                    .insert([blog])
+                    .select();
+            }
+
+            console.log('📊 Database operation result:', result);
+
+            if (result.error) {
+                console.error('❌ Database error:', result.error);
+                throw new Error(`Database error: ${result.error.message}`);
+            }
+
+            if (result.data && result.data.length > 0) {
+                console.log('✅ Blog saved successfully:', result.data[0]);
+                this.showAlert("Blog saved successfully!", "success");
+                
+                // Close modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('blogModal'));
+                if (modal) {
+                    modal.hide();
+                }
+                
+                // Refresh data
+                this.loadBlogs();
+                this.loadDashboardData();
+            } else {
+                console.warn('⚠️ No data returned from database operation');
+                this.showAlert("Blog saved, but no confirmation received", "warning");
+            }
+
         } catch (error) {
-            console.error('Error saving blog:', error);
-            this.showAlert('Error saving blog', 'danger');
+            console.error('💥 Error saving blog:', error);
+            
+            // Show detailed error message
+            let errorMessage = 'Error saving blog: ';
+            if (error.message) {
+                errorMessage += error.message;
+            } else if (error.error && error.error.message) {
+                errorMessage += error.error.message;
+            } else {
+                errorMessage += 'Unknown error occurred';
+            }
+            
+            this.showAlert(errorMessage, 'danger');
+            
+            // Log additional debug info
+            console.log('🔍 Debug info:');
+            console.log('- Supabase client:', window.supabaseClient ? 'Available' : 'Missing');
+            console.log('- CONFIG object:', window.CONFIG ? 'Available' : 'Missing');
+            console.log('- Table name:', window.CONFIG?.tables?.BLOGS || 'Missing');
         }
     }
 
@@ -317,6 +589,36 @@ class AdminPanel {
             }
         } catch (error) {
             console.warn('Database compatibility check failed:', error);
+            return false;
+        }
+    }
+
+    // Test database connection
+    async testDatabaseConnection() {
+        try {
+            console.log('🔍 Testing database connection...');
+            
+            if (!window.supabaseClient) {
+                throw new Error('Supabase client not initialized');
+            }
+
+            // Test basic connection
+            const { data, error } = await window.supabaseClient
+                .from('blogs')
+                .select('count', { count: 'exact', head: true });
+
+            if (error) {
+                console.error('❌ Database connection failed:', error);
+                this.showAlert(`Database connection failed: ${error.message}`, 'danger');
+                return false;
+            }
+
+            console.log('✅ Database connection successful');
+            this.showAlert('Database connection successful!', 'success');
+            return true;
+        } catch (error) {
+            console.error('💥 Database test error:', error);
+            this.showAlert(`Database test failed: ${error.message}`, 'danger');
             return false;
         }
     }
@@ -1232,10 +1534,15 @@ class AdminPanel {
         if (loginForm) {
             loginForm.addEventListener("submit", (e) => {
                 e.preventDefault();
-                this.login(
-                    document.getElementById('email').value, 
-                    document.getElementById('password').value
-                );
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value;
+                
+                if (!username || !password) {
+                    this.showLoginError('Please enter both username and password');
+                    return;
+                }
+                
+                this.login(username, password);
             });
         }
 
@@ -1259,23 +1566,7 @@ class AdminPanel {
 
     // Method to bind events after admin panel is shown
     bindAdminEvents() {
-        // Navigation links
-        document.querySelectorAll('[data-section]').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const section = e.target.getAttribute('data-section');
-                this.showSection(section);
-            });
-        });
-
-        // Logout button
-        const logoutBtn = document.getElementById('logoutBtn');
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.logout();
-            });
-        }
+        // Additional admin-specific event binding can go here
     }
 }
 

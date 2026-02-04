@@ -14,7 +14,9 @@ class EcellDataManager {
 
     initClient() {
         if (typeof supabase !== 'undefined') {
-            this.client = supabase.createClient(this.supabaseUrl, this.supabaseKey);
+            this.client = window.supabaseManager ? 
+                window.supabaseManager.getPublicClient() : 
+                supabase.createClient(this.supabaseUrl, this.supabaseKey);
             console.log('E-Cell Data Manager initialized');
         } else {
             // Retry after a short delay if Supabase isn't loaded yet

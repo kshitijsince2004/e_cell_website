@@ -835,44 +835,54 @@
         });
     }
 
-    //scrollTrigger
+    //scrollTrigger - Only run if elements exist
+    const prtMain = document.getElementById('prt-main');
+    const text2 = document.querySelector('.text2');
+    const cardOne = document.getElementById('card-one');
+    const cardTwo = document.getElementById('card-two');
+    const cardThree = document.getElementById('card-three');
 
-    var tl = gsap.timeline({
-        scrollTrigger: {
-            trigger: "#prt-main",
-            // markers:true,
-            start: "50% 50%",
-            end: "100% 50%",
-            scrub: 2,
-            pin: true
-        }
-    });
-    tl
-        .to(".text2", {
-            top: "-100%",
-        }, 'a')
-        .to("#card-one", {
-            top: "35%",
-        }, 'a')
-        .to("#card-two", {
-            top: "130%"
-        }, 'a')
-        .to("#card-two", {
-            top: "42%"
-        }, 'b')
-        .to("#card-one", {
-            width: "55%",
-            height: "35vh"
-        }, 'b')
-        .to("#card-three", {
-            top: "130%"
-        }, 'b')
-        .to("#card-three", {
-            top: "50%"
-        }, 'c')
-        .to("#card-two", {
-            width: "65%",
-            height: "38vh"
-        }, 'c')
+    // Only initialize GSAP animations if all required elements exist
+    if (prtMain && text2 && cardOne && cardTwo && cardThree) {
+        var tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#prt-main",
+                // markers:true,
+                start: "50% 50%",
+                end: "100% 50%",
+                scrub: 2,
+                pin: true
+            }
+        });
+        tl
+            .to(".text2", {
+                top: "-100%",
+            }, 'a')
+            .to("#card-one", {
+                top: "35%",
+            }, 'a')
+            .to("#card-two", {
+                top: "130%"
+            }, 'a')
+            .to("#card-two", {
+                top: "42%"
+            }, 'b')
+            .to("#card-one", {
+                width: "55%",
+                height: "35vh"
+            }, 'b')
+            .to("#card-three", {
+                top: "130%"
+            }, 'b')
+            .to("#card-three", {
+                top: "50%"
+            }, 'c')
+            .to("#card-two", {
+                width: "65%",
+                height: "38vh"
+            }, 'c')
+    } else {
+        console.log('GSAP ScrollTrigger: Required elements not found on this page, skipping animations');
+    }
 
 })(jQuery);

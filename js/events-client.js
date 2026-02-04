@@ -13,7 +13,9 @@ class EventsClient {
     initializeClient() {
         try {
             if (typeof window.supabase !== 'undefined') {
-                this.supabaseClient = window.supabase.createClient(this.SUPABASE_URL, this.SUPABASE_ANON_KEY);
+                this.supabaseClient = window.supabaseManager ? 
+                    window.supabaseManager.getPublicClient() : 
+                    window.supabase.createClient(this.SUPABASE_URL, this.SUPABASE_ANON_KEY);
                 console.log('Events client initialized successfully');
             } else {
                 console.error('Supabase library not loaded');

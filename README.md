@@ -44,14 +44,17 @@ Modern, secure website for the Entrepreneurship Cell at National Forensic Scienc
 ### **1. Database Setup**
 ```sql
 -- Run in Supabase SQL Editor
--- 1. Main database structure
-\i admin/clean-database-setup.sql
+-- 1. Create admin users and authentication
+\i admin/add-admin-user.sql
 
--- 2. Admin authentication
+-- 2. Set up secure admin table
 \i admin/safe-admin-table.sql
 
--- 3. Enable security
+-- 3. Enable security policies
 \i admin/enable-rls-security.sql
+
+-- 4. (Optional) Minimal RLS fix if needed
+\i admin/minimal-rls-fix.sql
 ```
 
 ### **2. Configuration**
@@ -99,9 +102,10 @@ Multiple secure access methods:
 │   │       └── admin.css           # Admin styles
 │   │
 │   └── Database Scripts
-│       ├── clean-database-setup.sql    # Main DB setup
+│       ├── add-admin-user.sql          # Admin user creation
 │       ├── safe-admin-table.sql        # Admin authentication
-│       └── enable-rls-security.sql     # Security policies
+│       ├── enable-rls-security.sql     # Security policies
+│       └── minimal-rls-fix.sql         # RLS troubleshooting
 │
 ├── 🎨 Assets
 │   ├── css/                    # Stylesheets

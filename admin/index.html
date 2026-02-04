@@ -20,19 +20,23 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">E-Cell Admin Login</h5>
+                    <h5 class="modal-title">🔐 E-Cell Admin Login</h5>
                 </div>
                 <div class="modal-body">
                     <form id="loginForm">
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" required>
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" required placeholder="Enter username"
+                                autocomplete="username">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" required>
+                            <input type="password" class="form-control" id="password" required
+                                placeholder="Enter password" autocomplete="current-password">
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </button>
                     </form>
                     <div id="loginError" class="alert alert-danger mt-3 d-none"></div>
                 </div>
@@ -46,6 +50,11 @@
         <div class="sidebar">
             <div class="sidebar-header">
                 <h4><i class="fas fa-cogs"></i> E-Cell Admin</h4>
+                <div class="text-center mt-2">
+                    <span class="badge bg-success" id="userBadge">
+                        <i class="fas fa-user"></i> <span id="currentUsername">Admin</span>
+                    </span>
+                </div>
                 <a href="../index.html" target="_blank" class="btn btn-sm btn-outline-light mt-2" title="View Website">
                     <i class="fas fa-globe"></i> Website
                 </a>
@@ -83,9 +92,22 @@
             <div id="dashboard" class="content-section active">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2>Dashboard</h2>
-                    <a href="../index.html" target="_blank" class="btn btn-outline-primary">
-                        <i class="fas fa-external-link-alt"></i> View Website
-                    </a>
+                    <div class="d-flex gap-2">
+                        <span class="badge bg-primary fs-6" id="welcomeMessage">
+                            <i class="fas fa-user"></i> Welcome, Admin!
+                        </span>
+                        <a href="../index.html" target="_blank" class="btn btn-outline-primary">
+                            <i class="fas fa-external-link-alt"></i> View Website
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Welcome Alert -->
+                <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                    <i class="fas fa-shield-alt"></i> <strong>Authenticated Access:</strong>
+                    You're logged in with full admin privileges.
+                    Create and manage content with secure database access!
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
@@ -536,16 +558,18 @@
                                                 placeholder="Enter image URL or upload below">
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="file" class="form-control" id="eventImageFile" 
-                                                accept="image/*" onchange="handleEventImageUpload(this)">
+                                            <input type="file" class="form-control" id="eventImageFile" accept="image/*"
+                                                onchange="handleEventImageUpload(this)">
                                         </div>
                                     </div>
                                     <div class="form-text">
                                         <i class="fas fa-info-circle"></i>
-                                        <strong>Recommended size:</strong> 800x400px (2:1 ratio) | Max file size: 2MB | Formats: JPG, PNG, WebP
+                                        <strong>Recommended size:</strong> 800x400px (2:1 ratio) | Max file size: 2MB |
+                                        Formats: JPG, PNG, WebP
                                     </div>
                                     <div id="eventImagePreview" class="mt-2" style="display: none;">
-                                        <img id="eventImagePreviewImg" src="" alt="Preview" style="max-width: 200px; max-height: 100px; border-radius: 5px; border: 1px solid #ddd;">
+                                        <img id="eventImagePreviewImg" src="" alt="Preview"
+                                            style="max-width: 200px; max-height: 100px; border-radius: 5px; border: 1px solid #ddd;">
                                     </div>
                                 </div>
                                 <div class="mb-3">
@@ -774,17 +798,18 @@
                                     <label for="adImage" class="form-label">Advertisement Image *</label>
                                     <div class="row">
                                         <div class="col-md-8">
-                                            <input type="url" class="form-control" id="adImageUrl" 
+                                            <input type="url" class="form-control" id="adImageUrl"
                                                 placeholder="Enter image URL or upload below">
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="file" class="form-control" id="adImageFile" 
-                                                accept="image/*" onchange="handleAdImageUpload(this)">
+                                            <input type="file" class="form-control" id="adImageFile" accept="image/*"
+                                                onchange="handleAdImageUpload(this)">
                                         </div>
                                     </div>
                                     <div class="form-text">
                                         <i class="fas fa-info-circle"></i>
-                                        <strong>Recommended size:</strong> 400x500px (4:5 ratio) | Max file size: 2MB | Formats: JPG, PNG, WebP
+                                        <strong>Recommended size:</strong> 400x500px (4:5 ratio) | Max file size: 2MB |
+                                        Formats: JPG, PNG, WebP
                                     </div>
                                 </div>
 
@@ -996,26 +1021,26 @@
 
             // Read file as data URL
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 // Set the data URL as the image source
                 urlInput.value = e.target.result;
                 urlInput.placeholder = originalPlaceholder;
                 urlInput.disabled = false;
-                
+
                 // Trigger the existing image preview system
                 const event = new Event('input', { bubbles: true });
                 urlInput.dispatchEvent(event);
-                
+
                 console.log('Advertisement image loaded as data URL. In production, upload to server and use returned URL.');
             };
-            
-            reader.onerror = function() {
+
+            reader.onerror = function () {
                 alert('Error reading file. Please try again.');
                 urlInput.placeholder = originalPlaceholder;
                 urlInput.disabled = false;
                 input.value = '';
             };
-            
+
             reader.readAsDataURL(file);
         }
 
@@ -1048,25 +1073,25 @@
 
             // Read file as data URL
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 // Set the data URL as the image source
                 urlInput.value = e.target.result;
                 urlInput.placeholder = originalPlaceholder;
                 urlInput.disabled = false;
-                
+
                 // Show preview
                 showEventImagePreview(e.target.result);
-                
+
                 console.log('Event image loaded as data URL. In production, upload to server and use returned URL.');
             };
-            
-            reader.onerror = function() {
+
+            reader.onerror = function () {
                 alert('Error reading file. Please try again.');
                 urlInput.placeholder = originalPlaceholder;
                 urlInput.disabled = false;
                 input.value = '';
             };
-            
+
             reader.readAsDataURL(file);
         }
 
@@ -1074,7 +1099,7 @@
         function showEventImagePreview(imageSrc) {
             const previewContainer = document.getElementById('eventImagePreview');
             const previewImg = document.getElementById('eventImagePreviewImg');
-            
+
             if (previewContainer && previewImg && imageSrc) {
                 previewImg.src = imageSrc;
                 previewContainer.style.display = 'block';
@@ -1082,10 +1107,10 @@
         }
 
         // Update event image preview when URL is typed
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const eventImageInput = document.getElementById('eventImage');
             if (eventImageInput) {
-                eventImageInput.addEventListener('input', function() {
+                eventImageInput.addEventListener('input', function () {
                     const url = this.value;
                     if (url && (url.startsWith('http') || url.startsWith('data:'))) {
                         showEventImagePreview(url);

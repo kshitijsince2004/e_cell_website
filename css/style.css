@@ -93,7 +93,7 @@ body {
     display: none;
 }
 
-.badge {
+.badge.spinning-badge {
     position: absolute;
     top: 7%;
     left: 90px;
@@ -101,6 +101,35 @@ body {
     -webkit-animation: spin 15s linear infinite;
     -moz-animation: spin 15s linear infinite;
     animation: spin 15s linear infinite;
+}
+
+/* Ensure blog status badges are static */
+.blog-status .badge {
+    position: static !important;
+    animation: none !important;
+    -webkit-animation: none !important;
+    -moz-animation: none !important;
+    transform: none !important;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+/* Blog meta styling */
+.blog-meta {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.blog-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.blog-author .badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
 }
 
 @-moz-keyframes spin {

@@ -31,15 +31,18 @@ class AdvertisementPopup {
             // Wait for Supabase to be available
             await this.waitForSupabase();
             
-            // Initialize Supabase client
-            this.client = window.supabase.createClient(this.supabaseUrl, this.supabaseKey);
+            // Initialize Supabase client using centralized manager
+            this.client = window.supabaseManager ? 
+                window.supabaseManager.getPublicClient() : 
+                window.supabase.createClient(this.supabaseUrl, this.supabaseKey);
             
             // Fetch and show advertisement
             await this.loadAndShowAdvertisement();
             
-            console.log('Advertisement popup system initialized');
+            console.log('✅ Advertisement popup system initialized');
         } catch (error) {
-            console.error('Error initializing advertisement popup:', error);
+            console.error('❌ Error initializing advertisement popup:', error);
+            // Fail silently - don't break the page if ads can't load
         }
     }
 
