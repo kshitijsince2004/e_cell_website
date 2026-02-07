@@ -81,12 +81,11 @@
     /* Transitions */
     transition: all var(--transition-smooth);
     
-    /* Inner Glow */
-    position: relative;
-    overflow: hidden;
-    
     /* Space above navbar */
     margin-top: 20px !important;
+    
+    /* Allow overflow for mobile menu */
+    overflow: visible !important;
 }
 
 /* Enhanced top highlight */
@@ -344,6 +343,10 @@
     border: none;
     cursor: pointer;
     transition: all var(--transition-smooth);
+    z-index: 10000;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 .toggle-line {
@@ -403,29 +406,35 @@
     
     .navbar-content {
         padding: 0 20px;
+        position: relative;
     }
     
-    .navbar-menu {
-        display: none;
+    /* Hide desktop menu by default on mobile */
+    .premium-navbar .navbar-menu {
+        display: none !important;
         position: absolute;
-        top: calc(100% + 12px);
-        left: 0;
-        right: 0;
+        top: 100%;
+        left: 10px;
+        right: 10px;
         flex-direction: column;
         gap: 0;
-        background: var(--glass-bg);
+        background: rgba(20, 20, 30, 0.98);
         backdrop-filter: blur(24px);
-        border: 1px solid var(--glass-border);
-        border-radius: var(--border-radius);
+        -webkit-backdrop-filter: blur(24px);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
         box-shadow: 
-            /* Clean drop shadow for mobile menu */
-            0 20px 60px rgba(0, 0, 0, 0.5),
-            inset 0 1px 0 rgba(255, 255, 255, 0.15);
-        padding: 24px;
+            0 20px 60px rgba(0, 0, 0, 0.8),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        padding: 20px;
+        z-index: 99999;
+        margin-top: 15px;
+        min-height: 300px;
     }
     
-    .navbar-menu.active {
-        display: flex;
+    /* Show menu when active */
+    .premium-navbar .navbar-menu.active {
+        display: flex !important;
         animation: slideDown 0.35s ease-out;
     }
     
