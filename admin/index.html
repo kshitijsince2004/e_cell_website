@@ -411,13 +411,13 @@
                                         placeholder="Enter image URL or upload below">
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="file" class="form-control" id="blogImageFile" accept="image/*"
+                                    <input type="file" class="form-control" id="blogImageFile" accept="image/jpeg,image/jpg,image/png,image/webp,image/gif,image/svg+xml"
                                         onchange="handleImageUpload(this, 'blogImage')">
                                 </div>
                             </div>
                             <div class="form-text">
                                 <i class="fas fa-info-circle"></i>
-                                <strong>Recommended size:</strong> 800x400px (2:1 ratio) | Max file size: 2MB | Formats:
+                                <strong>Recommended size:</strong> 800x400px (2:1 ratio) | Max file size: 10MB | Formats: JPG, PNG, WebP, GIF, SVG
                                 JPG, PNG, WebP
                             </div>
                             <div id="blogImagePreview" class="mt-2" style="display: none;">
@@ -558,14 +558,14 @@
                                                 placeholder="Enter image URL or upload below">
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="file" class="form-control" id="eventImageFile" accept="image/*"
+                                            <input type="file" class="form-control" id="eventImageFile" accept="image/jpeg,image/jpg,image/png,image/webp,image/gif,image/svg+xml"
                                                 onchange="handleEventImageUpload(this)">
                                         </div>
                                     </div>
                                     <div class="form-text">
                                         <i class="fas fa-info-circle"></i>
-                                        <strong>Recommended size:</strong> 800x400px (2:1 ratio) | Max file size: 2MB |
-                                        Formats: JPG, PNG, WebP
+                                        <strong>Recommended size:</strong> 800x400px (2:1 ratio) | Max file size: 10MB |
+                                        Formats: JPG, PNG, WebP, GIF, SVG
                                     </div>
                                     <div id="eventImagePreview" class="mt-2" style="display: none;">
                                         <img id="eventImagePreviewImg" src="" alt="Preview"
@@ -802,14 +802,14 @@
                                                 placeholder="Enter image URL or upload below">
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="file" class="form-control" id="adImageFile" accept="image/*"
+                                            <input type="file" class="form-control" id="adImageFile" accept="image/jpeg,image/jpg,image/png,image/webp,image/gif,image/svg+xml"
                                                 onchange="handleAdImageUpload(this)">
                                         </div>
                                     </div>
                                     <div class="form-text">
                                         <i class="fas fa-info-circle"></i>
-                                        <strong>Recommended size:</strong> 400x500px (4:5 ratio) | Max file size: 2MB |
-                                        Formats: JPG, PNG, WebP
+                                        <strong>Recommended size:</strong> 400x500px (4:5 ratio) | Max file size: 10MB |
+                                        Formats: JPG, PNG, WebP, GIF, SVG
                                     </div>
                                 </div>
 
@@ -922,23 +922,29 @@
             });
         });
 
+        // Configuration for image uploads
+        const IMAGE_UPLOAD_CONFIG = {
+            maxSize: 10 * 1024 * 1024, // 10MB in bytes (increased from 2MB)
+            allowedTypes: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'],
+            maxSizeMB: 10 // For display purposes
+        };
+
         // Handle image upload and preview
         function handleImageUpload(input, targetInputId) {
             const file = input.files[0];
             if (!file) return;
 
             // Validate file type
-            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-            if (!allowedTypes.includes(file.type)) {
-                alert('Please select a valid image file (JPG, PNG, or WebP)');
+            if (!IMAGE_UPLOAD_CONFIG.allowedTypes.includes(file.type)) {
+                alert(`Please select a valid image file (${IMAGE_UPLOAD_CONFIG.allowedTypes.map(t => t.split('/')[1].toUpperCase()).join(', ')})`);
                 input.value = '';
                 return;
             }
 
-            // Validate file size (2MB max)
-            const maxSize = 2 * 1024 * 1024; // 2MB in bytes
-            if (file.size > maxSize) {
-                alert('File size must be less than 2MB');
+            // Validate file size (10MB max)
+            if (file.size > IMAGE_UPLOAD_CONFIG.maxSize) {
+                const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                alert(`File size (${fileSizeMB}MB) exceeds the maximum allowed size of ${IMAGE_UPLOAD_CONFIG.maxSizeMB}MB`);
                 input.value = '';
                 return;
             }
@@ -998,17 +1004,16 @@
             if (!file) return;
 
             // Validate file type
-            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-            if (!allowedTypes.includes(file.type)) {
-                alert('Please select a valid image file (JPG, PNG, or WebP)');
+            if (!IMAGE_UPLOAD_CONFIG.allowedTypes.includes(file.type)) {
+                alert(`Please select a valid image file (${IMAGE_UPLOAD_CONFIG.allowedTypes.map(t => t.split('/')[1].toUpperCase()).join(', ')})`);
                 input.value = '';
                 return;
             }
 
-            // Validate file size (2MB max)
-            const maxSize = 2 * 1024 * 1024; // 2MB in bytes
-            if (file.size > maxSize) {
-                alert('File size must be less than 2MB');
+            // Validate file size (10MB max)
+            if (file.size > IMAGE_UPLOAD_CONFIG.maxSize) {
+                const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                alert(`File size (${fileSizeMB}MB) exceeds the maximum allowed size of ${IMAGE_UPLOAD_CONFIG.maxSizeMB}MB`);
                 input.value = '';
                 return;
             }
@@ -1050,17 +1055,16 @@
             if (!file) return;
 
             // Validate file type
-            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-            if (!allowedTypes.includes(file.type)) {
-                alert('Please select a valid image file (JPG, PNG, or WebP)');
+            if (!IMAGE_UPLOAD_CONFIG.allowedTypes.includes(file.type)) {
+                alert(`Please select a valid image file (${IMAGE_UPLOAD_CONFIG.allowedTypes.map(t => t.split('/')[1].toUpperCase()).join(', ')})`);
                 input.value = '';
                 return;
             }
 
-            // Validate file size (2MB max)
-            const maxSize = 2 * 1024 * 1024; // 2MB in bytes
-            if (file.size > maxSize) {
-                alert('File size must be less than 2MB');
+            // Validate file size (10MB max)
+            if (file.size > IMAGE_UPLOAD_CONFIG.maxSize) {
+                const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                alert(`File size (${fileSizeMB}MB) exceeds the maximum allowed size of ${IMAGE_UPLOAD_CONFIG.maxSizeMB}MB`);
                 input.value = '';
                 return;
             }

@@ -22,11 +22,75 @@
     <link rel="stylesheet" href="css/swiper.min.css">
     <link rel="stylesheet" href="css/default.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/rounded-corners.css">
+    <link rel="stylesheet" href="css/custom-buttons.css">
+    <link rel="stylesheet" href="css/premium-navbar.css">
+    <link rel="stylesheet" href="css/premium-cards.css">
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="css/advertisement-popup.css">
 </head>
 
 <body>
+    <!-- Premium Glassmorphism Navigation Bar -->
+    <nav class="premium-navbar" id="premiumNavbar">
+        <div class="navbar-content">
+            <!-- Logo Section -->
+            <a href="index.html" class="navbar-logo">
+                <img src="img/logo/elogo.png" alt="E-Cell NFSU" class="logo-image">
+                <span class="logo-text">E-Cell</span>
+            </a>
+            
+            <!-- Navigation Menu -->
+            <ul class="navbar-menu" id="navbarMenu">
+                <li class="menu-item">
+                    <a href="index.html" class="menu-link" data-page="home">
+                        <span>Home</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="about.html" class="menu-link active" data-page="about">
+                        <span>About</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="events.html" class="menu-link" data-page="events">
+                        <span>Events</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="team.html" class="menu-link" data-page="team">
+                        <span>Team</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="blog.html" class="menu-link" data-page="blog">
+                        <span>Blog</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="contact.html" class="menu-link" data-page="contact">
+                        <span>Contact</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <!-- CTA Button -->
+            <a href="about.html" class="navbar-cta">
+                <span>Join E-Cell</span>
+                <svg class="cta-icon" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                </svg>
+            </a>
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span class="toggle-line"></span>
+                <span class="toggle-line"></span>
+                <span class="toggle-line"></span>
+            </button>
+        </div>
+    </nav>
+
     <!--  Preloader  -->
     <div id="preloader">
         <div id="loading"> </div>
@@ -65,7 +129,9 @@
                             <div class="login">
                                 <ul>
                                     <li>
-                                        <a href="contact.html" class="btn3" data-animation="fadeInLeft" data-delay=".4s">lets talks <i class="fa-sharp fa-solid fa-arrow-up"></i></a>
+                                        <a href="contact.html" class="btn3" data-animation="fadeInLeft"
+                                            data-delay=".4s">lets talks <i
+                                                class="fa-sharp fa-solid fa-arrow-up"></i></a>
                                     </li>
                                 </ul>
                             </div>
@@ -91,21 +157,28 @@
         <div id="cssmenu3" class="menu-one-page-menu-container">
             <ul class="menu">
                 <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="index.html">Home</a></li>
-                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="about.html">About Us</a></li>
-                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="services.html">Services</a></li>
-                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="pricing.html">Pricing </a></li>
+                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="about.html">About Us</a>
+                </li>
+                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="services.html">Services</a>
+                </li>
+                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="pricing.html">Pricing </a>
+                </li>
                 <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="team.html">Team </a></li>
 
-                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="projects.html">Cases Study</a></li>
+                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="projects.html">Cases
+                        Study</a></li>
                 <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="blog.html">Blog</a></li>
-                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="contact.html">Contact</a></li>
+                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="contact.html">Contact</a>
+                </li>
             </ul>
         </div>
 
         <div id="cssmenu2" class="menu-one-page-menu-container">
             <ul id="menu-one-page-menu-12" class="menu">
-                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="tel:+919999882696"><span>+91 9999882696</span></a></li>
-                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="mailto:ecell@nfsutc.ac.in"><span>ecell@nfsutc.ac.in</span></a></li>
+                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a
+                        href="tel:+919999882696"><span>+91 9999882696</span></a></li>
+                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a
+                        href="mailto:ecell@nfsutc.ac.in"><span>ecell@nfsutc.ac.in</span></a></li>
             </ul>
         </div>
     </div>
@@ -132,7 +205,8 @@
 
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="index.html"><i class="fa-solid fa-house"></i> Home</a></li>
+                                            <li class="breadcrumb-item"><a href="index.html"><i
+                                                        class="fa-solid fa-house"></i> Home</a></li>
                                             <li class="breadcrumb-item active" aria-current="page">About</li>
                                         </ol>
                                     </nav>
@@ -150,26 +224,34 @@
             <div class="container">
                 <div class="row">
                     <div class="col-xl-4 col-lg-4 col-md-12">
-                        <div class="section-title mb-70 text-left wow fadeInDown animated" data-animation="fadeInDown" data-delay=".4s">
-                            <h5><img src="img/bg/h-icon.png" alt="img"> About Us</h5>
+                        <div class="section-title mb-70 text-left wow fadeInDown animated" data-animation="fadeInDown"
+                            data-delay=".4s">
+                            <h5> About Us</h5>
                             <h2>
                                 Powering Innovation with Purpose
                             </h2>
-                            <a href="about.html" class="btn mt-30" data-animation="fadeInLeft" data-delay=".4s">Read More <i class="fa-light fa-arrow-right-long"></i></a>
+                            <a href="about.html" class="btn mt-30" data-animation="fadeInLeft" data-delay=".4s">Read
+                                More <i class="fa-light fa-arrow-right-long"></i></a>
                         </div>
 
                     </div>
                     <div class="col-xl-8 col-lg-8 col-md-12">
-                        <div class="about-content pl-30 wow fadeInRight animated" data-animation="fadeInRight" data-delay=".4s">
-                            <h3>At E-Cell NFSU Tripura Campus, we are a <span>community of curious innovators,</span> aspiring entrepreneurs, and problem-solvers driven to create impact through ideas that matter.</h3>
-                            <h4>Rooted in the unique academic ecosystem of National Forensic Sciences University, we encourage students to explore entrepreneurship at the intersection of technology, cybersecurity, forensics, law, and national development.</h4>
+                        <div class="about-content pl-30 wow fadeInRight animated" data-animation="fadeInRight"
+                            data-delay=".4s">
+                            <h3>At E-Cell NFSU Tripura Campus, we are a <span>community of curious innovators,</span>
+                                aspiring entrepreneurs, and problem-solvers driven to create impact through ideas that
+                                matter.</h3>
+                            <h4>Rooted in the unique academic ecosystem of National Forensic Sciences University, we
+                                encourage students to explore entrepreneurship at the intersection of technology,
+                                cybersecurity, forensics, law, and national development.</h4>
                             <div class="about-content2">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <ul class="green2">
                                             <li>
                                                 <div class="abcontent">
-                                                    <div class="ano"><span><img src="img/icon/c-icon-01.png" alt="img"> </span></div>
+                                                    <div class="ano"><span><img src="img/icon/c-icon-01.png" alt="img">
+                                                        </span></div>
                                                     <div class="text">
                                                         <h3>50+</h3>
                                                         <p>Active Members</p>
@@ -178,7 +260,8 @@
                                             </li>
                                             <li>
                                                 <div class="abcontent">
-                                                    <div class="ano"><span><img src="img/icon/c-icon-02.png" alt="img"> </span></div>
+                                                    <div class="ano"><span><img src="img/icon/c-icon-02.png" alt="img">
+                                                        </span></div>
                                                     <div class="text">
                                                         <h3>10+</h3>
                                                         <p>Builders Behind the Vision</p>
@@ -211,40 +294,50 @@
                             <div class="animations-02">
                                 <img src="img/bg/who-ani-02.png" alt="img">
                             </div>
-                            <div class="img-01 pl-100 wow fadeInLeft animated" data-animation="fadeInLeft" data-delay=".4s">
+                            <div class="img-01 pl-100 wow fadeInLeft animated" data-animation="fadeInLeft"
+                                data-delay=".4s">
                                 <img src="img/bg/mission.png" alt="img">
                             </div>
 
                         </div>
                     </div>
                     <div class="col-xl-6 col-lg-6 col-md-6">
-                        <div class="who-are-you-content pl-30 wow fadeInRight animated" data-animation="fadeInRight" data-delay=".4s">
-                            <div class="section-title mb-50 text-left wow fadeInDown animated" data-animation="fadeInDown" data-delay=".4s">
-                                <h5><img src="img/bg/h-icon.png" alt="img"> Our Mission</h5>
+                        <div class="who-are-you-content pl-30 wow fadeInRight animated" data-animation="fadeInRight"
+                            data-delay=".4s">
+                            <div class="section-title mb-50 text-left wow fadeInDown animated"
+                                data-animation="fadeInDown" data-delay=".4s">
+                                <h5> Our Mission</h5>
                                 <h2>
                                     Cultivating the Next Generation of Student Entrepreneurs
                                 </h2>
 
                             </div>
                             <div class="who-are-you-content2">
-                                <p>We aim to cultivate a strong entrepreneurial mindset among students by providing exposure to ideation, startup fundamentals, and innovation challenges tailored to forensic and security-centric domains.</p>
-                                <p class="mt-20">We focus on enabling student-led ventures through mentorship, industry connections, national-level competitions, and incubation opportunities.</p>
+                                <p>We aim to cultivate a strong entrepreneurial mindset among students by providing
+                                    exposure to ideation, startup fundamentals, and innovation challenges tailored to
+                                    forensic and security-centric domains.</p>
+                                <p class="mt-20">We focus on enabling student-led ventures through mentorship, industry
+                                    connections, national-level competitions, and incubation opportunities.</p>
                                 <div class="row mt-40">
                                     <div class="col-md-6">
                                         <div class="way-content pr-30">
-                                            <div class="ano mb-30"><span><img src="img/icon/w-icon-01.png" alt="img"> </span></div>
+                                            <div class="ano mb-30"><span><img src="img/icon/w-icon-01.png" alt="img">
+                                                </span></div>
                                             <div class="text">
                                                 <h3>2026 Goals</h3>
-                                                <p>Building entrepreneurial mindset through ideation and startup fundamentals.</p>
+                                                <p>Building entrepreneurial mindset through ideation and startup
+                                                    fundamentals.</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="way-content pr-30">
-                                            <div class="ano mb-30"><span><img src="img/icon/w-icon-02.png" alt="img"> </span></div>
+                                            <div class="ano mb-30"><span><img src="img/icon/w-icon-02.png" alt="img">
+                                                </span></div>
                                             <div class="text">
                                                 <h3>2027 Goals</h3>
-                                                <p>Enabling student-led ventures through mentorship and industry connections.</p>
+                                                <p>Enabling student-led ventures through mentorship and industry
+                                                    connections.</p>
                                             </div>
                                         </div>
                                     </div>
@@ -269,40 +362,50 @@
                             <div class="animations-02">
                                 <img src="img/bg/who-ani-02.png" alt="img">
                             </div>
-                            <div class="img-01 pl-100 wow fadeInLeft animated" data-animation="fadeInLeft" data-delay=".4s">
+                            <div class="img-01 pl-100 wow fadeInLeft animated" data-animation="fadeInLeft"
+                                data-delay=".4s">
                                 <img src="img/bg/vision.png" alt="img">
                             </div>
 
                         </div>
                     </div>
                     <div class="col-xl-6 col-lg-6 col-md-6">
-                        <div class="who-are-you-content pl-30 wow fadeInRight animated" data-animation="fadeInRight" data-delay=".4s">
-                            <div class="section-title mb-50 text-left wow fadeInDown animated" data-animation="fadeInDown" data-delay=".4s">
-                                <h5><img src="img/bg/h-icon.png" alt="img"> Our Vision</h5>
+                        <div class="who-are-you-content pl-30 wow fadeInRight animated" data-animation="fadeInRight"
+                            data-delay=".4s">
+                            <div class="section-title mb-50 text-left wow fadeInDown animated"
+                                data-animation="fadeInDown" data-delay=".4s">
+                                <h5> Our Vision</h5>
                                 <h2>
-                                   To nurture a new generation of student entrepreneurs and changemakers
+                                    To nurture a new generation of student entrepreneurs and changemakers
                                 </h2>
 
                             </div>
                             <div class="who-are-you-content2">
-                                <p>We envision E-Cell NFSU Tripura as a launchpad for students who aspire to become entrepreneurial leaders, startup founders, and innovation contributors in critical national sectors.</p>
-                                <p class="mt-20">By bridging academics with real-world execution, we strive to make entrepreneurship an accessible and impactful journey for every NFSU student.</p>
+                                <p>We envision E-Cell NFSU Tripura as a launchpad for students who aspire to become
+                                    entrepreneurial leaders, startup founders, and innovation contributors in critical
+                                    national sectors.</p>
+                                <p class="mt-20">By bridging academics with real-world execution, we strive to make
+                                    entrepreneurship an accessible and impactful journey for every NFSU student.</p>
                                 <div class="row mt-40">
                                     <div class="col-md-6">
                                         <div class="way-content pr-30">
-                                            <div class="ano mb-30"><span><img src="img/icon/w-icon-01.png" alt="img"> </span></div>
+                                            <div class="ano mb-30"><span><img src="img/icon/w-icon-01.png" alt="img">
+                                                </span></div>
                                             <div class="text">
                                                 <h3>Leadership Development</h3>
-                                                <p>Nurturing entrepreneurial leaders and startup founders in critical sectors.</p>
+                                                <p>Nurturing entrepreneurial leaders and startup founders in critical
+                                                    sectors.</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="way-content pr-30">
-                                            <div class="ano mb-30"><span><img src="img/icon/w-icon-02.png" alt="img"> </span></div>
+                                            <div class="ano mb-30"><span><img src="img/icon/w-icon-02.png" alt="img">
+                                                </span></div>
                                             <div class="text">
                                                 <h3>Academic Integration</h3>
-                                                <p>Bridging academics with real-world execution for impactful entrepreneurship.</p>
+                                                <p>Bridging academics with real-world execution for impactful
+                                                    entrepreneurship.</p>
                                             </div>
                                         </div>
                                     </div>
@@ -327,40 +430,51 @@
                             <div class="animations-02">
                                 <img src="img/bg/who-ani-02.png" alt="img">
                             </div>
-                            <div class="img-01 pl-100 wow fadeInLeft animated" data-animation="fadeInLeft" data-delay=".4s">
+                            <div class="img-01 pl-100 wow fadeInLeft animated" data-animation="fadeInLeft"
+                                data-delay=".4s">
                                 <img src="img/bg/who-img.png" alt="img">
                             </div>
 
                         </div>
                     </div>
                     <div class="col-xl-6 col-lg-6 col-md-6">
-                        <div class="who-are-you-content pl-30 wow fadeInRight animated" data-animation="fadeInRight" data-delay=".4s">
-                            <div class="section-title mb-50 text-left wow fadeInDown animated" data-animation="fadeInDown" data-delay=".4s">
-                                <h5><img src="img/bg/h-icon.png" alt="img"> Who We Are</h5>
+                        <div class="who-are-you-content pl-30 wow fadeInRight animated" data-animation="fadeInRight"
+                            data-delay=".4s">
+                            <div class="section-title mb-50 text-left wow fadeInDown animated"
+                                data-animation="fadeInDown" data-delay=".4s">
+                                <h5> Who We Are</h5>
                                 <h2>
                                     Entrepreneurship for Modern Nation Builders
                                 </h2>
 
                             </div>
                             <div class="who-are-you-content2">
-                                <p>At E-Cell NFSU Tripura, we are a student-led entrepreneurship cell committed to transforming ideas into responsible, scalable ventures. Our members collaborate across disciplines to build solutions that are secure, ethical, and socially relevant, aligned with the nation's priorities.</p>
-                                <p class="mt-20">We believe entrepreneurship is not just about startups — it is about innovation with accountability.</p>
+                                <p>At E-Cell NFSU Tripura, we are a student-led entrepreneurship cell committed to
+                                    transforming ideas into responsible, scalable ventures. Our members collaborate
+                                    across disciplines to build solutions that are secure, ethical, and socially
+                                    relevant, aligned with the nation's priorities.</p>
+                                <p class="mt-20">We believe entrepreneurship is not just about startups — it is about
+                                    innovation with accountability.</p>
                                 <div class="row mt-40">
                                     <div class="col-md-6">
                                         <div class="way-content pr-30">
-                                            <div class="ano mb-30"><span><img src="img/icon/w-icon-01.png" alt="img"> </span></div>
+                                            <div class="ano mb-30"><span><img src="img/icon/w-icon-01.png" alt="img">
+                                                </span></div>
                                             <div class="text">
                                                 <h3>Startup & Idea Development</h3>
-                                                <p>Guiding students from problem identification to validated startup concepts.</p>
+                                                <p>Guiding students from problem identification to validated startup
+                                                    concepts.</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="way-content pr-30">
-                                            <div class="ano mb-30"><span><img src="img/icon/w-icon-02.png" alt="img"> </span></div>
+                                            <div class="ano mb-30"><span><img src="img/icon/w-icon-02.png" alt="img">
+                                                </span></div>
                                             <div class="text">
                                                 <h3>Innovation & Skill Building</h3>
-                                                <p>Workshops on entrepreneurship, leadership, design thinking, cybersecurity startups, and legal awareness.</p>
+                                                <p>Workshops on entrepreneurship, leadership, design thinking,
+                                                    cybersecurity startups, and legal awareness.</p>
                                             </div>
                                         </div>
                                     </div>
@@ -374,15 +488,16 @@
         <!-- whow-are-you-end -->
 
         <!-- testimonial-area -->
-        
+
         <!-- testimonial-area-end -->
         <!-- work-process-area -->
         <section class="work-process-area pt-150 pb-120 fix">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-6 col-md-6">
-                        <div class="section-title center-align mb-50 p-relative text-center wow fadeInDown animated" data-animation="fadeInDown" data-delay=".4s">
-                            <h5><img src="img/bg/h-icon.png" alt="img"> Work Process</h5>
+                        <div class="section-title center-align mb-50 p-relative text-center wow fadeInDown animated"
+                            data-animation="fadeInDown" data-delay=".4s">
+                            <h5> Work Process</h5>
                             <h2>
                                 From Ideas to Successful Ventures
                             </h2>
@@ -401,28 +516,36 @@
                                         <div class="setp">Step 01</div>
                                         <h3>Discovery & Ideation</h3>
                                         <div class="content">
-                                            We identify problems worth solving. We engage students through brainstorming sessions, problem-statements, and ideation workshops to uncover real-world challenges and entrepreneurial opportunities.
+                                            We identify problems worth solving. We engage students through brainstorming
+                                            sessions, problem-statements, and ideation workshops to uncover real-world
+                                            challenges and entrepreneurial opportunities.
                                         </div>
                                     </li>
                                     <li class="wow fadeInUp animated" data-animation="fadeInUp" data-delay=".4s">
                                         <div class="setp">Step 02</div>
                                         <h3>Learning & Validation</h3>
                                         <div class="content">
-                                            We shape ideas into viable concepts. Through mentorship, market research, and peer feedback, we help validate ideas, refine value propositions, and build strong startup foundations.
+                                            We shape ideas into viable concepts. Through mentorship, market research,
+                                            and peer feedback, we help validate ideas, refine value propositions, and
+                                            build strong startup foundations.
                                         </div>
                                     </li>
                                     <li class="wow fadeInUp animated" data-animation="fadeInUp" data-delay=".4s">
                                         <div class="setp">Step 03</div>
                                         <h3>Building & Execution</h3>
                                         <div class="content">
-                                            We turn concepts into action. Students work on prototypes, MVPs, and pitch decks while gaining hands-on experience in product development, teamwork, and execution.
+                                            We turn concepts into action. Students work on prototypes, MVPs, and pitch
+                                            decks while gaining hands-on experience in product development, teamwork,
+                                            and execution.
                                         </div>
                                     </li>
                                     <li class="wow fadeInUp animated" data-animation="fadeInUp" data-delay=".4s">
                                         <div class="setp">Step 04</div>
                                         <h3>Launch & Growth</h3>
                                         <div class="content">
-                                            We prepare ideas for the real world. We connect teams to competitions, industry experts, and incubation opportunities to help transform student ideas into impactful ventures.
+                                            We prepare ideas for the real world. We connect teams to competitions,
+                                            industry experts, and incubation opportunities to help transform student
+                                            ideas into impactful ventures.
                                         </div>
                                     </li>
                                 </ul>
@@ -445,9 +568,12 @@
                             <h2>
                                 FAQ
                             </h2>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="235" height="235" viewBox="0 0 235 235" fill="none">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="235" height="235" viewBox="0 0 235 235"
+                                fill="none">
                                 <g clip-path="url(#clip0_17692_51)">
-                                    <path opacity="0.2" d="M228.454 25.0077L228.454 179.529C228.454 182.751 227.129 185.84 224.771 188.118C222.412 190.396 219.213 191.676 215.878 191.676C212.543 191.676 209.344 190.396 206.986 188.118C204.627 185.84 203.302 182.751 203.302 179.529L203.313 54.3131L29.2408 222.451C26.8837 224.728 23.6868 226.007 20.3533 226.007C17.0199 226.007 13.8229 224.728 11.4658 222.451C9.10871 220.175 7.7845 217.087 7.7845 213.867C7.7845 210.647 9.10871 207.559 11.4658 205.282L185.538 37.1441L55.9033 37.1548C52.568 37.1548 49.3693 35.875 47.0108 33.597C44.6524 31.319 43.3275 28.2293 43.3275 25.0077C43.3275 21.7861 44.6524 18.6964 47.0108 16.4184C49.3693 14.1404 52.568 12.8606 55.9033 12.8606L215.878 12.8606C217.53 12.8597 219.166 13.1733 220.692 13.7834C222.218 14.3936 223.605 15.2883 224.773 16.4165C225.941 17.5446 226.867 18.884 227.499 20.3582C228.13 21.8323 228.455 23.4123 228.454 25.0077Z" fill="#F5F9FF" />
+                                    <path opacity="0.2"
+                                        d="M228.454 25.0077L228.454 179.529C228.454 182.751 227.129 185.84 224.771 188.118C222.412 190.396 219.213 191.676 215.878 191.676C212.543 191.676 209.344 190.396 206.986 188.118C204.627 185.84 203.302 182.751 203.302 179.529L203.313 54.3131L29.2408 222.451C26.8837 224.728 23.6868 226.007 20.3533 226.007C17.0199 226.007 13.8229 224.728 11.4658 222.451C9.10871 220.175 7.7845 217.087 7.7845 213.867C7.7845 210.647 9.10871 207.559 11.4658 205.282L185.538 37.1441L55.9033 37.1548C52.568 37.1548 49.3693 35.875 47.0108 33.597C44.6524 31.319 43.3275 28.2293 43.3275 25.0077C43.3275 21.7861 44.6524 18.6964 47.0108 16.4184C49.3693 14.1404 52.568 12.8606 55.9033 12.8606L215.878 12.8606C217.53 12.8597 219.166 13.1733 220.692 13.7834C222.218 14.3936 223.605 15.2883 224.773 16.4165C225.941 17.5446 226.867 18.884 227.499 20.3582C228.13 21.8323 228.455 23.4123 228.454 25.0077Z"
+                                        fill="#F5F9FF" />
                                 </g>
                                 <defs>
                                     <clipPath id="clip0_17692_51">
@@ -464,7 +590,8 @@
                                 <div class="card">
                                     <div class="card-header" id="headingOne">
                                         <h2 class="mb-0">
-                                            <button class="faq-btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                            <button class="faq-btn" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseOne">
                                                 <span class="number">01</span> Who can join E-Cell NFSU?
                                             </button>
                                         </h2>
@@ -478,7 +605,8 @@
                                 <div class="card">
                                     <div class="card-header" id="headingTwo">
                                         <h2 class="mb-0">
-                                            <button class="faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                            <button class="faq-btn collapsed" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseTwo">
                                                 <span class="number">02</span> Is prior startup experience required?
                                             </button>
                                         </h2>
@@ -492,28 +620,32 @@
                                 <div class="card">
                                     <div class="card-header" id="headingThree">
                                         <h2 class="mb-0">
-                                            <button class="faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                                            <button class="faq-btn collapsed" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseThree">
                                                 <span class="number">03</span> Is E-Cell limited to business ideas?
                                             </button>
                                         </h2>
                                     </div>
                                     <div id="collapseThree" class="collapse" data-bs-parent="#accordionExample">
                                         <div class="card-body">
-                                            No. We encourage ideas in cybersecurity, forensics, law, technology, and interdisciplinary domains.
+                                            No. We encourage ideas in cybersecurity, forensics, law, technology, and
+                                            interdisciplinary domains.
                                         </div>
                                     </div>
                                 </div>
                                 <div class="card">
                                     <div class="card-header" id="headingFour">
                                         <h2 class="mb-0">
-                                            <button class="faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                                            <button class="faq-btn collapsed" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseFour">
                                                 <span class="number">04</span> What do members gain?
                                             </button>
                                         </h2>
                                     </div>
                                     <div id="collapseFour" class="collapse" data-bs-parent="#accordionExample">
                                         <div class="card-body">
-                                            Practical exposure, leadership experience, networking, certifications, and real-world learning.
+                                            Practical exposure, leadership experience, networking, certifications, and
+                                            real-world learning.
                                         </div>
                                     </div>
                                 </div>
@@ -527,7 +659,8 @@
         <!-- faq-area -->
         <!-- cta-area -->
         <section class="cta-area pb-150">
-            <div class="container cta-bg p-relative" style="background-image: url(img/bg/cta-bg.png); background-repeat:no-repeat;">
+            <div class="container cta-bg p-relative"
+                style="background-image: url(img/bg/cta-bg.png); background-repeat:no-repeat;">
                 <div class="animations-01">
                     <img src="img/bg/cta-ani-img-01.png" alt="img" class="img">
                 </div>
@@ -536,7 +669,8 @@
                 </div>
                 <div class="row justify-content-center align-items-center">
                     <div class="col-lg-8">
-                        <div class="section-title mb-60 text-center wow fadeInDown animated" data-animation="fadeInDown" data-delay=".4s">
+                        <div class="section-title mb-60 text-center wow fadeInDown animated" data-animation="fadeInDown"
+                            data-delay=".4s">
                             <h2>Innovate Responsibly. Build Confidently. Lead Fearlessly.</h2>
                         </div>
                     </div>
@@ -544,8 +678,10 @@
                 <div class="row">
                     <div class="col-lg-12 text-center">
                         <div class="slider-btn wow fadeInUp animated" data-animation="fadeInUp" data-delay=".4s">
-                            <a href="contact.html" class="btn ss-btn" data-animation="fadeInLeft" data-delay=".4s">Become a Member <i class="fa-light fa-arrow-right-long"></i></a>
-                            <a href="contact.html" class="btn btn2" data-animation="fadeInLeft" data-delay=".4s">Contact E-Cell <i class="fa-light fa-arrow-right-long"></i></a>
+                            <a href="contact.html" class="btn ss-btn" data-animation="fadeInLeft"
+                                data-delay=".4s">Become a Member <i class="fa-light fa-arrow-right-long"></i></a>
+                            <a href="contact.html" class="btn btn2" data-animation="fadeInLeft" data-delay=".4s">Contact
+                                E-Cell <i class="fa-light fa-arrow-right-long"></i></a>
                         </div>
                     </div>
                 </div>
@@ -556,7 +692,8 @@
     <!-- main-area-end -->
 
     <!-- footer -->
-    <footer class="footer-bg footer-p pt-90 fix" style="background-image: url(img/bg/footer-bg.png); background-size: cover; background-repeat:no-repeat;">
+    <footer class="footer-bg footer-p pt-90 fix"
+        style="background-image: url(img/bg/footer-bg.png); background-size: cover; background-repeat:no-repeat;">
         <div class="footer-top pb-70">
             <div class="container f-logo-area">
                 <div class="row mb-30">
@@ -567,7 +704,8 @@
                     </div>
                     <div class="col-lg-6 text-right">
                         <div class="footer-social mt-10">
-                            <a href="https://www.instagram.com/ecell.nfsu.tc?igsh=Ym45bms0eTZwOHFs" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="https://www.instagram.com/ecell.nfsu.tc?igsh=Ym45bms0eTZwOHFs" target="_blank"
+                                title="Instagram"><i class="fab fa-instagram"></i></a>
                             <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
                         </div>
                     </div>
@@ -588,7 +726,8 @@
                             <div class="footer-contact-info">
                                 <div class="contact-item mb-15">
                                     <i class="fas fa-map-marker-alt"></i>
-                                    <span>NFSU TC, VIP Rd, near Buddhamandir, Radha Nagar, Agartala, Tripura 799001</span>
+                                    <span>NFSU TC, VIP Rd, near Buddhamandir, Radha Nagar, Agartala, Tripura
+                                        799001</span>
                                 </div>
                                 <div class="contact-item mb-15">
                                     <i class="fas fa-phone"></i>
@@ -629,7 +768,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Copyright Section -->
         <div class="copyright-wrap">
             <div class="container">
@@ -668,13 +807,16 @@
     <script src="js/gsap.min.js"></script>
     <script src="js/ScrollTrigger.min.js"></script>
     <script src="js/main.js"></script>
-    
+
     <!-- Supabase Integration -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-manager.js"></script>
     <script src="js/supabase-client.js"></script>
     <script src="js/join-ecell-handler.js"></script>
     <script src="js/advertisement-popup.js"></script>
+    
+    <!-- Premium Navbar JavaScript -->
+    <script src="js/premium-navbar.js"></script>
 </body>
 
 </html>

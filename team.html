@@ -22,10 +22,74 @@
     <link rel="stylesheet" href="css/swiper.min.css">
     <link rel="stylesheet" href="css/default.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/rounded-corners.css">
+    <link rel="stylesheet" href="css/custom-buttons.css">
+    <link rel="stylesheet" href="css/premium-navbar.css">
+    <link rel="stylesheet" href="css/premium-cards.css">
     <link rel="stylesheet" href="css/responsive.css">
 </head>
 
 <body>
+    <!-- Premium Glassmorphism Navigation Bar -->
+    <nav class="premium-navbar" id="premiumNavbar">
+        <div class="navbar-content">
+            <!-- Logo Section -->
+            <a href="index.html" class="navbar-logo">
+                <img src="img/logo/elogo.png" alt="E-Cell NFSU" class="logo-image">
+                <span class="logo-text">E-Cell</span>
+            </a>
+            
+            <!-- Navigation Menu -->
+            <ul class="navbar-menu" id="navbarMenu">
+                <li class="menu-item">
+                    <a href="index.html" class="menu-link" data-page="home">
+                        <span>Home</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="about.html" class="menu-link" data-page="about">
+                        <span>About</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="events.html" class="menu-link" data-page="events">
+                        <span>Events</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="team.html" class="menu-link active" data-page="team">
+                        <span>Team</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="blog.html" class="menu-link" data-page="blog">
+                        <span>Blog</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="contact.html" class="menu-link" data-page="contact">
+                        <span>Contact</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <!-- CTA Button -->
+            <a href="about.html" class="navbar-cta">
+                <span>Join E-Cell</span>
+                <svg class="cta-icon" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                </svg>
+            </a>
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span class="toggle-line"></span>
+                <span class="toggle-line"></span>
+                <span class="toggle-line"></span>
+            </button>
+        </div>
+    </nav>
+
     <!--  Preloader  -->
     <div id="preloader">
         <div id="loading"> </div>
@@ -275,7 +339,7 @@
                         <div class="single-team mb-60">
                             <div class="team-thumb">
                                 <div class="brd">
-                                    <img src="img/team/image.png" alt="img">
+                                    <img src="img/team/12.svg" alt="img">
                                     <div class="team-social">
                                         <a href="https://www.linkedin.com/in/kvn-srinitya-4454bb325?utm_source=share_via&utm_content=profile&utm_medium=member_android"
                                             class="share-alt"><i class="fab fa-linkedin-in"></i></a>
@@ -606,6 +670,9 @@
     <script src="js/supabase-manager.js"></script>
     <script src="js/supabase-client.js"></script>
     <script src="js/join-ecell-handler.js"></script>
+    
+    <!-- Premium Navbar JavaScript -->
+    <script src="js/premium-navbar.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,496 @@
+/**
+ * E-Cell NFSU - Rounded Corners Stylesheet
+ * Applies consistent border-radius to all rectangular components
+ * Version: 1.0
+ */
+
+/* ========================================
+   GLOBAL ROUNDED CORNERS CONFIGURATION
+   ======================================== */
+
+:root {
+    --radius-small: 6px;
+    --radius-medium: 10px;
+    --radius-large: 15px;
+    --radius-xlarge: 20px;
+}
+
+/* ========================================
+   CARDS AND CONTAINERS
+   ======================================== */
+
+.card,
+.box,
+.container-box,
+.content-wrapper,
+.section-wrapper {
+    border-radius: var(--radius-large) !important;
+    overflow: hidden;
+}
+
+/* Service Cards */
+.service-box,
+.service-item,
+.service-card,
+.services-box-02,
+.services-box-03 {
+    border-radius: var(--radius-large) !important;
+    overflow: hidden;
+}
+
+/* Feature Cards */
+.feature-box,
+.feature-item,
+.feature-card {
+    border-radius: var(--radius-large) !important;
+    overflow: hidden;
+}
+
+/* Team Cards */
+.team-box,
+.team-item,
+.team-card,
+.single-team,
+.team-wrapper {
+    border-radius: var(--radius-large) !important;
+    overflow: hidden;
+}
+
+/* Blog Cards */
+.blog-box,
+.blog-item,
+.blog-card,
+.post-item,
+.article-box,
+.blog-details-content {
+    border-radius: var(--radius-large) !important;
+}
+
+/* Event Cards */
+.event-box,
+.event-item,
+.event-card,
+.events-box {
+    border-radius: var(--radius-large) !important;
+    overflow: hidden;
+}
+
+/* Testimonial Cards */
+.testimonial-box,
+.testimonial-item,
+.testimonial-card,
+.review-box {
+    border-radius: var(--radius-large) !important;
+    overflow: hidden;
+}
+
+/* Pricing Cards */
+.pricing-box,
+.pricing-item,
+.pricing-card,
+.price-table {
+    border-radius: var(--radius-large) !important;
+    overflow: hidden;
+}
+
+/* ========================================
+   IMAGES AND MEDIA
+   ======================================== */
+
+img,
+.img,
+.image,
+.thumbnail,
+.img-fluid,
+.wp-post-image {
+    border-radius: var(--radius-medium);
+}
+
+/* Specific Image Containers */
+.blog-image img,
+.team-image img,
+.event-image img,
+.service-image img,
+.about-image img,
+.portfolio-image img,
+.gallery-image img {
+    border-radius: var(--radius-medium);
+}
+
+/* Video and Media */
+.video-wrapper,
+.media-wrapper,
+.video-container,
+iframe,
+video {
+    border-radius: var(--radius-medium);
+}
+
+/* ========================================
+   BUTTONS AND FORM ELEMENTS
+   ======================================== */
+
+/* Buttons */
+.btn,
+button,
+.button,
+.wp-block-button__link,
+input[type="submit"],
+input[type="button"],
+input[type="reset"],
+.submit-btn,
+.action-btn {
+    border-radius: var(--radius-small) !important;
+}
+
+/* Form Inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="url"],
+input[type="search"],
+input[type="number"],
+input[type="date"],
+textarea,
+select,
+.form-control,
+.form-input {
+    border-radius: var(--radius-small) !important;
+}
+
+/* Input Groups */
+.input-group {
+    border-radius: var(--radius-small);
+}
+
+.input-group .form-control:first-child {
+    border-top-left-radius: var(--radius-small) !important;
+    border-bottom-left-radius: var(--radius-small) !important;
+}
+
+.input-group .form-control:last-child {
+    border-top-right-radius: var(--radius-small) !important;
+    border-bottom-right-radius: var(--radius-small) !important;
+}
+
+/* ========================================
+   NAVIGATION AND MENUS
+   ======================================== */
+
+/* Navigation Tabs */
+.nav-tabs,
+.nav-pills {
+    border-radius: var(--radius-small);
+}
+
+.nav-tabs .nav-link,
+.nav-pills .nav-link {
+    border-radius: var(--radius-small);
+}
+
+/* Dropdown Menus */
+.dropdown-menu,
+.sub-menu,
+.mega-menu {
+    border-radius: var(--radius-medium) !important;
+    overflow: hidden;
+}
+
+/* Breadcrumbs */
+.breadcrumb {
+    border-radius: var(--radius-small);
+}
+
+/* ========================================
+   MODALS AND POPUPS
+   ======================================== */
+
+.modal-content,
+.popup-content,
+.dialog-content,
+.lightbox-content {
+    border-radius: var(--radius-large) !important;
+}
+
+.modal-header,
+.modal-footer {
+    border-radius: 0;
+}
+
+/* Advertisement Popup */
+.advertisement-popup,
+.ad-popup-content {
+    border-radius: var(--radius-large) !important;
+}
+
+/* ========================================
+   SIDEBAR AND WIDGETS
+   ======================================== */
+
+.widget,
+.sidebar-widget,
+.widget-box,
+.sidebar-box {
+    border-radius: var(--radius-medium);
+    overflow: hidden;
+}
+
+.widget-title {
+    border-radius: var(--radius-small);
+}
+
+/* ========================================
+   FOOTER COMPONENTS
+   ======================================== */
+
+.footer-widget,
+.footer-box,
+.footer-content {
+    border-radius: var(--radius-medium);
+}
+
+/* ========================================
+   ALERTS AND NOTIFICATIONS
+   ======================================== */
+
+.alert,
+.notification,
+.message-box,
+.info-box,
+.warning-box,
+.error-box,
+.success-box {
+    border-radius: var(--radius-medium);
+}
+
+/* ========================================
+   TABLES AND DATA DISPLAYS
+   ======================================== */
+
+.table,
+.data-table,
+table {
+    border-radius: var(--radius-medium);
+    overflow: hidden;
+}
+
+.table thead th:first-child {
+    border-top-left-radius: var(--radius-medium);
+}
+
+.table thead th:last-child {
+    border-top-right-radius: var(--radius-medium);
+}
+
+/* ========================================
+   PAGINATION
+   ======================================== */
+
+.pagination .page-link {
+    border-radius: var(--radius-small);
+    margin: 0 3px;
+}
+
+.pagination .page-item:first-child .page-link {
+    border-top-left-radius: var(--radius-small);
+    border-bottom-left-radius: var(--radius-small);
+}
+
+.pagination .page-item:last-child .page-link {
+    border-top-right-radius: var(--radius-small);
+    border-bottom-right-radius: var(--radius-small);
+}
+
+/* ========================================
+   PROGRESS BARS AND LOADERS
+   ======================================== */
+
+.progress,
+.progress-bar {
+    border-radius: var(--radius-medium);
+}
+
+.loader,
+.spinner {
+    border-radius: 50%;
+}
+
+/* ========================================
+   BADGES AND LABELS
+   ======================================== */
+
+.badge,
+.label,
+.tag,
+.chip {
+    border-radius: var(--radius-small);
+}
+
+/* ========================================
+   TOOLTIPS AND POPOVERS
+   ======================================== */
+
+.tooltip-inner {
+    border-radius: var(--radius-small);
+}
+
+.popover {
+    border-radius: var(--radius-medium);
+}
+
+/* ========================================
+   SPECIAL COMPONENTS
+   ======================================== */
+
+/* Counter Boxes */
+.counter-box,
+.counter-item,
+.stats-box {
+    border-radius: var(--radius-large);
+}
+
+/* CTA Boxes */
+.cta-box,
+.cta-item,
+.call-to-action {
+    border-radius: var(--radius-large);
+}
+
+/* Work Process Boxes */
+.work-process-box,
+.process-item,
+.step-box {
+    border-radius: var(--radius-large);
+}
+
+/* Brand Boxes */
+.brand-box,
+.brand-item,
+.logo-box {
+    border-radius: var(--radius-medium);
+}
+
+/* Choose/Why Us Boxes */
+.choose-box,
+.why-us-box,
+.advantage-box {
+    border-radius: var(--radius-large);
+}
+
+/* About Boxes */
+.about-box,
+.about-content,
+.about-wrapper {
+    border-radius: var(--radius-large);
+}
+
+/* Contact Boxes */
+.contact-box,
+.contact-form,
+.contact-info {
+    border-radius: var(--radius-large);
+}
+
+/* ========================================
+   ADMIN PANEL COMPONENTS
+   ======================================== */
+
+.admin-card,
+.admin-box,
+.dashboard-card,
+.stats-card {
+    border-radius: var(--radius-large) !important;
+}
+
+.admin-table,
+.data-grid {
+    border-radius: var(--radius-medium);
+    overflow: hidden;
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+   ======================================== */
+
+/* Mobile Devices */
+@media (max-width: 767px) {
+    :root {
+        --radius-small: 5px;
+        --radius-medium: 8px;
+        --radius-large: 12px;
+        --radius-xlarge: 15px;
+    }
+}
+
+/* Tablet Devices */
+@media (min-width: 768px) and (max-width: 991px) {
+    :root {
+        --radius-small: 6px;
+        --radius-medium: 9px;
+        --radius-large: 13px;
+        --radius-xlarge: 17px;
+    }
+}
+
+/* Large Screens */
+@media (min-width: 1400px) {
+    :root {
+        --radius-small: 8px;
+        --radius-medium: 12px;
+        --radius-large: 18px;
+        --radius-xlarge: 24px;
+    }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+.rounded-none {
+    border-radius: 0 !important;
+}
+
+.rounded-small {
+    border-radius: var(--radius-small) !important;
+}
+
+.rounded-medium {
+    border-radius: var(--radius-medium) !important;
+}
+
+.rounded-large {
+    border-radius: var(--radius-large) !important;
+}
+
+.rounded-xlarge {
+    border-radius: var(--radius-xlarge) !important;
+}
+
+.rounded-full {
+    border-radius: 50% !important;
+}
+
+/* Top corners only */
+.rounded-top {
+    border-top-left-radius: var(--radius-medium) !important;
+    border-top-right-radius: var(--radius-medium) !important;
+}
+
+/* Bottom corners only */
+.rounded-bottom {
+    border-bottom-left-radius: var(--radius-medium) !important;
+    border-bottom-right-radius: var(--radius-medium) !important;
+}
+
+/* Left corners only */
+.rounded-left {
+    border-top-left-radius: var(--radius-medium) !important;
+    border-bottom-left-radius: var(--radius-medium) !important;
+}
+
+/* Right corners only */
+.rounded-right {
+    border-top-right-radius: var(--radius-medium) !important;
+    border-bottom-right-radius: var(--radius-medium) !important;
+}

@@ -1,0 +1,575 @@
+/**
+ * Premium Glassmorphism Navigation Bar
+ * Modern, futuristic design with enhanced depth
+ * Version: 2.1 - Enhanced Inner Shadows & Outer Glows
+ */
+
+/* ========================================
+   PREMIUM NAVBAR FOUNDATION
+   ======================================== */
+
+/* Import modern font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Premium Color Palette - Orange to Blue Gradient */
+    --primary-gradient: linear-gradient(135deg, #ff6b35 0%, #f7931e 25%, #c44569 50%, #6c5ce7 75%, #4834df 100%);
+    --cta-gradient: linear-gradient(135deg, #ff6b35 0%, #f7931e 20%, #c44569 40%, #a55eea 60%, #6c5ce7 80%, #4834df 100%);
+    --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #ff6b6b 100%);
+    --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --glass-bg: rgba(15, 15, 23, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.85);
+    --text-muted: rgba(255, 255, 255, 0.6);
+    
+    /* Spacing & Sizing */
+    --nav-height: 85px;
+    --nav-padding: 24px 40px;
+    --logo-size: 50px;
+    --menu-gap: 52px;
+    --border-radius: 16px;
+    --pill-radius: 50px;
+    
+    /* Animation */
+    --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* ========================================
+   HIDE OLD NAVBAR
+   ======================================== */
+
+.header-area,
+.menu-area,
+.second-menu,
+.offcanvas-menu {
+    display: none !important;
+}
+
+/* ========================================
+   NAVBAR CONTAINER WITH CLEAN DROP SHADOW
+   ======================================== */
+
+.premium-navbar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px);
+    max-width: 1440px;
+    height: var(--nav-height);
+    z-index: 9999 !important;
+    
+    /* Glassmorphism Effect */
+    background: var(--glass-bg);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    
+    /* Border & Clean Drop Shadow */
+    border: 1px solid var(--glass-border);
+    border-radius: var(--pill-radius);
+    box-shadow: 
+        /* Clean drop shadow - no glow */
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        0 4px 16px rgba(0, 0, 0, 0.3),
+        /* Inner shadows for depth */
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    
+    /* Transitions */
+    transition: all var(--transition-smooth);
+    
+    /* Inner Glow */
+    position: relative;
+    overflow: hidden;
+    
+    /* Space above navbar */
+    margin-top: 20px !important;
+}
+
+/* Enhanced top highlight */
+.premium-navbar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    filter: blur(0.5px);
+    pointer-events: none;
+}
+
+/* Scrolled State with Clean Drop Shadow */
+.premium-navbar.scrolled {
+    top: 0 !important;
+    height: 72px;
+    background: rgba(10, 10, 15, 0.95);
+    box-shadow: 
+        /* Stronger drop shadow when scrolled - no glow */
+        0 20px 60px rgba(0, 0, 0, 0.5),
+        0 10px 30px rgba(0, 0, 0, 0.4),
+        /* Enhanced inner shadows */
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.18);
+    margin-top: 10px !important;
+}
+
+/* ========================================
+   NAVBAR CONTENT
+   ======================================== */
+
+.navbar-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0 40px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ========================================
+   LOGO SECTION
+   ======================================== */
+
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    transition: all var(--transition-smooth);
+    position: relative;
+}
+
+.navbar-logo:hover {
+    transform: translateY(-2px);
+}
+
+.logo-image {
+    height: var(--logo-size);
+    width: auto;
+    object-fit: contain;
+    transition: all var(--transition-smooth);
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+}
+
+.scrolled .logo-image {
+    height: 44px;
+}
+
+.logo-text {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.8px;
+    margin-left: 4px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    display: none; /* Hide E-Cell text */
+}
+
+.scrolled .logo-text {
+    font-size: 23px;
+    display: none; /* Keep hidden when scrolled */
+}
+
+/* ========================================
+   NAVIGATION MENU
+   ======================================== */
+
+.navbar-menu {
+    display: flex;
+    align-items: center;
+    gap: var(--menu-gap);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-item {
+    position: relative;
+}
+
+.menu-link {
+    display: flex;
+    align-items: center;
+    padding: 14px 0;
+    font-size: 15.5px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    letter-spacing: 0.4px;
+    transition: all var(--transition-smooth);
+    position: relative;
+    cursor: pointer;
+}
+
+/* Hover State */
+.menu-link:hover {
+    color: var(--text-primary);
+    transform: translateY(-2px);
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+}
+
+/* Active State */
+.menu-link.active {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* Animated Underline with Clean Shadow */
+.menu-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2.5px;
+    background: var(--primary-gradient);
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: width var(--transition-smooth);
+}
+
+.menu-link:hover::after,
+.menu-link.active::after {
+    width: 100%;
+}
+
+/* Hover Effect - Subtle Background */
+.menu-link:hover::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 130%;
+    height: 130%;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 14px;
+    z-index: -1;
+}
+
+/* ========================================
+   CTA BUTTON - MATCHING WEBSITE STYLE (NO SHADOW)
+   ======================================== */
+
+.navbar-cta {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 15px 70px 15px 30px;
+    min-height: 60px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-decoration: none;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    
+    /* Vertical Gradient Background - Orange → Purple → Blue */
+    background: linear-gradient(180deg, #FF6B35 0%, #8B4789 50%, #4158D0 100%);
+    border: none;
+    border-radius: 50px;
+    
+    /* No shadow - clean flat design */
+    box-shadow: none;
+    
+    /* No transitions */
+    transition: none;
+    cursor: pointer;
+    overflow: visible;
+    
+    /* Ensure button floats cleanly without background spill */
+    isolation: isolate;
+}
+
+/* Circular Arrow Icon */
+.navbar-cta::after {
+    content: '→';
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    color: #8B4789;
+    border-radius: 50%;
+    font-size: 24px;
+    font-weight: bold;
+    transition: none;
+}
+
+/* Hide the SVG icon since we're using ::after */
+.navbar-cta .cta-icon {
+    display: none;
+}
+
+/* Remove all hover effects */
+.navbar-cta:hover {
+    transform: none;
+    box-shadow: none;
+    color: var(--text-primary);
+}
+
+.navbar-cta:hover::after {
+    transform: translateY(-50%);
+    background: #ffffff;
+}
+
+/* Remove all active/click effects */
+.navbar-cta:active {
+    transform: none;
+    box-shadow: none;
+}
+
+/* ========================================
+   MOBILE MENU TOGGLE
+   ======================================== */
+
+.mobile-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+}
+
+.toggle-line {
+    width: 26px;
+    height: 2.5px;
+    background: var(--text-primary);
+    border-radius: 2px;
+    transition: all var(--transition-smooth);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.mobile-toggle:hover .toggle-line {
+    background: var(--text-primary);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Mobile Toggle Animation */
+.mobile-toggle.active .toggle-line:nth-child(1) {
+    transform: rotate(45deg) translate(7px, 7px);
+}
+
+.mobile-toggle.active .toggle-line:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-toggle.active .toggle-line:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+    :root {
+        --menu-gap: 38px;
+        --nav-padding: 20px 28px;
+    }
+    
+    .navbar-content {
+        padding: 0 28px;
+    }
+    
+    .menu-link {
+        font-size: 14.5px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .premium-navbar {
+        width: calc(100% - 20px);
+        top: 0;
+        margin-top: 10px !important;
+    }
+    
+    .navbar-content {
+        padding: 0 20px;
+    }
+    
+    .navbar-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 12px);
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 0;
+        background: var(--glass-bg);
+        backdrop-filter: blur(24px);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--border-radius);
+        box-shadow: 
+            /* Clean drop shadow for mobile menu */
+            0 20px 60px rgba(0, 0, 0, 0.5),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        padding: 24px;
+    }
+    
+    .navbar-menu.active {
+        display: flex;
+        animation: slideDown 0.35s ease-out;
+    }
+    
+    .menu-item {
+        width: 100%;
+    }
+    
+    .menu-link {
+        padding: 18px 0;
+        font-size: 16.5px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .menu-item:last-child .menu-link {
+        border-bottom: none;
+    }
+    
+    .mobile-toggle {
+        display: flex;
+    }
+    
+    .navbar-cta {
+        padding: 12px 65px 12px 25px;
+        min-height: 55px;
+        font-size: 15px;
+        letter-spacing: 1.5px;
+    }
+    
+    .navbar-cta::after {
+        width: 42px;
+        height: 42px;
+        font-size: 22px;
+        right: 7px;
+    }
+    
+    .logo-image {
+        height: 42px;
+    }
+    
+    .logo-text {
+        font-size: 21px;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .premium-navbar {
+        width: calc(100% - 16px);
+    }
+    
+    .navbar-content {
+        padding: 0 18px;
+    }
+    
+    .logo-text {
+        display: none;
+    }
+    
+    .navbar-cta {
+        padding: 10px 60px 10px 20px;
+        min-height: 50px;
+        font-size: 14px;
+        letter-spacing: 1px;
+    }
+    
+    .navbar-cta::after {
+        width: 38px;
+        height: 38px;
+        font-size: 20px;
+        right: 6px;
+    }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+.menu-link:focus,
+.navbar-cta:focus,
+.mobile-toggle:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 3px;
+}
+
+.menu-link:focus:not(:focus-visible),
+.navbar-cta:focus:not(:focus-visible),
+.mobile-toggle:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+
+/* ========================================
+   BODY PADDING FOR FIXED NAVBAR
+   ======================================== */
+
+/* Add padding to body to prevent content from going under navbar */
+body {
+    padding-top: 120px !important;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-top: 100px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding-top: 90px !important;
+    }
+}

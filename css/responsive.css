@@ -4470,3 +4470,64 @@
         margin: 0 2px;
 
     }
+
+
+/* ========================================
+   ROUNDED CORNERS - RESPONSIVE ADJUSTMENTS
+   ======================================== */
+
+/* Mobile Devices - Slightly smaller radius for better fit */
+@media (max-width: 767px) {
+    .card,
+    .box,
+    .service-box,
+    .feature-box,
+    .team-box,
+    .blog-box,
+    .event-box,
+    .blog-item,
+    .team-item,
+    .event-item,
+    .service-item {
+        border-radius: 12px !important;
+    }
+    
+    img,
+    .img,
+    .image {
+        border-radius: 10px;
+    }
+    
+    .btn,
+    button {
+        border-radius: 6px !important;
+    }
+}
+
+/* Tablet Devices */
+@media (min-width: 768px) and (max-width: 991px) {
+    .card,
+    .box,
+    .blog-item,
+    .team-item,
+    .event-item {
+        border-radius: 13px !important;
+    }
+}
+
+/* Large Screens - Larger radius for better aesthetics */
+@media (min-width: 1400px) {
+    .card,
+    .box,
+    .blog-item,
+    .team-item,
+    .event-item {
+        border-radius: 18px !important;
+    }
+    
+    img,
+    .img,
+    .image {
+        border-radius: 15px;
+    }
+}

@@ -1,0 +1,768 @@
+/**
+ * E-Cell NFSU - Custom Button Styles
+ * Pill-shaped buttons with gradient and circular arrow icon
+ * Version: 1.0
+ */
+
+/* ========================================
+   OVERRIDE EXISTING BUTTON STYLES
+   ======================================== */
+
+/* Force pill shape on all custom buttons and existing button classes */
+a.btn-custom,
+button.btn-custom,
+a.btn-pill,
+button.btn-pill,
+a.btn-gradient,
+button.btn-gradient,
+.btn.btn-custom,
+.btn.btn-pill,
+.btn.btn-gradient,
+a.btn,
+a.btn3,
+a.ss-btn,
+a.btn2,
+button.btn3 {
+    border-radius: 50px !important;
+    background: linear-gradient(180deg, #FF6B35 0%, #8B4789 50%, #4158D0 100%) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    min-height: 60px !important;
+    padding: 15px 80px 15px 30px !important;
+    position: relative !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.3s ease !important;
+    overflow: visible !important;
+    border: none !important;
+    width: auto !important;
+    min-width: auto !important;
+    max-width: 100% !important;
+    white-space: nowrap !important;
+}
+
+/* Hide existing icon elements inside buttons */
+a.btn i,
+a.btn3 i,
+a.ss-btn i,
+a.btn2 i,
+button.btn3 i {
+    display: none !important;
+}
+
+/* Add circular arrow icon to all buttons */
+a.btn::after,
+a.btn3::after,
+a.ss-btn::after,
+a.btn2::after,
+button.btn3::after,
+a.btn-custom::after,
+a.btn-pill::after {
+    content: '→';
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    color: #8B4789;
+    border-radius: 50%;
+    font-size: 24px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+/* Hover effects for all buttons */
+a.btn:hover,
+a.btn3:hover,
+a.ss-btn:hover,
+a.btn2:hover,
+button.btn3:hover,
+a.btn-custom:hover,
+a.btn-pill:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4) !important;
+}
+
+a.btn:hover::after,
+a.btn3:hover::after,
+a.ss-btn:hover::after,
+a.btn2:hover::after,
+button.btn3:hover::after,
+a.btn-custom:hover::after,
+a.btn-pill:hover::after {
+    transform: translateY(-50%) rotate(45deg);
+}
+
+/* ========================================
+   CUSTOM BUTTON CONFIGURATION
+   ======================================== */
+
+:root {
+    /* Button Colors - Vertical Gradient (Top to Bottom) */
+    --btn-gradient-start: #FF6B35;      /* Orange/Red at top */
+    --btn-gradient-middle: #8B4789;     /* Purple in middle */
+    --btn-gradient-end: #4158D0;        /* Blue at bottom */
+    
+    /* Alternative Gradients */
+    --btn-gradient-blue-start: #2E3192;
+    --btn-gradient-blue-end: #1BFFFF;
+    
+    --btn-gradient-purple-start: #8E2DE2;
+    --btn-gradient-purple-end: #4A00E0;
+    
+    --btn-gradient-orange-start: #FF512F;
+    --btn-gradient-orange-end: #F09819;
+    
+    /* Button Sizes */
+    --btn-height: 60px;
+    --btn-padding: 20px 30px;
+    --btn-border-radius: 50px;
+    --btn-icon-size: 45px;
+    
+    /* Responsive Sizes */
+    --btn-height-mobile: 50px;
+    --btn-padding-mobile: 15px 25px;
+    --btn-icon-size-mobile: 38px;
+}
+
+/* ========================================
+   MAIN BUTTON STYLE
+   ======================================== */
+
+.btn-custom,
+.btn-pill,
+.btn-gradient {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 200px;
+    height: var(--btn-height);
+    padding: var(--btn-padding);
+    padding-right: calc(var(--btn-icon-size) + 20px);
+    
+    /* Gradient Background - Vertical (Top to Bottom) */
+    background: linear-gradient(180deg, 
+        var(--btn-gradient-start) 0%,      /* Orange/Red at top */
+        var(--btn-gradient-middle) 50%,    /* Purple in middle */
+        var(--btn-gradient-end) 100%) !important;     /* Blue at bottom */
+    
+    /* Pill Shape - Force with !important */
+    border-radius: var(--btn-border-radius) !important;
+    border: none !important;
+    
+    /* Text */
+    color: #ffffff !important;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-decoration: none !important;
+    
+    /* Effects */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+/* Circular Arrow Icon */
+.btn-custom::after,
+.btn-pill::after,
+.btn-gradient::after {
+    content: '→';
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    
+    width: var(--btn-icon-size);
+    height: var(--btn-icon-size);
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    background: #ffffff;
+    color: var(--btn-gradient-middle);
+    border-radius: 50%;
+    
+    font-size: 24px;
+    font-weight: bold;
+    
+    transition: all 0.3s ease;
+}
+
+/* Hover Effects */
+.btn-custom:hover,
+.btn-pill:hover,
+.btn-gradient:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.btn-custom:hover::after,
+.btn-pill:hover::after,
+.btn-gradient:hover::after {
+    transform: translateY(-50%) rotate(45deg);
+    background: #ffffff;
+}
+
+/* Active/Click State */
+.btn-custom:active,
+.btn-pill:active,
+.btn-gradient:active {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* ========================================
+   BUTTON VARIANTS
+   ======================================== */
+
+/* Blue Gradient */
+.btn-custom-blue,
+.btn-pill-blue {
+    background: linear-gradient(135deg, 
+        var(--btn-gradient-blue-start) 0%, 
+        var(--btn-gradient-blue-end) 100%);
+}
+
+/* Purple Gradient */
+.btn-custom-purple,
+.btn-pill-purple {
+    background: linear-gradient(135deg, 
+        var(--btn-gradient-purple-start) 0%, 
+        var(--btn-gradient-purple-end) 100%);
+}
+
+/* Orange Gradient */
+.btn-custom-orange,
+.btn-pill-orange {
+    background: linear-gradient(135deg, 
+        var(--btn-gradient-orange-start) 0%, 
+        var(--btn-gradient-orange-end) 100%);
+}
+
+/* Primary (E-Cell Brand) */
+.btn-custom-primary,
+.btn-pill-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Success */
+.btn-custom-success,
+.btn-pill-success {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+/* Danger */
+.btn-custom-danger,
+.btn-pill-danger {
+    background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+}
+
+/* Dark */
+.btn-custom-dark,
+.btn-pill-dark {
+    background: linear-gradient(135deg, #232526 0%, #414345 100%);
+}
+
+/* ========================================
+   BUTTON SIZES
+   ======================================== */
+
+/* Large Button */
+.btn-custom-lg,
+.btn-pill-lg {
+    height: 70px;
+    padding: 25px 40px;
+    padding-right: 65px;
+    font-size: 18px;
+    min-width: 250px;
+}
+
+.btn-custom-lg::after,
+.btn-pill-lg::after {
+    width: 55px;
+    height: 55px;
+    font-size: 28px;
+    right: 8px;
+}
+
+/* Small Button */
+.btn-custom-sm,
+.btn-pill-sm {
+    height: 45px;
+    padding: 12px 20px;
+    padding-right: 50px;
+    font-size: 14px;
+    min-width: 150px;
+}
+
+.btn-custom-sm::after,
+.btn-pill-sm::after {
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
+    right: 5px;
+}
+
+/* Extra Small Button */
+.btn-custom-xs,
+.btn-pill-xs {
+    height: 38px;
+    padding: 10px 15px;
+    padding-right: 45px;
+    font-size: 12px;
+    min-width: 120px;
+    letter-spacing: 1px;
+}
+
+.btn-custom-xs::after,
+.btn-pill-xs::after {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    right: 4px;
+}
+
+/* ========================================
+   BUTTON WITH CUSTOM ICONS
+   ======================================== */
+
+/* Using Font Awesome Icons */
+.btn-custom[data-icon]::after {
+    content: attr(data-icon);
+    font-family: 'Font Awesome 6 Pro', 'Font Awesome 6 Free';
+    font-weight: 900;
+}
+
+/* Specific Icon Classes */
+.btn-icon-arrow::after {
+    content: '→';
+}
+
+.btn-icon-plus::after {
+    content: '+';
+}
+
+.btn-icon-check::after {
+    content: '✓';
+}
+
+.btn-icon-star::after {
+    content: '★';
+}
+
+.btn-icon-heart::after {
+    content: '♥';
+}
+
+/* ========================================
+   BUTTON ANIMATIONS
+   ======================================== */
+
+/* Pulse Animation */
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    50% {
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+}
+
+.btn-custom-pulse,
+.btn-pill-pulse {
+    animation: pulse 2s infinite;
+}
+
+/* Shimmer Effect */
+@keyframes shimmer {
+    0% {
+        background-position: -200% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
+}
+
+.btn-custom-shimmer,
+.btn-pill-shimmer {
+    background-size: 200% auto;
+    animation: shimmer 3s linear infinite;
+}
+
+/* ========================================
+   BUTTON GROUPS
+   ======================================== */
+
+.btn-group-custom {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.btn-group-custom .btn-custom,
+.btn-group-custom .btn-pill {
+    margin: 0;
+}
+
+/* ========================================
+   DISABLED STATE
+   ======================================== */
+
+.btn-custom:disabled,
+.btn-pill:disabled,
+.btn-custom.disabled,
+.btn-pill.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ========================================
+   LOADING STATE
+   ======================================== */
+
+.btn-custom.loading,
+.btn-pill.loading {
+    pointer-events: none;
+}
+
+.btn-custom.loading::after,
+.btn-pill.loading::after {
+    content: '';
+    border: 3px solid #ffffff;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: translateY(-50%) rotate(360deg);
+    }
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+/* Tablet */
+@media (max-width: 991px) {
+    .btn-custom,
+    .btn-pill,
+    .btn-gradient {
+        height: 55px;
+        padding: 18px 28px;
+        padding-right: calc(var(--btn-icon-size-mobile) + 18px);
+        font-size: 15px;
+        min-width: 180px;
+    }
+    
+    .btn-custom::after,
+    .btn-pill::after,
+    .btn-gradient::after {
+        width: 42px;
+        height: 42px;
+        font-size: 22px;
+    }
+    
+    .btn-custom-lg,
+    .btn-pill-lg {
+        height: 65px;
+        padding: 22px 35px;
+        padding-right: 60px;
+        font-size: 17px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+    :root {
+        --btn-height: 50px;
+        --btn-padding: 15px 25px;
+        --btn-icon-size: 38px;
+    }
+    
+    .btn-custom,
+    .btn-pill,
+    .btn-gradient {
+        height: var(--btn-height-mobile);
+        padding: var(--btn-padding-mobile);
+        padding-right: calc(var(--btn-icon-size-mobile) + 15px);
+        font-size: 14px;
+        min-width: 160px;
+        letter-spacing: 1.5px;
+    }
+    
+    .btn-custom::after,
+    .btn-pill::after,
+    .btn-gradient::after {
+        width: var(--btn-icon-size-mobile);
+        height: var(--btn-icon-size-mobile);
+        font-size: 20px;
+        right: 6px;
+    }
+    
+    .btn-custom-lg,
+    .btn-pill-lg {
+        height: 60px;
+        padding: 20px 30px;
+        padding-right: 55px;
+        font-size: 16px;
+        min-width: 200px;
+    }
+    
+    .btn-custom-lg::after,
+    .btn-pill-lg::after {
+        width: 48px;
+        height: 48px;
+        font-size: 24px;
+    }
+    
+    .btn-custom-sm,
+    .btn-pill-sm {
+        height: 42px;
+        padding: 10px 18px;
+        padding-right: 45px;
+        font-size: 13px;
+        min-width: 140px;
+    }
+    
+    .btn-custom-sm::after,
+    .btn-pill-sm::after {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+    }
+    
+    .btn-group-custom {
+        gap: 10px;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .btn-custom,
+    .btn-pill,
+    .btn-gradient {
+        height: 48px;
+        padding: 12px 20px;
+        padding-right: calc(var(--btn-icon-size-mobile) + 12px);
+        font-size: 13px;
+        min-width: 140px;
+        letter-spacing: 1px;
+    }
+    
+    .btn-custom::after,
+    .btn-pill::after,
+    .btn-gradient::after {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+        right: 6px;
+    }
+    
+    .btn-custom-lg,
+    .btn-pill-lg {
+        height: 55px;
+        padding: 18px 25px;
+        padding-right: 50px;
+        font-size: 15px;
+        min-width: 180px;
+    }
+    
+    .btn-custom-lg::after,
+    .btn-pill-lg::after {
+        width: 45px;
+        height: 45px;
+        font-size: 22px;
+    }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+/* Full Width Button */
+.btn-custom-block,
+.btn-pill-block {
+    width: 100%;
+    display: flex;
+}
+
+/* Centered Button */
+.btn-custom-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* No Shadow */
+.btn-custom-no-shadow {
+    box-shadow: none !important;
+}
+
+/* Outline Style */
+.btn-custom-outline {
+    background: transparent;
+    border: 2px solid #ffffff;
+    color: #ffffff;
+}
+
+.btn-custom-outline::after {
+    background: transparent;
+    border: 2px solid #ffffff;
+    color: #ffffff;
+}
+
+.btn-custom-outline:hover {
+    background: #ffffff;
+    color: var(--btn-gradient-middle);
+}
+
+.btn-custom-outline:hover::after {
+    background: var(--btn-gradient-middle);
+    color: #ffffff;
+    border-color: var(--btn-gradient-middle);
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+.btn-custom:focus,
+.btn-pill:focus,
+.btn-gradient:focus {
+    outline: 3px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 3px;
+}
+
+.btn-custom:focus:not(:focus-visible),
+.btn-pill:focus:not(:focus-visible),
+.btn-gradient:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+
+@media print {
+    .btn-custom,
+    .btn-pill,
+    .btn-gradient {
+        box-shadow: none;
+        background: #333 !important;
+    }
+}
+
+
+/* ========================================
+   RESPONSIVE BUTTON ADJUSTMENTS
+   ======================================== */
+
+/* Tablet and below */
+@media (max-width: 991px) {
+    a.btn,
+    a.btn3,
+    a.ss-btn,
+    a.btn2,
+    button.btn3,
+    a.btn-custom,
+    a.btn-pill {
+        min-height: 55px !important;
+        padding: 12px 70px 12px 25px !important;
+        font-size: 15px !important;
+        letter-spacing: 1.5px !important;
+    }
+    
+    a.btn::after,
+    a.btn3::after,
+    a.ss-btn::after,
+    a.btn2::after,
+    button.btn3::after,
+    a.btn-custom::after,
+    a.btn-pill::after {
+        width: 42px;
+        height: 42px;
+        font-size: 22px;
+        right: 7px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+    a.btn,
+    a.btn3,
+    a.ss-btn,
+    a.btn2,
+    button.btn3,
+    a.btn-custom,
+    a.btn-pill {
+        min-height: 50px !important;
+        padding: 10px 65px 10px 20px !important;
+        font-size: 14px !important;
+        letter-spacing: 1px !important;
+        white-space: normal !important;
+        text-align: center !important;
+    }
+    
+    a.btn::after,
+    a.btn3::after,
+    a.ss-btn::after,
+    a.btn2::after,
+    button.btn3::after,
+    a.btn-custom::after,
+    a.btn-pill::after {
+        width: 38px;
+        height: 38px;
+        font-size: 20px;
+        right: 6px;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    a.btn,
+    a.btn3,
+    a.ss-btn,
+    a.btn2,
+    button.btn3,
+    a.btn-custom,
+    a.btn-pill {
+        min-height: 48px !important;
+        padding: 10px 60px 10px 18px !important;
+        font-size: 13px !important;
+        letter-spacing: 0.5px !important;
+        width: 100% !important;
+        max-width: 300px !important;
+        justify-content: center !important;
+    }
+    
+    a.btn::after,
+    a.btn3::after,
+    a.ss-btn::after,
+    a.btn2::after,
+    button.btn3::after,
+    a.btn-custom::after,
+    a.btn-pill::after {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+        right: 6px;
+    }
+}

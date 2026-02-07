@@ -36,6 +36,206 @@ body {
     background: #060606;
 }
 
+/* Global Rounded Corners for All Components */
+/* Cards, Boxes, and Containers */
+.card,
+.box,
+.service-box,
+.feature-box,
+.team-box,
+.blog-box,
+.event-box,
+.testimonial-box,
+.pricing-box,
+.contact-box,
+.about-box,
+.work-process-box,
+.counter-box,
+.cta-box,
+.video-box,
+.choose-box,
+.brand-box {
+    border-radius: 15px !important;
+    overflow: hidden;
+}
+
+/* Images */
+img,
+.img,
+.image,
+.thumbnail,
+.blog-image img,
+.team-image img,
+.event-image img,
+.service-image img,
+.about-image img,
+.portfolio-image img {
+    border-radius: 12px;
+}
+
+/* Buttons */
+.btn,
+button,
+.button,
+input[type="submit"],
+input[type="button"],
+.wp-block-button__link {
+    border-radius: 8px !important;
+}
+
+/* Form Elements */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="url"],
+input[type="search"],
+input[type="number"],
+textarea,
+select,
+.form-control {
+    border-radius: 8px !important;
+}
+
+/* Content Sections */
+.section-box,
+.content-box,
+.info-box,
+.details-box,
+.description-box {
+    border-radius: 15px;
+}
+
+/* Blog and Article Components */
+.blog-item,
+.blog-card,
+.post-item,
+.article-box,
+.news-item {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+/* Team Member Cards */
+.team-item,
+.team-card,
+.member-box {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+/* Event Cards */
+.event-item,
+.event-card,
+.events-box {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+/* Service Cards */
+.service-item,
+.service-card,
+.services-box {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+/* Testimonial Cards */
+.testimonial-item,
+.testimonial-card,
+.review-box {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+/* Modals and Popups */
+.modal-content,
+.popup-content,
+.dialog-content {
+    border-radius: 15px !important;
+}
+
+/* Sidebar Widgets */
+.widget,
+.sidebar-widget,
+.widget-box {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Footer Sections */
+.footer-widget,
+.footer-box {
+    border-radius: 12px;
+}
+
+/* Specific Component Overrides */
+.breadcrumb {
+    border-radius: 8px;
+}
+
+.alert,
+.notification,
+.message-box {
+    border-radius: 10px;
+}
+
+.table,
+.data-table {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Video and Media Players */
+.video-wrapper,
+.media-wrapper,
+iframe {
+    border-radius: 12px;
+}
+
+/* Navigation and Menu Items */
+.nav-tabs,
+.nav-pills {
+    border-radius: 8px;
+}
+
+.nav-tabs .nav-link,
+.nav-pills .nav-link {
+    border-radius: 8px;
+}
+
+/* Pagination */
+.pagination .page-link {
+    border-radius: 6px;
+    margin: 0 3px;
+}
+
+/* Progress Bars */
+.progress {
+    border-radius: 10px;
+}
+
+/* Badges and Labels */
+.badge,
+.label,
+.tag {
+    border-radius: 6px;
+}
+
+/* Dropdown Menus */
+.dropdown-menu {
+    border-radius: 10px;
+}
+
+/* Tooltips and Popovers */
+.tooltip-inner {
+    border-radius: 6px;
+}
+
+.popover {
+    border-radius: 10px;
+}
+
 .tp-project-4-2-item .tp-hover-reveal-bg {
     position: absolute;
     top: 0;
@@ -16197,4 +16397,394 @@ blockquote cite {
         padding: 8px 16px;
         font-size: 12px;
     }
+}
+
+/* 
+========================================
+   HIDE SPARKLE/STAR ANIMATIONS
+   ======================================== */
+.animations-01,
+.animations-02 {
+    display: none !important;
+}
+
+
+/* ========================================
+   UPDATED CTA SECTION STYLES
+   ======================================== */
+section.cta-area .container.cta-bg {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a1a2a 50%, #3a2a2a 100%) !important;
+    background-image: linear-gradient(135deg, #1a1a1a 0%, #2a1a2a 50%, #3a2a2a 100%) !important;
+    padding: 80px 60px !important;
+    border-radius: 25px !important;
+}
+
+#registrationBox {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a1a2a 50%, #3a2a2a 100%) !important;
+    padding: 80px 60px !important;
+    border-radius: 25px !important;
+}
+
+.cta-area h2,
+#registrationBox h3 {
+    font-size: 48px !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    margin-bottom: 40px !important;
+    color: #ffffff !important;
+}
+
+.cta-badge {
+    display: inline-block;
+    padding: 8px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+@media (max-width: 767px) {
+    .cta-area h2,
+    #registrationBox h3 {
+        font-size: 32px !important;
+    }
+    
+    section.cta-area .container.cta-bg,
+    #registrationBox {
+        padding: 50px 30px !important;
+    }
+}
+
+
+/* ========================================
+   FLOATING PILL-SHAPED NAVBAR
+   ======================================== */
+
+/* Header container */
+.header-area {
+    position: fixed !important;
+    top: 20px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 95% !important;
+    max-width: 1400px !important;
+    z-index: 9999 !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Navbar pill shape */
+.menu-area,
+.second-menu {
+    background: rgba(10, 10, 10, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    border-radius: 50px !important;
+    padding: 15px 30px !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Logo positioning */
+.logo {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.logo img {
+    max-height: 50px !important;
+    width: auto !important;
+}
+
+/* Navigation menu center */
+.main-menu {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.main-menu ul {
+    display: flex !important;
+    gap: 40px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+}
+
+.main-menu ul li {
+    margin: 0 !important;
+}
+
+.main-menu ul li a {
+    color: #ffffff !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    padding: 10px 0 !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+}
+
+.main-menu ul li a:hover {
+    color: #FF6B35 !important;
+}
+
+.main-menu ul li a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #FF6B35, #8B4789);
+    transition: width 0.3s ease;
+}
+
+.main-menu ul li a:hover::after {
+    width: 100%;
+}
+
+/* Join button on right */
+.login {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.login .btn,
+.login .btn3 {
+    min-height: 50px !important;
+    padding: 12px 60px 12px 25px !important;
+    font-size: 14px !important;
+}
+
+/* Scrolled state - smaller */
+.header-area.sticky {
+    top: 10px !important;
+}
+
+.sticky .menu-area,
+.sticky .second-menu {
+    padding: 10px 25px !important;
+}
+
+.sticky .logo img {
+    max-height: 40px !important;
+}
+
+.sticky .main-menu ul {
+    gap: 30px !important;
+}
+
+.sticky .main-menu ul li a {
+    font-size: 15px !important;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .main-menu ul {
+        gap: 25px !important;
+    }
+    
+    .main-menu ul li a {
+        font-size: 14px !important;
+    }
+}
+
+@media (max-width: 991px) {
+    .header-area {
+        width: 98% !important;
+    }
+    
+    .menu-area,
+    .second-menu {
+        border-radius: 40px !important;
+        padding: 12px 20px !important;
+    }
+    
+    .main-menu ul {
+        gap: 20px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .header-area {
+        top: 10px !important;
+        width: 95% !important;
+    }
+    
+    .menu-area,
+    .second-menu {
+        border-radius: 30px !important;
+        padding: 10px 15px !important;
+    }
+    
+    .logo img {
+        max-height: 40px !important;
+    }
+    
+    /* Hide menu items on mobile, show hamburger */
+    .main-menu {
+        display: none !important;
+    }
+    
+    .mobile-menu {
+        display: block !important;
+    }
+}
+
+/* Smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Add padding to body to prevent content from hiding under fixed navbar */
+body {
+    padding-top: 100px !important;
+}
+
+@media (max-width: 767px) {
+    body {
+        padding-top: 80px !important;
+    }
+}
+
+
+/* ========================================
+   UPDATED NAVBAR STYLES - SMALLER LOGO & GRADIENT BORDER
+   ======================================== */
+
+/* Smaller logo */
+.logo img {
+    max-height: 32px !important;
+    width: auto !important;
+    object-fit: contain !important;
+}
+
+.sticky .logo img {
+    max-height: 28px !important;
+}
+
+/* Navigation menu with gradient border pill */
+.main-menu {
+    position: relative !important;
+    background: transparent !important;
+    padding: 0 !important;
+    border-radius: 50px !important;
+    margin: 0 20px !important;
+}
+
+/* Remove gradient border */
+.main-menu::before {
+    display: none !important;
+}
+
+.main-menu .menu-outer {
+    background: transparent !important;
+    border-radius: 48px !important;
+    padding: 12px 30px !important;
+}
+
+.main-menu ul {
+    gap: 35px !important;
+}
+
+.main-menu ul li a {
+    font-size: 15px !important;
+    padding: 8px 0 !important;
+}
+
+/* Scrolled state */
+.sticky .main-menu .menu-outer {
+    padding: 10px 25px !important;
+}
+
+.sticky .main-menu ul {
+    gap: 30px !important;
+}
+
+.sticky .main-menu ul li a {
+    font-size: 14px !important;
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+    .logo img {
+        max-height: 28px !important;
+    }
+    
+    .main-menu {
+        margin: 0 10px !important;
+    }
+}
+
+
+/* ========================================
+   SLEEK TRANSPARENT NAVBAR - NO BACKGROUND
+   ======================================== */
+
+/* Remove navbar background - make it sleek and transparent */
+.menu-area,
+.second-menu {
+    background: rgba(10, 10, 10, 0.7) !important;
+    backdrop-filter: blur(15px) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    padding: 20px 30px !important;
+    border-radius: 50px !important;
+}
+
+/* Larger logo */
+.logo img {
+    max-height: 60px !important;
+    width: auto !important;
+    object-fit: contain !important;
+}
+
+.sticky .logo img {
+    max-height: 55px !important;
+}
+
+/* Clean menu styling */
+.main-menu .menu-outer {
+    background: transparent !important;
+    padding: 0 !important;
+}
+
+/* Scrolled state - add subtle background only when scrolled */
+.sticky .menu-area,
+.sticky .second-menu {
+    background: rgba(10, 10, 10, 0.9) !important;
+    backdrop-filter: blur(20px) !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+    border-radius: 50px !important;
+    padding: 15px 25px !important;
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+    .logo img {
+        max-height: 50px !important;
+    }
+    
+    .sticky .logo img {
+        max-height: 45px !important;
+    }
+}
+
+
+/* ========================================
+   INNER PILL-SHAPED BORDER FOR MENU
+   ======================================== */
+
+/* Add pill-shaped border around menu items */
+.main-menu,
+.main-menu .menu-outer,
+#mobile-menu .menu-outer {
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 50px !important;
+    padding: 12px 25px !important;
 }

@@ -22,11 +22,72 @@
     <link rel="stylesheet" href="css/swiper.min.css">
     <link rel="stylesheet" href="css/default.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/rounded-corners.css">
+    <link rel="stylesheet" href="css/custom-buttons.css">
+    <link rel="stylesheet" href="css/premium-navbar.css">
+    <link rel="stylesheet" href="css/premium-cards.css">
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="css/advertisement-popup.css">
 </head>
 
 <body>
+    <!-- Premium Glassmorphism Navigation Bar -->
+    <nav class="premium-navbar" id="premiumNavbar">
+        <div class="navbar-content">
+            <!-- Logo Section -->
+            <a href="index.html" class="navbar-logo">
+                <img src="img/logo/elogo.png" alt="E-Cell NFSU" class="logo-image">
+                <span class="logo-text">E-Cell</span>
+            </a>
+            
+            <!-- Navigation Menu -->
+            <ul class="navbar-menu" id="navbarMenu">
+                <li class="menu-item">
+                    <a href="index.html" class="menu-link active" data-page="home">
+                        <span>Home</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="about.html" class="menu-link" data-page="about">
+                        <span>About</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="events.html" class="menu-link" data-page="events">
+                        <span>Events</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="team.html" class="menu-link" data-page="team">
+                        <span>Team</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="blog.html" class="menu-link" data-page="blog">
+                        <span>Blog</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="contact.html" class="menu-link" data-page="contact">
+                        <span>Contact</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <!-- CTA Button -->
+            <a href="about.html" class="navbar-cta">
+                <span>Join E-Cell</span>
+            </a>
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span class="toggle-line"></span>
+                <span class="toggle-line"></span>
+                <span class="toggle-line"></span>
+            </button>
+        </div>
+    </nav>
+
     <!--  Preloader  -->
     <div id="preloader">
         <div id="loading"> </div>
@@ -136,8 +197,7 @@
                                     <div class="cr cr-3"></div>
                                     <div class="cr cr-4"></div>
                                     <div class="slider-content s-slider-content text-center pt-90 pb-120 ">
-                                        <h5 data-animation="fadeInUp" data-delay=".4s"><img src="img/bg/h-icon.png"
-                                                alt="img"> Empowering Student Entrepreneurs</h5>
+                                       
                                         <h2 data-animation="fadeInUp" data-delay=".4s">Your Gateway to Entrepreneurial
                                             Success</h2>
                                         <p data-animation="fadeInDown" data-delay=".4s">We nurture innovative minds,
@@ -167,7 +227,7 @@
                     <div class="col-xl-4 col-lg-4 col-md-12">
                         <div class="section-title mb-70 text-left wow fadeInDown animated" data-animation="fadeInDown"
                             data-delay=".4s">
-                            <h5><img src="img/bg/h-icon.png" alt="img"> About E-Cell</h5>
+                            <h5> About E-Cell</h5>
                             <h2>
                                 Empowering Future Entrepreneurs
                             </h2>
@@ -222,70 +282,6 @@
             </div>
         </section>
         <!-- about-area-end -->
-
-        <!-- whow-are-you -->
-        <section class="who-are-you  pb-150 p-relative">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-6 col-lg-6 col-md-6">
-
-                        <div class="img">
-                            <div class="animations-01">
-                                <img src="img/bg/who-ani-01.png" alt="img">
-                            </div>
-                            <div class="animations-02">
-                                <img src="img/bg/who-ani-02.png" alt="img">
-                            </div>
-                            <div class="img-01 pl-100 wow fadeInLeft animated" data-animation="fadeInLeft"
-                                data-delay=".4s">
-                                <img src="img/bg/who-img.png" alt="img">
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6">
-                        <div class="who-are-you-content pl-30 wow fadeInRight animated" data-animation="fadeInRight"
-                            data-delay=".4s">
-                            <div class="section-title mb-50 text-left wow fadeInDown animated"
-                                data-animation="fadeInDown" data-delay=".4s">
-                                <h5><img src="img/bg/h-icon.png" alt="img"> What We Do</h5>
-                                <h2>
-                                    Entrepreneurship-Driven Innovation Hub
-                                </h2>
-
-                            </div>
-                            <div class="who-are-you-content2">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="way-content pr-30">
-                                            <div class="ano mb-50"><span><i class="fas fa-rocket"
-                                                        style="font-size: 40px; color: #A93E17;"></i></span></div>
-                                            <div class="text">
-                                                <h3>Startup Incubation</h3>
-                                                <p>Nurture innovative ideas from concept to market-ready startups with
-                                                    comprehensive support and mentorship.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="way-content pr-30">
-                                            <div class="ano mb-50"><span><i class="fas fa-brain"
-                                                        style="font-size: 40px; color: #15399A;"></i></span></div>
-                                            <div class="text">
-                                                <h3>Entrepreneurship Programs</h3>
-                                                <p>Comprehensive workshops, seminars, and training programs to develop
-                                                    entrepreneurial skills and mindset.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- whow-are-you-end -->
         <!-- services-area -->
         <section id="services" class="services-area pb-150 fix">
             <div class="container">
@@ -293,7 +289,7 @@
                     <div class="col-lg-12">
                         <div class="section-title text-left wow fadeInDown animated" data-animation="fadeInDown"
                             data-delay=".4s">
-                            <h5><img src="img/bg/h-icon.png" alt="img"> Our Services</h5>
+
                             <h2>
                                 From Ideas to Successful Ventures
                             </h2>
@@ -356,7 +352,6 @@
                     <div class="col-lg-6 col-md-6">
                         <div class="section-title center-align mb-50 p-relative text-center wow fadeInDown animated"
                             data-animation="fadeInDown" data-delay=".4s">
-                            <h5><img src="img/bg/h-icon.png" alt="img"> Our Process</h5>
                             <h2>
                                 From Idea to Successful Startup
                             </h2>
@@ -526,7 +521,7 @@
                     <div class="col-lg-8">
                         <div class="section-title mb-60 text-center wow fadeInDown animated" data-animation="fadeInDown"
                             data-delay=".4s">
-                            <h5><img src="img/bg/h-icon.png" alt="img"> Join E-Cell</h5>
+                            <h5> Join E-Cell</h5>
                             <h2>Ready to Transform Your Ideas into Reality?</h2>
                         </div>
                     </div>
@@ -551,7 +546,7 @@
                     <div class="col-lg-6">
                         <div class="section-title  mb-50 wow fadeInDown animated" data-animation="fadeInDown"
                             data-delay=".4s">
-                            <h5><img src="img/bg/h-icon.png" alt="img"> Latest News</h5>
+                            <h5> Latest News</h5>
                             <h2>
                                 Entrepreneurship Insights and Success Stories
                             </h2>
@@ -659,7 +654,8 @@
                     </div>
                     <div class="col-lg-6 text-right">
                         <div class="footer-social mt-10">
-                            <a href="https://www.instagram.com/ecell.nfsu.tc?igsh=Ym45bms0eTZwOHFs" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="https://www.instagram.com/ecell.nfsu.tc?igsh=Ym45bms0eTZwOHFs" target="_blank"
+                                title="Instagram"><i class="fab fa-instagram"></i></a>
                             <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
                         </div>
                     </div>
@@ -772,6 +768,9 @@
 
     <!-- Router for admin access -->
     <script src="js/router.js"></script>
+    
+    <!-- Premium Navbar JavaScript -->
+    <script src="js/premium-navbar.js"></script>
 </body>
 
 </html>

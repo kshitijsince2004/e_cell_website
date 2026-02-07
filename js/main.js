@@ -886,3 +886,42 @@
     }
 
 })(jQuery);
+
+
+// ========================================
+// FLOATING NAVBAR ON SCROLL
+// ========================================
+(function() {
+    'use strict';
+    
+    // Add sticky class on scroll
+    window.addEventListener('scroll', function() {
+        const header = document.querySelector('.header-area');
+        if (header) {
+            if (window.scrollY > 50) {
+                header.classList.add('sticky');
+            } else {
+                header.classList.remove('sticky');
+            }
+        }
+    });
+    
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+            if (href !== '#' && href !== '#!') {
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    const headerHeight = document.querySelector('.header-area')?.offsetHeight || 100;
+                    const targetPosition = target.offsetTop - headerHeight - 20;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        });
+    });
+})();
