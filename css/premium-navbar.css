@@ -26,7 +26,7 @@
     /* Spacing & Sizing */
     --nav-height: 85px;
     --nav-padding: 24px 40px;
-    --logo-size: 50px;
+    --logo-size: 72px;
     --menu-gap: 52px;
     --border-radius: 16px;
     --pill-radius: 50px;
@@ -156,7 +156,7 @@
 }
 
 .scrolled .logo-image {
-    height: 44px;
+    height: 61px;
 }
 
 .logo-text {
@@ -471,7 +471,7 @@
     }
     
     .logo-image {
-        height: 42px;
+        height: 61px;
     }
     
     .logo-text {

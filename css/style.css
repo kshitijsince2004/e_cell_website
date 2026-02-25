@@ -271,7 +271,7 @@ iframe {
 
 /*--- LOADING ---*/
 #loading {
-    background-image: url("../img/logo/elogo.png");
+    background-image: url("../img/logo/ecell logo.svg");
     background-position: center center;
     background-repeat: no-repeat;
     height: 100%;
@@ -7620,10 +7620,12 @@ section:hover .section-title h2::before {
     width: 100%;
     text-align: left;
     padding-right: 75px;
+    padding-left: 60px;
     background: none;
     border: none;
     border-radius: 0;
     color: #fff;
+    position: relative;
 }
 
 .faq-area-2 .container {
@@ -7709,7 +7711,7 @@ section:hover .section-title h2::before {
 
 .faq-wrap .card-header h2 button .number {
     display: inline-flex;
-    padding: 5px 10px;
+    padding: 8px 14px;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -7719,13 +7721,15 @@ section:hover .section-title h2::before {
     font-size: 20px;
     color: #fff;
     position: absolute;
-    left: -25px;
-    top: 25px;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-right: 15px;
 }
 
 .faq-wrap .card-header h2 button.collapsed .number {
     display: inline-flex;
-    padding: 5px 10px;
+    padding: 8px 14px;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -7734,6 +7738,11 @@ section:hover .section-title h2::before {
     background: #0D0D0D;
     font-size: 20px;
     color: #ffffff7a;
+    margin-right: 15px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .faq-wrap-2 .card-header h2 button .number,
@@ -16335,27 +16344,27 @@ blockquote cite {
 }
 
 /* Custom E-Cell Logo Sizing */
-.logo img[src*="elogo.png"] {
+.logo img[src*="ecell logo.svg"] {
     width: 80px !important;
     height: auto;
 }
 
 /* Responsive logo sizing for mobile */
 @media (max-width: 768px) {
-    .logo img[src*="elogo.png"] {
+    .logo img[src*="ecell logo.svg"] {
         width: 60px !important;
     }
 }
 /* Footer Logo Sizing - 60% bigger */
-.f-widget-title img[src*="elogo.png"] {
-    width: 160px !important;
+.f-widget-title img[src*="ecell logo.svg"] {
+    width: 220px !important;
     height: auto;
 }
 
 /* Responsive footer logo sizing */
 @media (max-width: 768px) {
-    .f-widget-title img[src*="elogo.png"] {
-        width: 120px !important;
+    .f-widget-title img[src*="ecell logo.svg"] {
+        width: 165px !important;
     }
 }
 /* Service Tags Styling */
