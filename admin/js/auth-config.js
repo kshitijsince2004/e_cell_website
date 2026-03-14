@@ -3,9 +3,9 @@
 // Uses Supabase Auth with proper security
 // =====================================================
 
-const SUPABASE_URL = window?.ECELL_ENV?.SUPABASE_URL || "";
+const SUPABASE_URL = "https://cheyadkgpxtvdbsvzlgq.supabase.co";
 // ANON KEY - Safe for public use (read-only with RLS)
-const SUPABASE_ANON_KEY = window?.ECELL_ENV?.SUPABASE_ANON_KEY || "";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoZXlhZGtncHh0dmRic3Z6bGdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzk4ODcsImV4cCI6MjA4NTg1NTg4N30.CNgwaHZFc8bWlk0NOzJNndy9EVB0hKPJKg1FF5PdxVk";
 
 // Create Supabase client with ANON key (secure with RLS)
 window.supabaseClient = window.supabase.createClient(
