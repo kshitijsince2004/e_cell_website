@@ -497,42 +497,35 @@
         // Blog page specific functionality
         class BlogPageManager {
             constructor() {
-                this.supabaseUrl = window?.ECELL_ENV?.SUPABASE_URL || "";
-                this.supabaseKey = window?.ECELL_ENV?.SUPABASE_ANON_KEY || "";
-                this.client = null;
+                this.apiBase = window?.ECELL_ENV?.API_BASE || '/api/data';
                 this.currentPage = 1;
                 this.postsPerPage = 6;
                 this.totalPosts = 0;
+                this.allBlogs = [];
 
                 this.initClient();
             }
 
-            initClient() {
-                if (typeof supabase !== 'undefined') {
-                    this.client = window.supabaseManager ?
-                        window.supabaseManager.getPublicClient() :
-                        supabase.createClient(this.supabaseUrl, this.supabaseKey);
-                    console.log('Blog Page Manager initialized');
-                    this.loadBlogs();
-                    this.loadRecentPosts();
-                } else {
-                    setTimeout(() => this.initClient(), 100);
-                }
+            async initClient() {
+                console.log('Blog Page Manager initialized');
+                await this.loadBlogs();
+                await this.loadRecentPosts();
+            }
+
+            async _fetch(params) {
+                const url = new URL(this.apiBase, window.location.origin);
+                Object.entries(params).forEach(([k, v]) => { if (v != null) url.searchParams.set(k, v); });
+                const res = await fetch(url.toString());
+                if (!res.ok) throw new Error(`API error: ${res.status}`);
+                const json = await res.json();
+                if (json.error) throw new Error(json.error);
+                return json.data || [];
             }
 
             async loadRecentPosts() {
                 try {
-                    const { data: recentPosts, error } = await this.client
-                        .from('blogs')
-                        .select('id, title, date')
-                        .eq('status', 'published')
-                        .order('date', { ascending: false })
-                        .limit(5);
-
-                    if (error) throw error;
-
-                    this.renderRecentPosts(recentPosts || []);
-
+                    const posts = await this._fetch({ table: 'blogs', limit: 5 });
+                    this.renderRecentPosts(posts);
                 } catch (error) {
                     console.error('Error loading recent posts:', error);
                     this.showRecentPostsError();
@@ -544,6 +537,13 @@
                 const div = document.createElement('div');
                 div.appendChild(document.createTextNode(String(text)));
                 return div.innerHTML;
+            }
+
+            stripHtml(html) {
+                if (!html) return '';
+                const div = document.createElement('div');
+                div.innerHTML = html;
+                return div.textContent || div.innerText || '';
             }
 
             renderRecentPosts(posts) {
@@ -578,30 +578,15 @@
             async loadBlogs(page = 1) {
                 try {
                     this.showLoading();
-
-                    // Get total count
-                    const { count } = await this.client
-                        .from('blogs')
-                        .select('*', { count: 'exact', head: true })
-                        .eq('status', 'published');
-
-                    this.totalPosts = count || 0;
-
-                    // Get paginated blogs
+                    if (this.allBlogs.length === 0) {
+                        this.allBlogs = await this._fetch({ table: 'blogs' });
+                        this.totalPosts = this.allBlogs.length;
+                    }
                     const offset = (page - 1) * this.postsPerPage;
-                    const { data: blogs, error } = await this.client
-                        .from('blogs')
-                        .select('*')
-                        .eq('status', 'published')
-                        .order('date', { ascending: false })
-                        .range(offset, offset + this.postsPerPage - 1);
-
-                    if (error) throw error;
-
+                    const blogs = this.allBlogs.slice(offset, offset + this.postsPerPage);
                     this.hideLoading();
-                    this.renderBlogs(blogs || []);
+                    this.renderBlogs(blogs);
                     this.renderPagination();
-
                 } catch (error) {
                     console.error('Error loading blogs:', error);
                     this.hideLoading();
@@ -649,7 +634,8 @@
 
             generateBlogHTML(blog) {
                 const formattedDate = this.formatDate(blog.date);
-                const excerpt = this.escapeHtml(this.truncateText(blog.content, 200));
+                const rawText = blog.excerpt || this.stripHtml(blog.content);
+                const excerpt = this.escapeHtml(this.truncateText(rawText, 200));
                 const defaultImage = 'img/blog/inner_b1.jpg';
                 const safeId = encodeURIComponent(blog.id);
 
@@ -777,25 +763,19 @@
             async performSearch(searchTerm) {
                 try {
                     this.showLoading();
-
-                    const { data: blogs, error } = await this.client
-                        .from('blogs')
-                        .select('*')
-                        .eq('status', 'published')
-                        .or(`title.ilike.%${searchTerm}%,content.ilike.%${searchTerm}%,author.ilike.%${searchTerm}%`)
-                        .order('date', { ascending: false });
-
-                    if (error) throw error;
-
+                    if (this.allBlogs.length === 0) {
+                        this.allBlogs = await this._fetch({ table: 'blogs' });
+                    }
+                    const term = searchTerm.toLowerCase();
+                    const blogs = this.allBlogs.filter(b =>
+                        (b.title || '').toLowerCase().includes(term) ||
+                        (b.content || '').toLowerCase().includes(term) ||
+                        (b.author || '').toLowerCase().includes(term)
+                    );
                     this.hideLoading();
-                    this.renderBlogs(blogs || []);
-
-                    // Hide pagination for search results
+                    this.renderBlogs(blogs);
                     document.getElementById('pagination-container').style.display = 'none';
-
-                    // Show search results info
                     this.showSearchInfo(searchTerm, blogs.length);
-
                 } catch (error) {
                     console.error('Error searching blogs:', error);
                     this.hideLoading();
