@@ -642,8 +642,6 @@
 
     // Function to update event overview
     function updateEventOverview(event) {
-        console.log('Updating event overview section with comprehensive data');
-        
         // Update main overview content
         const overviewContent = document.getElementById('eventOverviewContent');
         if (overviewContent) {
@@ -652,7 +650,6 @@
             } else {
                 overviewContent.innerHTML = `<p>${escapeHtml(event.description || 'Event overview will be updated soon.')}</p>`;
             }
-            console.log('Updated overview content');
         }
 
         // Update learning description
@@ -663,7 +660,6 @@
             } else {
                 learningDesc.innerHTML = `<p>Learning outcomes and benefits will be shared soon.</p>`;
             }
-            console.log('Updated learning description');
         }
 
         // Update schedule description
@@ -674,163 +670,6 @@
             } else {
                 scheduleDesc.innerHTML = `<p>Detailed schedule will be announced closer to the event date.</p>`;
             }
-            console.log('Updated schedule description');
-        }
-    }
-
-    // Function to update learning points with comprehensive data
-    function updateLearningPoints(event) {
-        console.log('Updating learning points section with comprehensive data');
-        
-        const leftColumn = document.getElementById('learningPointsLeft');
-        const rightColumn = document.getElementById('learningPointsRight');
-        
-        if (!leftColumn || !rightColumn) {
-            console.warn('Learning points columns not found');
-            return;
-        }
-        
-        // Clear existing content
-        leftColumn.innerHTML = '';
-        rightColumn.innerHTML = '';
-        
-        if (event.learning_points) {
-            try {
-                const learningPoints = JSON.parse(event.learning_points);
-                
-                if (learningPoints.length > 0) {
-                    // Add learning points (3 per column)
-                    learningPoints.forEach((point, index) => {
-                        const li = document.createElement('li');
-                        li.textContent = point;
-                        
-                        if (index < 3) {
-                            leftColumn.appendChild(li);
-                        } else if (index < 6) {
-                            rightColumn.appendChild(li);
-                        }
-                    });
-                    console.log('Updated learning points from database');
-                } else {
-                    // Show default learning points
-                    leftColumn.innerHTML = `
-                        <li>Business idea validation and market research</li>
-                        <li>Creating compelling business plans</li>
-                        <li>Understanding funding options and investor relations</li>
-                    `;
-                    rightColumn.innerHTML = `
-                        <li>Digital marketing strategies for startups</li>
-                        <li>Building and managing effective teams</li>
-                        <li>Legal aspects of starting a business</li>
-                    `;
-                }
-            } catch (error) {
-                console.error('Error parsing learning points:', error);
-                // Show default learning points on error
-                leftColumn.innerHTML = `
-                    <li>Business idea validation and market research</li>
-                    <li>Creating compelling business plans</li>
-                    <li>Understanding funding options and investor relations</li>
-                `;
-                rightColumn.innerHTML = `
-                    <li>Digital marketing strategies for startups</li>
-                    <li>Building and managing effective teams</li>
-                    <li>Legal aspects of starting a business</li>
-                `;
-            }
-        } else {
-            // Show default learning points when no data
-            leftColumn.innerHTML = `
-                <li>Business idea validation and market research</li>
-                <li>Creating compelling business plans</li>
-                <li>Understanding funding options and investor relations</li>
-            `;
-            rightColumn.innerHTML = `
-                <li>Digital marketing strategies for startups</li>
-                <li>Building and managing effective teams</li>
-                <li>Legal aspects of starting a business</li>
-            `;
-        }
-    }
-
-    // Function to update event schedule with comprehensive data
-    function updateEventSchedule(event) {
-        console.log('Updating event schedule section with comprehensive data');
-        
-        const leftColumn = document.getElementById('scheduleLeft');
-        const rightColumn = document.getElementById('scheduleRight');
-        
-        if (!leftColumn || !rightColumn) {
-            console.warn('Schedule columns not found');
-            return;
-        }
-        
-        // Clear existing content
-        leftColumn.innerHTML = '';
-        rightColumn.innerHTML = '';
-        
-        if (event.schedule) {
-            try {
-                const schedule = JSON.parse(event.schedule);
-                
-                if (schedule.length > 0) {
-                    // Add schedule items (4 per column)
-                    schedule.forEach((item, index) => {
-                        const li = document.createElement('li');
-                        li.textContent = item;
-                        
-                        if (index < 4) {
-                            leftColumn.appendChild(li);
-                        } else if (index < 8) {
-                            rightColumn.appendChild(li);
-                        }
-                    });
-                    console.log('Updated event schedule from database');
-                } else {
-                    // Show default schedule
-                    leftColumn.innerHTML = `
-                        <li>10:00 AM - Registration & Welcome Coffee</li>
-                        <li>10:30 AM - Opening Keynote</li>
-                        <li>11:30 AM - Workshop Session</li>
-                        <li>12:30 PM - Panel Discussion</li>
-                    `;
-                    rightColumn.innerHTML = `
-                        <li>1:30 PM - Networking Lunch</li>
-                        <li>2:30 PM - Workshop Session</li>
-                        <li>3:30 PM - Pitch Session</li>
-                        <li>4:00 PM - Closing Remarks</li>
-                    `;
-                }
-            } catch (error) {
-                console.error('Error parsing schedule:', error);
-                // Show default schedule on error
-                leftColumn.innerHTML = `
-                    <li>10:00 AM - Registration & Welcome Coffee</li>
-                    <li>10:30 AM - Opening Keynote</li>
-                    <li>11:30 AM - Workshop Session</li>
-                    <li>12:30 PM - Panel Discussion</li>
-                `;
-                rightColumn.innerHTML = `
-                    <li>1:30 PM - Networking Lunch</li>
-                    <li>2:30 PM - Workshop Session</li>
-                    <li>3:30 PM - Pitch Session</li>
-                    <li>4:00 PM - Closing Remarks</li>
-                `;
-            }
-        } else {
-            // Show default schedule when no data
-            leftColumn.innerHTML = `
-                <li>10:00 AM - Registration & Welcome Coffee</li>
-                <li>10:30 AM - Opening Keynote</li>
-                <li>11:30 AM - Workshop Session</li>
-                <li>12:30 PM - Panel Discussion</li>
-            `;
-            rightColumn.innerHTML = `
-                <li>1:30 PM - Networking Lunch</li>
-                <li>2:30 PM - Workshop Session</li>
-                <li>3:30 PM - Pitch Session</li>
-                <li>4:00 PM - Closing Remarks</li>
-            `;
         }
     }
 

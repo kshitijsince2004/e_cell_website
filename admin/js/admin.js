@@ -729,6 +729,26 @@ class AdminPanel {
             setValue('eventOrganizer', event.organizer);
             setValue('eventCategory', event.category);
             setValue('eventImage', event.image);
+            setValue('eventOverview', event.overview);
+            setValue('eventLearning', event.learning_description);
+            setValue('scheduleDescription', event.schedule_description);
+            setValue('registrationLink', event.registration_link);
+            setValue('registrationNote', event.registration_note);
+            setValue('eventDuration', event.duration);
+            setValue('eventRating', event.rating);
+            setValue('eventTags', event.tags);
+
+            // Populate learning points
+            try {
+                const lp = event.learning_points ? JSON.parse(event.learning_points) : [];
+                [1,2,3,4,5,6].forEach((n, i) => setValue(`learningPoint${n}`, lp[i] || ''));
+            } catch(e) { [1,2,3,4,5,6].forEach(n => setValue(`learningPoint${n}`, '')); }
+
+            // Populate schedule items
+            try {
+                const sc = event.schedule ? JSON.parse(event.schedule) : [];
+                [1,2,3,4,5,6,7,8].forEach((n, i) => setValue(`schedule${n}`, sc[i] || ''));
+            } catch(e) { [1,2,3,4,5,6,7,8].forEach(n => setValue(`schedule${n}`, '')); }
             
             // Show current image if exists
             if (event.image) {
@@ -1149,6 +1169,26 @@ window.saveEvent = async function() {
         
         // Get image URL (either typed or uploaded as data URL)
         const imageUrl = document.getElementById('eventImage')?.value || '';
+
+        // Get overview and learning fields
+        const overview = document.getElementById('eventOverview')?.value || '';
+        const learningDescription = document.getElementById('eventLearning')?.value || '';
+        const scheduleDesc = document.getElementById('scheduleDescription')?.value || '';
+        const registrationLink = document.getElementById('registrationLink')?.value || '';
+        const registrationNote = document.getElementById('registrationNote')?.value || '';
+        const duration = document.getElementById('eventDuration')?.value || '';
+        const rating = document.getElementById('eventRating')?.value || null;
+        const tags = document.getElementById('eventTags')?.value || '';
+
+        // Collect learning points (filter out empty ones)
+        const learningPoints = [1,2,3,4,5,6]
+            .map(i => document.getElementById(`learningPoint${i}`)?.value?.trim() || '')
+            .filter(v => v !== '');
+
+        // Collect schedule items (filter out empty ones)
+        const scheduleItems = [1,2,3,4,5,6,7,8]
+            .map(i => document.getElementById(`schedule${i}`)?.value?.trim() || '')
+            .filter(v => v !== '');
         
         // Prepare event data
         const eventData = {
@@ -1162,6 +1202,16 @@ window.saveEvent = async function() {
             organizer,
             category,
             image: imageUrl,
+            overview,
+            learning_description: learningDescription,
+            learning_points: JSON.stringify(learningPoints),
+            schedule_description: scheduleDesc,
+            schedule: JSON.stringify(scheduleItems),
+            registration_link: registrationLink,
+            registration_note: registrationNote,
+            duration,
+            rating: rating ? parseInt(rating) : null,
+            tags,
             updated_at: new Date().toISOString()
         };
         
