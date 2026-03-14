@@ -8,7 +8,7 @@ const supabase = createClient(
 );
 
 // Allowed tables for public read access
-const ALLOWED_TABLES = ['events', 'blogs', 'advertisements'];
+const ALLOWED_TABLES = ['events', 'blogs', 'advertisements', 'settings'];
 
 export default async function handler(req, res) {
     // CORS - only allow your domain
@@ -29,6 +29,7 @@ export default async function handler(req, res) {
         let query = supabase.from(table).select('*');
 
         if (table === 'blogs') query = query.eq('status', 'published');
+        if (table === 'settings') query = query.eq('is_public', true);
         if (status) query = query.eq('status', status);
         if (id) query = query.eq('id', id).single();
         if (limit) query = query.limit(parseInt(limit));

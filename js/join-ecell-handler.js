@@ -11,15 +11,7 @@ class JoinEcellHandler {
 
     async init() {
         try {
-            if (typeof window.supabase !== 'undefined') {
-                const SUPABASE_URL = window?.ECELL_ENV?.SUPABASE_URL || "";
-                const SUPABASE_ANON_KEY = window?.ECELL_ENV?.SUPABASE_ANON_KEY || "";
-                
-                this.supabaseClient = window.supabaseManager ? 
-                    window.supabaseManager.getPublicClient() : 
-                    window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                await this.loadSettings();
-            }
+            await this.loadSettings();
             this.setupButtonHandlers();
         } catch (error) {
             console.error('Error initializing Join E-Cell handler:', error);
@@ -29,20 +21,15 @@ class JoinEcellHandler {
 
     async loadSettings() {
         try {
-            if (!this.supabaseClient) return;
-
-            const { data, error } = await this.supabaseClient
-                .from('settings')
-                .select('setting_key, setting_value')
-                .in('setting_key', ['google_form_join_ecell', 'google_form_enabled']);
-
-            if (error) return;
-
-            data.forEach(setting => {
-                this.settings[setting.setting_key] = setting.setting_value;
+            const apiBase = window?.ECELL_ENV?.API_BASE || '/api/data';
+            const url = new URL(apiBase, window.location.origin);
+            url.searchParams.set('table', 'settings');
+            const res = await fetch(url.toString());
+            if (!res.ok) return;
+            const json = await res.json();
+            (json.data || []).forEach(row => {
+                this.settings[row.setting_key] = row.setting_value;
             });
-
-
         } catch (error) {
             console.error('Error loading Join E-Cell settings:', error);
         }
