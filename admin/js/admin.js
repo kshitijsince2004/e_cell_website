@@ -59,18 +59,33 @@ class AdminPanel {
 
         // Listen for auth state changes
         this.authManager.onAuthStateChange((event, session) => {
+            console.log('🔔 Auth Event:', event);
+
+            if (event === 'PASSWORD_RECOVERY') {
+                this.hideLoginModal();
+                this.showSetPasswordModal();
+                return;
+            }
+
             if (event === 'SIGNED_IN') {
                 // Only react on actual sign-in transitions, not token refreshes
                 if (!wasAuthenticated) {
                     wasAuthenticated = true;
                     this.hideLoginModal();
-                    this.showAdminPanel();
-                    this.loadDashboardData();
-                    this.updateUserDisplay();
+                    
+                    // Check if it's an invitation flow
+                    if (window.location.hash.includes('type=invite') || window.location.hash.includes('type=recovery')) {
+                        this.showSetPasswordModal();
+                    } else {
+                        this.showAdminPanel();
+                        this.loadDashboardData();
+                        this.updateUserDisplay();
+                    }
                 }
             } else if (event === 'SIGNED_OUT') {
                 wasAuthenticated = false;
                 this.hideAdminPanel();
+                this.hideSetPasswordModal();
                 this.showLoginModal();
             }
         });
@@ -100,6 +115,28 @@ class AdminPanel {
             logoutBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.handleLogout();
+            });
+        }
+
+        // Set password form submission
+        const setPasswordForm = document.getElementById('setPasswordForm');
+        if (setPasswordForm) {
+            setPasswordForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+
+                if (newPassword !== confirmPassword) {
+                    this.showSetPasswordError("Passwords do not match");
+                    return;
+                }
+
+                if (newPassword.length < 6) {
+                    this.showSetPasswordError("Password must be at least 6 characters");
+                    return;
+                }
+
+                await this.handleSetPassword(newPassword);
             });
         }
     }
@@ -150,6 +187,46 @@ class AdminPanel {
         }
     }
 
+    async handleSetPassword(newPassword) {
+        try {
+            this.hideSetPasswordError();
+            
+            // Show loading state
+            const submitBtn = document.querySelector('#setPasswordForm button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            }
+
+            // Update password
+            const result = await this.authManager.updatePassword(newPassword);
+
+            if (result.success) {
+                this.showAlert("Password set successfully! Welcome.", "success");
+                this.hideSetPasswordModal();
+                
+                // Refresh dashboard
+                this.showAdminPanel();
+                await this.loadDashboardData();
+                this.updateUserDisplay();
+                
+                // Clear hash
+                window.location.hash = '';
+            }
+
+        } catch (error) {
+            console.error('Password update error:', error);
+            this.showSetPasswordError(error.message);
+            
+            // Reset button
+            const submitBtn = document.querySelector('#setPasswordForm button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-check"></i> Save Password & Sign in';
+            }
+        }
+    }
+
     /* ================= UI MANAGEMENT ================= */
 
     showLoginModal() {
@@ -186,6 +263,40 @@ class AdminPanel {
         }
     }
 
+    showSetPasswordModal() {
+        const modalElement = document.getElementById("setPasswordModal");
+        if (modalElement) {
+            modalElement.style.display = 'block';
+            modalElement.classList.add('show');
+            
+            // Create backdrop
+            let backdrop = document.querySelector('.modal-backdrop');
+            if (!backdrop) {
+                backdrop = document.createElement('div');
+                backdrop.className = 'modal-backdrop fade show';
+                document.body.appendChild(backdrop);
+            }
+
+            // Focus on first field
+            setTimeout(() => {
+                const passField = document.getElementById('newPassword');
+                if (passField) passField.focus();
+            }, 100);
+        }
+    }
+
+    hideSetPasswordModal() {
+        const modalElement = document.getElementById("setPasswordModal");
+        if (modalElement) {
+            modalElement.style.display = 'none';
+            modalElement.classList.remove('show');
+            
+            // Remove backdrop
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) backdrop.remove();
+        }
+    }
+
     showAdminPanel() {
         document.getElementById("adminPanel").classList.remove("d-none");
         console.log('✅ Admin panel displayed');
@@ -210,6 +321,25 @@ class AdminPanel {
 
     hideLoginError() {
         const errorDiv = document.getElementById("loginError");
+        if (errorDiv) {
+            errorDiv.classList.add("d-none");
+        }
+    }
+
+    showSetPasswordError(message) {
+        const errorDiv = document.getElementById("setPasswordError");
+        if (errorDiv) {
+            errorDiv.textContent = message;
+            errorDiv.classList.remove("d-none");
+            
+            setTimeout(() => {
+                errorDiv.classList.add("d-none");
+            }, 5000);
+        }
+    }
+
+    hideSetPasswordError() {
+        const errorDiv = document.getElementById("setPasswordError");
         if (errorDiv) {
             errorDiv.classList.add("d-none");
         }

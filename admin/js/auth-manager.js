@@ -172,6 +172,26 @@ class AuthManager {
         }
     }
 
+    async updatePassword(newPassword) {
+        try {
+            const { data, error } = await this.supabase.auth.updateUser({
+                password: newPassword
+            });
+
+            if (error) throw error;
+            
+            await this.logActivity('password_update', null, null, null, {
+                email: this.currentUser.email,
+                updated_at: new Date().toISOString()
+            });
+
+            return { success: true, user: data.user };
+        } catch (error) {
+            console.error('Password update error:', error);
+            throw error;
+        }
+    }
+
     async logActivity(action, tableName, recordId, oldValues, newValues) {
         try {
             if (!this.currentUser) return;
