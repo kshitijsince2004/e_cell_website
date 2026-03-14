@@ -582,3 +582,10 @@ body {
         padding-top: 90px !important;
     }
 }
+
+/* Hide Join E-Cell CTA button on mobile */
+@media (max-width: 768px) {
+    .navbar-cta {
+        display: none !important;
+    }
+}
