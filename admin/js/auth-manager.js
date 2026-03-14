@@ -78,6 +78,8 @@ class AuthManager {
 
     async loadUserProfile() {
         try {
+            if (!this.currentUser) return;
+
             const { data, error } = await this.supabase
                 .from('admin_profiles')
                 .select('*')
@@ -101,6 +103,8 @@ class AuthManager {
 
     async createUserProfile() {
         try {
+            if (!this.currentUser) return;
+
             const { data, error } = await this.supabase
                 .from('admin_profiles')
                 .insert([{
@@ -123,6 +127,8 @@ class AuthManager {
 
     async updateLoginStats() {
         try {
+            if (!this.currentUser) return;
+
             await this.supabase
                 .from('admin_profiles')
                 .update({
@@ -174,6 +180,10 @@ class AuthManager {
 
     async updatePassword(newPassword) {
         try {
+            if (!this.currentUser?.email) {
+                throw new Error("No active user session found. Please sign in again.");
+            }
+
             const { data, error } = await this.supabase.auth.updateUser({
                 password: newPassword
             });

@@ -201,7 +201,7 @@ class AdminPanel {
             // Update password
             const result = await this.authManager.updatePassword(newPassword);
 
-            if (result.success) {
+            if (result && result.success) {
                 this.showAlert("Password set successfully! Welcome.", "success");
                 this.hideSetPasswordModal();
                 
@@ -212,11 +212,13 @@ class AdminPanel {
                 
                 // Clear hash
                 window.location.hash = '';
+            } else {
+                throw new Error(result?.error || "Failed to update password. Please try again.");
             }
 
         } catch (error) {
             console.error('Password update error:', error);
-            this.showSetPasswordError(error.message);
+            this.showSetPasswordError(error.message || "An unexpected error occurred");
             
             // Reset button
             const submitBtn = document.querySelector('#setPasswordForm button[type="submit"]');
