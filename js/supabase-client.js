@@ -1,174 +1,62 @@
 // =====================================================
 // SUPABASE CLIENT FOR PUBLIC WEBSITE
-// Read-only access with Row Level Security
+// All requests go through /api/data proxy
+// Keys are never exposed to the browser
 // =====================================================
-
-const SUPABASE_URL = window?.ECELL_ENV?.SUPABASE_URL || "";
-// ANON KEY - Safe for public use (read-only with RLS)
-const SUPABASE_ANON_KEY = window?.ECELL_ENV?.SUPABASE_ANON_KEY || "";
 
 class EcellDataManager {
     constructor() {
-        // Initialize Supabase client with ANON key (read-only with RLS)
-        this.supabaseUrl = SUPABASE_URL;
-        this.supabaseKey = SUPABASE_ANON_KEY;
-        
-        // Initialize client when Supabase library is loaded
-        this.initClient();
+        this.apiBase = window?.ECELL_ENV?.API_BASE || '/api/data';
+        console.log('✅ E-Cell Data Manager initialized (proxy mode)');
     }
 
-    initClient() {
-        if (typeof supabase !== 'undefined') {
-            this.client = window.supabaseManager ? 
-                window.supabaseManager.getPublicClient() : 
-                window.supabase.createClient(this.supabaseUrl, this.supabaseKey);
-            
-            console.log('✅ E-Cell Data Manager initialized');
-            console.log('🔐 Using ANON key with Row Level Security');
-        } else {
-            console.error('Supabase library not loaded');
-        }
+    async _fetch(params) {
+        const url = new URL(this.apiBase, window.location.origin);
+        Object.entries(params).forEach(([k, v]) => { if (v != null) url.searchParams.set(k, v); });
+        const res = await fetch(url.toString());
+        if (!res.ok) throw new Error(`API error: ${res.status}`);
+        const json = await res.json();
+        if (json.error) throw new Error(json.error);
+        return json.data;
     }
 
-    // Fetch published blogs
     async getPublishedBlogs(limit = null) {
-        try {
-            let query = this.client
-                .from('blogs')
-                .select('*')
-                .eq('status', 'published')
-                .order('date', { ascending: false });
-
-            if (limit) {
-                query = query.limit(limit);
-            }
-
-            const { data, error } = await query;
-            
-            if (error) throw error;
-            return data || [];
-        } catch (error) {
-            console.error('Error fetching blogs:', error);
-            return [];
-        }
+        try { return await this._fetch({ table: 'blogs', limit }); }
+        catch (e) { console.error('Error fetching blogs:', e); return []; }
     }
 
-    // Fetch events
     async getEvents(status = null, limit = null) {
-        try {
-            let query = this.client
-                .from('events')
-                .select('*')
-                .order('date', { ascending: false });
-
-            if (status) {
-                query = query.eq('status', status);
-            }
-
-            if (limit) {
-                query = query.limit(limit);
-            }
-
-            const { data, error } = await query;
-            
-            if (error) throw error;
-            return data || [];
-        } catch (error) {
-            console.error('Error fetching events:', error);
-            return [];
-        }
+        try { return await this._fetch({ table: 'events', status, limit }); }
+        catch (e) { console.error('Error fetching events:', e); return []; }
     }
 
-    // Fetch upcoming events
-    async getUpcomingEvents(limit = 3) {
-        return await this.getEvents('upcoming', limit);
-    }
+    async getUpcomingEvents(limit = 3) { return this.getEvents('upcoming', limit); }
+    async getRecentEvents(limit = 3) { return this.getEvents(null, limit); }
+    async getLatestBlogs(limit = 3) { return this.getPublishedBlogs(limit); }
 
-    // Fetch recent events for homepage
-    async getRecentEvents(limit = 3) {
-        try {
-            const { data, error } = await this.client
-                .from('events')
-                .select('*')
-                .order('date', { ascending: false })
-                .limit(limit);
-            
-            if (error) throw error;
-            return data || [];
-        } catch (error) {
-            console.error('Error fetching recent events:', error);
-            return [];
-        }
-    }
-
-    // Fetch latest blogs for homepage
-    async getLatestBlogs(limit = 3) {
-        return await this.getPublishedBlogs(limit);
-    }
-
-    // Get single blog by ID
     async getBlogById(id) {
-        try {
-            const { data, error } = await this.client
-                .from('blogs')
-                .select('*')
-                .eq('id', id)
-                .eq('status', 'published')
-                .single();
-            
-            if (error) throw error;
-            return data;
-        } catch (error) {
-            console.error('Error fetching blog:', error);
-            return null;
-        }
+        try { return await this._fetch({ table: 'blogs', id }); }
+        catch (e) { console.error('Error fetching blog:', e); return null; }
     }
 
-    // Get single event by ID
     async getEventById(id) {
-        try {
-            const { data, error } = await this.client
-                .from('events')
-                .select('*')
-                .eq('id', id)
-                .single();
-            
-            if (error) throw error;
-            return data;
-        } catch (error) {
-            console.error('Error fetching event:', error);
-            return null;
-        }
+        try { return await this._fetch({ table: 'events', id }); }
+        catch (e) { console.error('Error fetching event:', e); return null; }
     }
 
-    // Format date for display
     formatDate(dateString) {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
+        return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
     }
 
-    // Format date for blog meta
     formatBlogDate(dateString) {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric'
-        }).toUpperCase();
+        return new Date(dateString).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase();
     }
 
-    // Truncate text for excerpts
     truncateText(text, maxLength = 150) {
         if (!text) return '';
-        if (text.length <= maxLength) return text;
-        return text.substring(0, maxLength).trim() + '...';
+        return text.length <= maxLength ? text : text.substring(0, maxLength).trim() + '...';
     }
 
-    // Escape HTML to prevent XSS
     escapeHtml(text) {
         if (!text) return '';
         const div = document.createElement('div');
@@ -176,7 +64,6 @@ class EcellDataManager {
         return div.innerHTML;
     }
 
-    // Generate blog HTML for homepage
     generateBlogHTML(blog) {
         return `
             <div class="single-post2 hover-zoomin mb-30 wow fadeInUp animated" data-animation="fadeInUp" data-delay=".4s">
@@ -197,15 +84,13 @@ class EcellDataManager {
                     </div>
                     <h4><a href="blog-details.html?id=${encodeURIComponent(blog.id)}">${this.escapeHtml(blog.title)}</a></h4>
                 </div>
-            </div>
-        `;
+            </div>`;
     }
 
-    // Generate event HTML for homepage
     generateEventHTML(event) {
         return `
             <div class="grid-item hover-zoomin financial">
-                <a href="events.html#event-${encodeURIComponent(event.id)}">
+                <a href="events-detail.html?id=${encodeURIComponent(event.id)}">
                     <figure class="gallery-image">
                         <img src="${this.escapeHtml(event.image || 'img/gallery/protfolio-img01.png')}" alt="${this.escapeHtml(event.title)}" class="img">
                         <figcaption>
@@ -214,56 +99,11 @@ class EcellDataManager {
                         </figcaption>
                     </figure>
                 </a>
-            </div>
-        `;
+            </div>`;
     }
 
-    // Load blogs into homepage
-    async loadHomepageBlogs() {
-        const blogs = await this.getLatestBlogs(4);
-        const container = document.querySelector('.home-blog-active');
-        
-        if (container && blogs.length > 0) {
-            container.innerHTML = blogs.map(blog => this.generateBlogHTML(blog)).join('');
-        }
-    }
-
-    // Load events into homepage
-    async loadHomepageEvents() {
-        const events = await this.getRecentEvents(3);
-        const container = document.querySelector('#events-area .grid.col2');
-        
-        if (container && events.length > 0) {
-            container.innerHTML = events.map(event => this.generateEventHTML(event)).join('');
-        }
-    }
-
-    // Load all events into events page
-    async loadEventsPage() {
-        const events = await this.getEvents();
-        const container = document.querySelector('#events-area .grid.col2');
-        
-        if (container && events.length > 0) {
-            container.innerHTML = events.map(event => this.generateEventHTML(event)).join('');
-        }
-    }
-
-    // Load all blogs into blog page
-    async loadBlogPage() {
-        const blogs = await this.getPublishedBlogs();
-        const container = document.querySelector('#blog-posts-container');
-        
-        if (container && blogs.length > 0) {
-            container.innerHTML = blogs.map(blog => this.generateBlogPageHTML(blog)).join('');
-        }
-    }
-
-    // Generate blog HTML for blog page (different from homepage)
     generateBlogPageHTML(blog) {
-        const formattedDate = this.formatDate(blog.date);
-        const excerpt = this.escapeHtml(this.truncateText(blog.content, 200));
         const defaultImage = 'img/blog/inner_b1.jpg';
-        
         return `
             <div class="bsingle__post mb-50">
                 <div class="bsingle__post-thumb">
@@ -273,48 +113,57 @@ class EcellDataManager {
                     <div class="meta-info">
                         <ul>
                             <li><i class="fal fa-user"></i>By ${this.escapeHtml(blog.author || 'E-Cell')}</li>
-                            <li><i class="fal fa-calendar-alt"></i> ${formattedDate}</li>
+                            <li><i class="fal fa-calendar-alt"></i> ${this.formatDate(blog.date)}</li>
                         </ul>
                     </div>
                     <h2><a href="blog-details.html?id=${encodeURIComponent(blog.id)}">${this.escapeHtml(blog.title)}</a></h2>
-                    <p>${excerpt}</p>
+                    <p>${this.escapeHtml(this.truncateText(blog.content, 200))}</p>
                     <div class="blog__btn">
                         <a href="blog-details.html?id=${encodeURIComponent(blog.id)}" class="btn3">Read More <i class="fa-sharp fa-solid fa-arrow-up"></i></a>
                     </div>
                 </div>
-            </div>
-        `;
+            </div>`;
     }
 
-    // Initialize content loading based on current page
+    async loadHomepageBlogs() {
+        const blogs = await this.getLatestBlogs(4);
+        const container = document.querySelector('.home-blog-active');
+        if (container && blogs.length > 0) container.innerHTML = blogs.map(b => this.generateBlogHTML(b)).join('');
+    }
+
+    async loadHomepageEvents() {
+        const events = await this.getRecentEvents(3);
+        const container = document.querySelector('#events-area .grid.col2');
+        if (container && events.length > 0) container.innerHTML = events.map(e => this.generateEventHTML(e)).join('');
+    }
+
+    async loadEventsPage() {
+        const events = await this.getEvents();
+        const container = document.querySelector('#events-area .grid.col2');
+        if (container && events.length > 0) container.innerHTML = events.map(e => this.generateEventHTML(e)).join('');
+    }
+
+    async loadBlogPage() {
+        const blogs = await this.getPublishedBlogs();
+        const container = document.querySelector('#blog-posts-container');
+        if (container && blogs.length > 0) container.innerHTML = blogs.map(b => this.generateBlogPageHTML(b)).join('');
+    }
+
     async initPageContent() {
-        const currentPage = window.location.pathname.split('/').pop();
-        
-        switch (currentPage) {
-            case 'index.html':
-            case '':
-                await this.loadHomepageBlogs();
-                await this.loadHomepageEvents();
-                break;
-            case 'blog.html':
-                await this.loadBlogPage();
-                break;
-            case 'events.html':
-                await this.loadEventsPage();
-                break;
+        const page = window.location.pathname.split('/').pop();
+        if (page === 'index.html' || page === '') {
+            await this.loadHomepageBlogs();
+            await this.loadHomepageEvents();
+        } else if (page === 'blog.html') {
+            await this.loadBlogPage();
+        } else if (page === 'events.html') {
+            await this.loadEventsPage();
         }
     }
 }
 
-// Initialize the data manager
 window.ecellData = new EcellDataManager();
 
-// Auto-load content when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    // Wait a bit for Supabase to load, then initialize content
-    setTimeout(() => {
-        if (window.ecellData) {
-            window.ecellData.initPageContent();
-        }
-    }, 500);
+    setTimeout(() => { if (window.ecellData) window.ecellData.initPageContent(); }, 500);
 });
