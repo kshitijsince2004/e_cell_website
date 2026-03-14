@@ -13,138 +13,55 @@
 
 class AdvertisementPopup {
     constructor() {
-        this.supabaseUrl = window?.ECELL_ENV?.SUPABASE_URL || "";
-        this.supabaseKey = window?.ECELL_ENV?.SUPABASE_ANON_KEY || "";
-        
-        this.client = null;
+        this.apiBase = window?.ECELL_ENV?.API_BASE || '/api/data';
         this.currentAd = null;
         this.popupElement = null;
-        
         this.init();
     }
 
-    /**
-     * Initialize the advertisement popup system
-     */
     async init() {
         try {
-            // Wait for Supabase to be available
-            await this.waitForSupabase();
-            
-            // Initialize Supabase client using centralized manager
-            this.client = window.supabaseManager ? 
-                window.supabaseManager.getPublicClient() : 
-                window.supabase.createClient(this.supabaseUrl, this.supabaseKey);
-            
-            // Fetch and show advertisement
             await this.loadAndShowAdvertisement();
-            
             console.log('✅ Advertisement popup system initialized');
         } catch (error) {
             console.error('❌ Error initializing advertisement popup:', error);
-            // Fail silently - don't break the page if ads can't load
         }
     }
 
-    /**
-     * Wait for Supabase library to be available
-     */
-    waitForSupabase() {
-        return new Promise((resolve) => {
-            if (typeof window.supabase !== 'undefined') {
-                resolve();
-            } else {
-                const checkSupabase = () => {
-                    if (typeof window.supabase !== 'undefined') {
-                        resolve();
-                    } else {
-                        setTimeout(checkSupabase, 100);
-                    }
-                };
-                checkSupabase();
-            }
-        });
-    }
-
-    /**
-     * Fetch active advertisement from Supabase
-     */
     async fetchActiveAdvertisement() {
         try {
-            const { data, error } = await this.client
-                .from('advertisements')
-                .select(`
-                    id,
-                    title,
-                    image_url,
-                    event_id,
-                    status,
-                    created_at,
-                    events (
-                        id,
-                        title,
-                        description
-                    )
-                `)
-                .eq('status', 'active')
-                .order('created_at', { ascending: false })
-                .limit(1);
-
-            if (error) {
-                console.error('Error fetching advertisement:', error);
-                return null;
-            }
-
-            return data && data.length > 0 ? data[0] : null;
+            const url = new URL(this.apiBase, window.location.origin);
+            url.searchParams.set('table', 'advertisements');
+            url.searchParams.set('status', 'active');
+            url.searchParams.set('limit', '1');
+            const res = await fetch(url.toString());
+            if (!res.ok) return null;
+            const json = await res.json();
+            const ads = json.data || [];
+            return ads.length > 0 ? ads[0] : null;
         } catch (error) {
-            console.error('Error in fetchActiveAdvertisement:', error);
+            console.error('Error fetching advertisement:', error);
             return null;
         }
     }
 
-    /**
-     * Check if popups should be shown based on settings and page type
-     */
     async shouldShowPopup() {
         try {
-            // Multiple ways to detect if we're on a details page
             const currentPage = window.location.pathname.split('/').pop();
             const hasIdParam = window.location.search.includes('id=');
-            const isBlogDetails = currentPage === 'blog-details.html' || 
-                                 currentPage.includes('blog-details') ||
-                                 document.title.includes('Blog Details') ||
-                                 document.querySelector('#blogContent') !== null;
-            const isEventDetails = currentPage === 'events-detail.html' || 
-                                  currentPage.includes('events-detail');
-            
-            const isDetailsPage = isBlogDetails || isEventDetails || hasIdParam;
-            
-            console.log('shouldShowPopup - Details page check:', isDetailsPage);
-            
-            if (isDetailsPage) {
-                console.log('❌ Popup blocked: Details page detected');
-                return false;
-            }
-            
-            // Check global popup settings from database
-            const { data: settings, error } = await this.client
-                .from('settings')
-                .select('setting_value')
-                .eq('setting_key', 'global_popup_enabled')
-                .single();
-            
-            if (error) {
-                console.log('Could not fetch popup settings, defaulting to enabled');
-                return true;
-            }
-            
-            const isEnabled = settings?.setting_value === 'true';
-            console.log('Global popup enabled:', isEnabled);
-            
-            return isEnabled;
-        } catch (error) {
-            console.error('Error checking popup settings:', error);
-            return true; // Default to showing popup if there's an error
+            const isDetailsPage = currentPage === 'blog-details.html' ||
+                                  currentPage === 'events-detail.html' || hasIdParam;
+            if (isDetailsPage) return false;
+
+            const url = new URL(this.apiBase, window.location.origin);
+            url.searchParams.set('table', 'settings');
+            const res = await fetch(url.toString());
+            if (!res.ok) return true;
+            const json = await res.json();
+            const setting = (json.data || []).find(r => r.setting_key === 'global_popup_enabled');
+            return setting ? setting.setting_value === 'true' : true;
+        } catch (e) {
+            return true;
         }
     }
 

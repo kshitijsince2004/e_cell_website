@@ -1,174 +1,37 @@
 // Events Client - Handles database operations for events
 class EventsClient {
     constructor() {
-        // Initialize Supabase client
-        this.SUPABASE_URL = window?.ECELL_ENV?.SUPABASE_URL || "";
-        this.SUPABASE_ANON_KEY = window?.ECELL_ENV?.SUPABASE_ANON_KEY || "";
-        
-        this.supabaseClient = null;
-        this.initializeClient();
+        this.apiBase = window?.ECELL_ENV?.API_BASE || '/api/data';
     }
 
-    // Initialize Supabase client
-    initializeClient() {
-        try {
-            if (typeof window.supabase !== 'undefined') {
-                this.supabaseClient = window.supabaseManager ? 
-                    window.supabaseManager.getPublicClient() : 
-                    window.supabase.createClient(this.SUPABASE_URL, this.SUPABASE_ANON_KEY);
-                console.log('Events client initialized successfully');
-            } else {
-                console.error('Supabase library not loaded');
-            }
-        } catch (error) {
-            console.error('Error initializing events client:', error);
-        }
+    async _fetch(params) {
+        const url = new URL(this.apiBase, window.location.origin);
+        Object.entries(params).forEach(([k, v]) => { if (v != null) url.searchParams.set(k, v); });
+        const res = await fetch(url.toString());
+        if (!res.ok) throw new Error(`API error: ${res.status}`);
+        const json = await res.json();
+        if (json.error) throw new Error(json.error);
+        return json.data || [];
     }
 
-    // Get all events with comprehensive fields
     async getAllEvents() {
-        try {
-            if (!this.supabaseClient) {
-                throw new Error('Supabase client not initialized');
-            }
-
-            const { data: events, error } = await this.supabaseClient
-                .from('events')
-                .select(`
-                    id, title, description, date, time, location, venue, image, status,
-                    event_type, organizer, category, duration, 
-                    registration_link, registration_note,
-                    rating, contact_email, tags, special_notes,
-                    overview, learning_description, learning_points, 
-                    schedule_description, schedule,
-                    created_at, updated_at
-                `)
-                .order('date', { ascending: true });
-
-            if (error) throw error;
-            return events || [];
-        } catch (error) {
-            console.error('Error fetching events:', error);
-            // Fallback to basic query if comprehensive query fails
-            try {
-                const { data: basicEvents, error: basicError } = await this.supabaseClient
-                    .from('events')
-                    .select('*')
-                    .order('date', { ascending: true });
-                
-                if (basicError) throw basicError;
-                return basicEvents || [];
-            } catch (fallbackError) {
-                console.error('Fallback query also failed:', fallbackError);
-                return [];
-            }
-        }
+        try { return await this._fetch({ table: 'events' }); }
+        catch (e) { console.error('Error fetching events:', e); return []; }
     }
 
-    // Get event by ID
     async getEventById(id) {
-        try {
-            if (!this.supabaseClient) {
-                throw new Error('Supabase client not initialized');
-            }
-
-            const { data: event, error } = await this.supabaseClient
-                .from('events')
-                .select('*')
-                .eq('id', id)
-                .single();
-
-            if (error) throw error;
-            return event;
-        } catch (error) {
-            console.error('Error fetching event by ID:', error);
-            return null;
-        }
+        try { return await this._fetch({ table: 'events', id }); }
+        catch (e) { console.error('Error fetching event by ID:', e); return null; }
     }
 
-    // Get upcoming events with comprehensive fields
     async getUpcomingEvents() {
-        try {
-            if (!this.supabaseClient) {
-                throw new Error('Supabase client not initialized');
-            }
-
-            const today = new Date().toISOString().split('T')[0];
-            
-            const { data: events, error } = await this.supabaseClient
-                .from('events')
-                .select(`
-                    id, title, description, date, time, location, venue, image, status,
-                    event_type, organizer, category, duration, 
-                    registration_link, registration_note,
-                    rating, contact_email, tags, special_notes,
-                    overview, learning_description, learning_points, 
-                    schedule_description, schedule,
-                    created_at, updated_at
-                `)
-                .gte('date', today)
-                .order('date', { ascending: true });
-
-            if (error) throw error;
-            return events || [];
-        } catch (error) {
-            console.error('Error fetching upcoming events:', error);
-            // Fallback to basic query
-            try {
-                const today = new Date().toISOString().split('T')[0];
-                const { data: basicEvents, error: basicError } = await this.supabaseClient
-                    .from('events')
-                    .select('*')
-                    .gte('date', today)
-                    .order('date', { ascending: true });
-                
-                if (basicError) throw basicError;
-                return basicEvents || [];
-            } catch (fallbackError) {
-                console.error('Fallback query also failed:', fallbackError);
-                return [];
-            }
-        }
+        try { return await this._fetch({ table: 'events', status: 'upcoming' }); }
+        catch (e) { console.error('Error fetching upcoming events:', e); return []; }
     }
 
-    // Get events by status with comprehensive fields
     async getEventsByStatus(status) {
-        try {
-            if (!this.supabaseClient) {
-                throw new Error('Supabase client not initialized');
-            }
-
-            // Try comprehensive query first
-            const { data: events, error } = await this.supabaseClient
-                .from('events')
-                .select(`
-                    id, title, description, date, time, location, venue, image, status,
-                    event_type, organizer, category, duration, 
-                    registration_link, registration_note,
-                    rating, contact_email, tags, special_notes,
-                    overview, learning_description, learning_points, 
-                    schedule_description, schedule,
-                    created_at, updated_at
-                `)
-                .eq('status', status)
-                .order('date', { ascending: true });
-
-            if (error) {
-                console.error('Database error:', error);
-                // If status column doesn't exist, just return all events
-                const { data: basicEvents, error: basicError } = await this.supabaseClient
-                    .from('events')
-                    .select('*')
-                    .order('date', { ascending: true });
-                
-                if (basicError) throw basicError;
-                return basicEvents || [];
-            }
-            return events || [];
-        } catch (error) {
-            console.error('Error fetching events by status:', error);
-            return [];
-        }
+        try { return await this._fetch({ table: 'events', status }); }
+        catch (e) { console.error('Error fetching events by status:', e); return []; }
     }
 
     // Utility functions
