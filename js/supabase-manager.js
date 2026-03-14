@@ -1,18 +1,26 @@
+// =====================================================
+// SECURE SUPABASE CLIENT MANAGER
+// Uses ANON key with Row Level Security
+// =====================================================
+
+const SUPABASE_URL = window?.ECELL_ENV?.SUPABASE_URL || "";
+// ANON KEY - Safe for public use (read-only with RLS)
+const SUPABASE_ANON_KEY = window?.ECELL_ENV?.SUPABASE_ANON_KEY || "";
+
 /**
  * Centralized Supabase Client Manager
  * Prevents multiple client instances and manages connections efficiently
  */
-
 class SupabaseManager {
     constructor() {
         this.clients = new Map();
-        this.SUPABASE_URL = "https://khxeesffponvgpgnszpz.supabase.co";
-        this.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoeGVlc2ZmcG9udmdwZ25zenB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MjQ0OTcsImV4cCI6MjA4NTIwMDQ5N30.Nie54ajcJH6Ll51VBVTablRlZEETYUMOHxogWHbwThY";
+        this.SUPABASE_URL = SUPABASE_URL;
+        this.SUPABASE_ANON_KEY = SUPABASE_ANON_KEY;
     }
 
     /**
      * Get or create a Supabase client
-     * @param {string} key - API key to use
+     * @param {string} key - API key to use (defaults to ANON key)
      * @param {string} clientId - Unique identifier for this client
      * @returns {Object} Supabase client instance
      */
@@ -35,21 +43,14 @@ class SupabaseManager {
     }
 
     /**
-     * Get public client (anon key)
+     * Get public client (read-only with RLS)
      */
     getPublicClient() {
         return this.getClient(this.SUPABASE_ANON_KEY, 'public');
     }
 
     /**
-     * Get admin client (service role key)
-     */
-    getAdminClient(serviceRoleKey) {
-        return this.getClient(serviceRoleKey, 'admin');
-    }
-
-    /**
-     * Clear all clients (useful for cleanup)
+     * Clear all clients
      */
     clearClients() {
         this.clients.clear();
@@ -64,3 +65,7 @@ window.supabaseManager = new SupabaseManager();
 window.getSupabaseClient = (key, clientId) => {
     return window.supabaseManager.getClient(key, clientId);
 };
+
+console.log('🔐 Supabase Manager initialized');
+console.log('✅ Using ANON key with Row Level Security');
+console.log('⚠️  Service role key removed from client code');

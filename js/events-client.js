@@ -2,8 +2,8 @@
 class EventsClient {
     constructor() {
         // Initialize Supabase client
-        this.SUPABASE_URL = "https://khxeesffponvgpgnszpz.supabase.co";
-        this.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoeGVlc2ZmcG9udmdwZ25zenB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MjQ0OTcsImV4cCI6MjA4NTIwMDQ5N30.Nie54ajcJH6Ll51VBVTablRlZEETYUMOHxogWHbwThY";
+        this.SUPABASE_URL = window?.ECELL_ENV?.SUPABASE_URL || "";
+        this.SUPABASE_ANON_KEY = window?.ECELL_ENV?.SUPABASE_ANON_KEY || "";
         
         this.supabaseClient = null;
         this.initializeClient();

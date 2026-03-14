@@ -1,12 +1,17 @@
-// Supabase Client for Main Website
-// This file handles fetching data from Supabase for the main E-Cell website
-// Uses ANON key for read-only public access
+// =====================================================
+// SUPABASE CLIENT FOR PUBLIC WEBSITE
+// Read-only access with Row Level Security
+// =====================================================
+
+const SUPABASE_URL = window?.ECELL_ENV?.SUPABASE_URL || "";
+// ANON KEY - Safe for public use (read-only with RLS)
+const SUPABASE_ANON_KEY = window?.ECELL_ENV?.SUPABASE_ANON_KEY || "";
 
 class EcellDataManager {
     constructor() {
-        // Initialize Supabase client with ANON key (read-only)
-        this.supabaseUrl = "https://khxeesffponvgpgnszpz.supabase.co";
-        this.supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoeGVlc2ZmcG9udmdwZ25zenB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MjQ0OTcsImV4cCI6MjA4NTIwMDQ5N30.Nie54ajcJH6Ll51VBVTablRlZEETYUMOHxogWHbwThY"; // ANON KEY
+        // Initialize Supabase client with ANON key (read-only with RLS)
+        this.supabaseUrl = SUPABASE_URL;
+        this.supabaseKey = SUPABASE_ANON_KEY;
         
         // Initialize client when Supabase library is loaded
         this.initClient();
@@ -16,11 +21,12 @@ class EcellDataManager {
         if (typeof supabase !== 'undefined') {
             this.client = window.supabaseManager ? 
                 window.supabaseManager.getPublicClient() : 
-                supabase.createClient(this.supabaseUrl, this.supabaseKey);
-            console.log('E-Cell Data Manager initialized');
+                window.supabase.createClient(this.supabaseUrl, this.supabaseKey);
+            
+            console.log('✅ E-Cell Data Manager initialized');
+            console.log('🔐 Using ANON key with Row Level Security');
         } else {
-            // Retry after a short delay if Supabase isn't loaded yet
-            setTimeout(() => this.initClient(), 100);
+            console.error('Supabase library not loaded');
         }
     }
 
@@ -162,13 +168,21 @@ class EcellDataManager {
         return text.substring(0, maxLength).trim() + '...';
     }
 
+    // Escape HTML to prevent XSS
+    escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
     // Generate blog HTML for homepage
     generateBlogHTML(blog) {
         return `
             <div class="single-post2 hover-zoomin mb-30 wow fadeInUp animated" data-animation="fadeInUp" data-delay=".4s">
                 <div class="blog-thumb2">
-                    <a href="blog-details.html?id=${blog.id}">
-                        <img src="${blog.image || 'img/blog/inner_b1.jpg'}" alt="${blog.title}">
+                    <a href="blog-details.html?id=${encodeURIComponent(blog.id)}">
+                        <img src="${this.escapeHtml(blog.image || 'img/blog/inner_b1.jpg')}" alt="${this.escapeHtml(blog.title)}">
                     </a>
                 </div>
                 <div class="blog-content2">
@@ -177,11 +191,11 @@ class EcellDataManager {
                             <ul>
                                 <li>${this.formatBlogDate(blog.date)}</li>
                                 <li><span></span></li>
-                                <li>${blog.author}</li>
+                                <li>${this.escapeHtml(blog.author)}</li>
                             </ul>
                         </div>
                     </div>
-                    <h4><a href="blog-details.html?id=${blog.id}">${blog.title}</a></h4>
+                    <h4><a href="blog-details.html?id=${encodeURIComponent(blog.id)}">${this.escapeHtml(blog.title)}</a></h4>
                 </div>
             </div>
         `;
@@ -191,12 +205,12 @@ class EcellDataManager {
     generateEventHTML(event) {
         return `
             <div class="grid-item hover-zoomin financial">
-                <a href="events.html#event-${event.id}">
+                <a href="events.html#event-${encodeURIComponent(event.id)}">
                     <figure class="gallery-image">
-                        <img src="${event.image || 'img/gallery/protfolio-img01.png'}" alt="${event.title}" class="img">
+                        <img src="${this.escapeHtml(event.image || 'img/gallery/protfolio-img01.png')}" alt="${this.escapeHtml(event.title)}" class="img">
                         <figcaption>
-                            <h4>${event.title}</h4>
-                            <span>${this.truncateText(event.description, 100)}</span>
+                            <h4>${this.escapeHtml(event.title)}</h4>
+                            <span>${this.escapeHtml(this.truncateText(event.description, 100))}</span>
                         </figcaption>
                     </figure>
                 </a>
@@ -247,25 +261,25 @@ class EcellDataManager {
     // Generate blog HTML for blog page (different from homepage)
     generateBlogPageHTML(blog) {
         const formattedDate = this.formatDate(blog.date);
-        const excerpt = this.truncateText(blog.content, 200);
+        const excerpt = this.escapeHtml(this.truncateText(blog.content, 200));
         const defaultImage = 'img/blog/inner_b1.jpg';
         
         return `
             <div class="bsingle__post mb-50">
                 <div class="bsingle__post-thumb">
-                    <img src="${blog.image || defaultImage}" alt="${blog.title}" onerror="this.src='${defaultImage}'">
+                    <img src="${this.escapeHtml(blog.image || defaultImage)}" alt="${this.escapeHtml(blog.title)}" onerror="this.src='${defaultImage}'">
                 </div>
                 <div class="bsingle__content">
                     <div class="meta-info">
                         <ul>
-                            <li><i class="fal fa-user"></i>By ${blog.author || 'E-Cell'}</li>
+                            <li><i class="fal fa-user"></i>By ${this.escapeHtml(blog.author || 'E-Cell')}</li>
                             <li><i class="fal fa-calendar-alt"></i> ${formattedDate}</li>
                         </ul>
                     </div>
-                    <h2><a href="blog-details.html?id=${blog.id}">${blog.title}</a></h2>
+                    <h2><a href="blog-details.html?id=${encodeURIComponent(blog.id)}">${this.escapeHtml(blog.title)}</a></h2>
                     <p>${excerpt}</p>
                     <div class="blog__btn">
-                        <a href="blog-details.html?id=${blog.id}" class="btn3">Read More <i class="fa-sharp fa-solid fa-arrow-up"></i></a>
+                        <a href="blog-details.html?id=${encodeURIComponent(blog.id)}" class="btn3">Read More <i class="fa-sharp fa-solid fa-arrow-up"></i></a>
                     </div>
                 </div>
             </div>

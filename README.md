@@ -76,9 +76,9 @@ Multiple secure access methods:
 4. **Keyboard Shortcut**: `Ctrl+Alt+A` on any page
 
 ### **Default Credentials**
-- **Username**: `admin`
-- **Password**: `password`
-- ⚠️ **Change immediately after first login!**
+- There are no default credentials configured.
+- You must create the initial admin user from your Supabase Dashboard under `Authentication > Users`.
+- ⚠️ Ensure you set a strong, secure password!
 
 ## 📁 Project Structure
 
@@ -303,7 +303,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## 📞 Support & Contact
 
-- **Email**: ecell@nfsutc.ac.in
+- **Email**: ecellnfsutc@gmail.com
 - **Phone**: +91 9999882696
 - **Instagram**: [@ecell.nfsu.tc](https://www.instagram.com/ecell.nfsu.tc)
 

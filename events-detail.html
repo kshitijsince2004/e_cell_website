@@ -168,7 +168,7 @@
         <div id="cssmenu2" class="menu-one-page-menu-container">
             <ul id="menu-one-page-menu-12" class="menu">
                 <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="tel:+919999882696"><span>+91 9999882696</span></a></li>
-                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="mailto:ecell@nfsutc.ac.in"><span>ecell@nfsutc.ac.in</span></a></li>
+                <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="mailto:ecellnfsutc@gmail.com"><span>ecellnfsutc@gmail.com</span></a></li>
             </ul>
         </div>
     </div>
@@ -347,7 +347,7 @@
                                 </div>
                                 <div class="contact-item mb-15">
                                     <i class="fas fa-envelope"></i>
-                                    <a href="mailto:ecell@nfsutc.ac.in">ecell@nfsutc.ac.in</a>
+                                    <a href="mailto:ecellnfsutc@gmail.com">ecellnfsutc@gmail.com</a>
                                 </div>
                             </div>
                         </div>
@@ -423,7 +423,9 @@
     <script src="js/main.js"></script>
     
     <!-- Supabase Integration -->
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/env-config.js"></script>
     <script src="js/supabase-manager.js"></script>
     <script src="js/supabase-client.js"></script>
     <script src="js/advertisement-popup.js"></script>
@@ -437,6 +439,14 @@
             loadEventDetails();
         }, 1000);
     });
+
+    // Escape HTML to prevent XSS
+    function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.appendChild(document.createTextNode(String(text)));
+        return div.innerHTML;
+    }
 
     // Function to load event details from database
     async function loadEventDetails() {
@@ -587,7 +597,7 @@
         if (eventRating) {
             if (event.rating && event.rating > 0) {
                 const stars = '★'.repeat(event.rating) + '☆'.repeat(5 - event.rating);
-                eventRating.innerHTML = `Rating: ${stars} (${event.rating}/5)`;
+                eventRating.innerHTML = `Rating: ${stars} (${escapeHtml(String(event.rating))}/5)`;
             } else {
                 eventRating.innerHTML = 'Rating: <img src="img/bg/star-p.png" alt="img">';
             }
@@ -601,12 +611,12 @@
             const eventTime = event.time ? ` - ${event.time}` : '';
             
             projectInfo.innerHTML = `
-                <li><h5>Event Type</h5> <span>${event.event_type || 'Workshop'}</span></li>
-                <li><h5>Organizer</h5> <span>${event.organizer || 'E-Cell Team'}</span></li>
-                <li><h5>Category</h5> <span>${event.category || 'Entrepreneurship, Innovation'}</span></li>
-                <li><h5>Date & Time</h5><span>${eventDate}${eventTime}</span></li>
-                <li><h5>Venue</h5><span>${event.venue || event.location || 'TBD'}</span></li>
-                <li><h5>Duration</h5><span>${event.duration || 'TBD'}</span></li>
+                <li><h5>Event Type</h5> <span>${escapeHtml(event.event_type || 'Workshop')}</span></li>
+                <li><h5>Organizer</h5> <span>${escapeHtml(event.organizer || 'E-Cell Team')}</span></li>
+                <li><h5>Category</h5> <span>${escapeHtml(event.category || 'Entrepreneurship, Innovation')}</span></li>
+                <li><h5>Date & Time</h5><span>${escapeHtml(eventDate)}${escapeHtml(eventTime)}</span></li>
+                <li><h5>Venue</h5><span>${escapeHtml(event.venue || event.location || 'TBD')}</span></li>
+                <li><h5>Duration</h5><span>${escapeHtml(event.duration || 'TBD')}</span></li>
             `;
             console.log('✓ Updated project info list');
         }
@@ -632,9 +642,9 @@
         const overviewContent = document.getElementById('eventOverviewContent');
         if (overviewContent) {
             if (event.overview) {
-                overviewContent.innerHTML = `<p>${event.overview}</p>`;
+                overviewContent.innerHTML = `<p>${escapeHtml(event.overview)}</p>`;
             } else {
-                overviewContent.innerHTML = `<p>${event.description || 'Event overview will be updated soon.'}</p>`;
+                overviewContent.innerHTML = `<p>${escapeHtml(event.description || 'Event overview will be updated soon.')}</p>`;
             }
             console.log('Updated overview content');
         }
@@ -643,7 +653,7 @@
         const learningDesc = document.getElementById('learningDescription');
         if (learningDesc) {
             if (event.learning_description) {
-                learningDesc.innerHTML = `<p>${event.learning_description}</p>`;
+                learningDesc.innerHTML = `<p>${escapeHtml(event.learning_description)}</p>`;
             } else {
                 learningDesc.innerHTML = `<p>Learning outcomes and benefits will be shared soon.</p>`;
             }
@@ -654,7 +664,7 @@
         const scheduleDesc = document.getElementById('scheduleDescription');
         if (scheduleDesc) {
             if (event.schedule_description) {
-                scheduleDesc.innerHTML = `<p>${event.schedule_description}</p>`;
+                scheduleDesc.innerHTML = `<p>${escapeHtml(event.schedule_description)}</p>`;
             } else {
                 scheduleDesc.innerHTML = `<p>Detailed schedule will be announced closer to the event date.</p>`;
             }
@@ -853,7 +863,7 @@
                 const noteDiv = document.createElement('div');
                 noteDiv.className = 'registration-note';
                 noteDiv.style.cssText = 'margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px; font-size: 14px;';
-                noteDiv.innerHTML = `<strong>Note:</strong> ${event.registration_note}`;
+                noteDiv.innerHTML = `<strong>Note:</strong> ${escapeHtml(event.registration_note)}`;
                 
                 // Find the register button and insert note before it
                 const registerButton = registrationBox.querySelector('.btn');
@@ -887,9 +897,9 @@
         const overviewContent = document.getElementById('eventOverviewContent');
         if (overviewContent) {
             if (event.overview) {
-                overviewContent.innerHTML = `<p>${event.overview}</p>`;
+                overviewContent.innerHTML = `<p>${escapeHtml(event.overview)}</p>`;
             } else {
-                overviewContent.innerHTML = `<p>${event.description || 'Event overview will be updated soon.'}</p>`;
+                overviewContent.innerHTML = `<p>${escapeHtml(event.description || 'Event overview will be updated soon.')}</p>`;
             }
         }
 
@@ -897,7 +907,7 @@
         const learningDesc = document.getElementById('learningDescription');
         if (learningDesc) {
             if (event.learning_description) {
-                learningDesc.innerHTML = `<p>${event.learning_description}</p>`;
+                learningDesc.innerHTML = `<p>${escapeHtml(event.learning_description)}</p>`;
             } else {
                 learningDesc.innerHTML = `<p>Learning outcomes and benefits will be shared soon.</p>`;
             }
@@ -907,7 +917,7 @@
         const scheduleDesc = document.getElementById('scheduleDescription');
         if (scheduleDesc) {
             if (event.schedule_description) {
-                scheduleDesc.innerHTML = `<p>${event.schedule_description}</p>`;
+                scheduleDesc.innerHTML = `<p>${escapeHtml(event.schedule_description)}</p>`;
             } else {
                 scheduleDesc.innerHTML = `<p>Detailed schedule will be announced closer to the event date.</p>`;
             }

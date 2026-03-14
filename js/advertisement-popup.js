@@ -13,8 +13,8 @@
 
 class AdvertisementPopup {
     constructor() {
-        this.supabaseUrl = "https://khxeesffponvgpgnszpz.supabase.co";
-        this.supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoeGVlc2ZmcG9udmdwZ25zenB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MjQ0OTcsImV4cCI6MjA4NTIwMDQ5N30.Nie54ajcJH6Ll51VBVTablRlZEETYUMOHxogWHbwThY";
+        this.supabaseUrl = window?.ECELL_ENV?.SUPABASE_URL || "";
+        this.supabaseKey = window?.ECELL_ENV?.SUPABASE_ANON_KEY || "";
         
         this.client = null;
         this.currentAd = null;
@@ -191,8 +191,8 @@ class AdvertisementPopup {
                         ×
                     </button>
                     <img 
-                        src="${this.currentAd.image_url}" 
-                        alt="${this.currentAd.title}"
+                        src="${this.escapeHtml(this.currentAd.image_url)}" 
+                        alt="${this.escapeHtml(this.currentAd.title)}"
                         class="ad-popup-image"
                         id="adPopupImage"
                         loading="eager"
@@ -370,6 +370,16 @@ class AdvertisementPopup {
      */
     isShown() {
         return this.popupElement && this.popupElement.classList.contains('show');
+    }
+
+    /**
+     * Escape HTML string
+     */
+    escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 }
 

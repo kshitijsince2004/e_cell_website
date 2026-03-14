@@ -1,8 +1,8 @@
 // Blog Details Page JavaScript
 class BlogDetailsManager {
     constructor() {
-        this.supabaseUrl = "https://khxeesffponvgpgnszpz.supabase.co";
-        this.supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoeGVlc2ZmcG9udmdwZ25zenB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MjQ0OTcsImV4cCI6MjA4NTIwMDQ5N30.Nie54ajcJH6Ll51VBVTablRlZEETYUMOHxogWHbwThY";
+        this.supabaseUrl = window?.ECELL_ENV?.SUPABASE_URL || "";
+        this.supabaseKey = window?.ECELL_ENV?.SUPABASE_ANON_KEY || "";
         this.client = null;
         this.blogId = this.getBlogIdFromUrl();
         this.init();
@@ -139,7 +139,14 @@ class BlogDetailsManager {
         if (!content) return '<p>No content available.</p>';
         
         const paragraphs = content.split('\n\n').filter(p => p.trim());
-        return paragraphs.map(p => `<p>${p.trim()}</p>`).join('');
+        return paragraphs.map(p => `<p>${this.escapeHtml(p.trim())}</p>`).join('');
+    }
+
+    escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 
     formatDate(dateString) {
@@ -227,12 +234,12 @@ class BlogDetailsManager {
             <div class="recent-post-item mb-3">
                 <div class="row align-items-center">
                     <div class="col-4">
-                        <img src="${blog.image || 'img/blog/inner_b1.jpg'}" 
-                             alt="${blog.title}" 
+                        <img src="${this.escapeHtml(blog.image || 'img/blog/inner_b1.jpg')}" 
+                             alt="${this.escapeHtml(blog.title)}" 
                              class="img-fluid rounded">
                     </div>
                     <div class="col-8">
-                        <h6><a href="blog-details.html?id=${blog.id}" class="text-decoration-none">${blog.title}</a></h6>
+                        <h6><a href="blog-details.html?id=${blog.id}" class="text-decoration-none">${this.escapeHtml(blog.title)}</a></h6>
                         <small class="text-muted">${this.formatBlogDate(blog.date)}</small>
                     </div>
                 </div>

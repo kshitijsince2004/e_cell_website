@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Cell Admin Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/admin.css">
@@ -12,33 +15,52 @@
     <!-- Quill.js Rich Text Editor -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    
+    <!-- Supabase Client -->
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/env-config.js"></script>
+    
+    <!-- Admin Scripts -->
+    <script src="js/auth-config.js"></script>
+    <script src="js/auth-manager.js"></script>
+    <script src="js/admin.js"></script>
 </head>
 
 <body>
     <!-- Login Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">🔐 E-Cell Admin Login</h5>
+        <div class="modal-dialog modal-dialog-centered" style="max-width:420px">
+            <div class="modal-content" style="background:linear-gradient(160deg,#0D1525 0%,#080D18 100%)!important">
+                <div class="modal-header" style="justify-content:center;border-bottom:1px solid rgba(255,255,255,0.06)!important;padding:28px 28px 20px">
+                    <div style="text-align:center">
+                        <div style="width:48px;height:48px;border-radius:14px;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 0 20px rgba(99,102,241,0.25)">
+                            <i class="fas fa-shield-alt" style="color:#818CF8;font-size:18px;filter:drop-shadow(0 0 6px #6366F1)"></i>
+                        </div>
+                        <h5 class="modal-title" style="font-size:17px;font-weight:700;letter-spacing:-0.3px">E-Cell Admin</h5>
+                        <p style="color:#64748B;font-size:12.5px;margin-top:4px;margin-bottom:0">Sign in to your dashboard</p>
+                    </div>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="padding:24px 28px 28px">
                     <form id="loginForm">
                         <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username" required placeholder="Enter username"
-                                autocomplete="username">
+                            <label for="email" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="email" required placeholder="admin@ecell.com" autocomplete="email">
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-4">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" required
-                                placeholder="Enter password" autocomplete="current-password">
+                            <input type="password" class="form-control" id="password" required placeholder="••••••••" autocomplete="current-password">
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">
-                            <i class="fas fa-sign-in-alt"></i> Login
+                        <button type="submit" class="btn btn-primary w-100" style="padding:11px;font-size:14px;font-weight:600">
+                            <i class="fas fa-arrow-right-to-bracket"></i> Sign in
                         </button>
                     </form>
                     <div id="loginError" class="alert alert-danger mt-3 d-none"></div>
+                    <div class="mt-4 text-center">
+                        <small style="color:#334155;font-size:11.5px">
+                            <i class="fas fa-lock" style="margin-right:4px"></i> Secured with Supabase Auth + RLS
+                        </small>
+                    </div>
                 </div>
             </div>
         </div>
@@ -49,14 +71,19 @@
         <!-- Sidebar -->
         <div class="sidebar">
             <div class="sidebar-header">
-                <h4><i class="fas fa-cogs"></i> E-Cell Admin</h4>
+                <h4>
+                    <span style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#6366F1,#4338CA);display:inline-flex;align-items:center;justify-content:center;box-shadow:0 0 12px rgba(99,102,241,0.4);flex-shrink:0">
+                        <i class="fas fa-bolt" style="font-size:12px;color:#fff;filter:none"></i>
+                    </span>
+                    E-Cell Admin
+                </h4>
                 <div class="text-center mt-2">
                     <span class="badge bg-success" id="userBadge">
-                        <i class="fas fa-user"></i> <span id="currentUsername">Admin</span>
+                        <i class="fas fa-circle" style="font-size:6px"></i> <span id="currentUsername">Admin</span>
                     </span>
                 </div>
                 <a href="../index.html" target="_blank" class="btn btn-sm btn-outline-light mt-2" title="View Website">
-                    <i class="fas fa-globe"></i> Website
+                    <i class="fas fa-arrow-up-right-from-square"></i> View Site
                 </a>
             </div>
             <nav class="sidebar-nav">
@@ -80,6 +107,7 @@
                     onclick="adminPanel.showSection('settings'); return false;">
                     <i class="fas fa-cog"></i> Settings
                 </a>
+                <hr style="border-color: rgba(255,255,255,0.06); margin: 8px 12px;">
                 <a href="#" class="nav-link" id="logoutBtn" onclick="adminPanel.logout(); return false;">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
@@ -103,15 +131,15 @@
                 </div>
 
                 <!-- Welcome Alert -->
-                <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                    <i class="fas fa-shield-alt"></i> <strong>Authenticated Access:</strong>
-                    You're logged in with full admin privileges.
-                    Create and manage content with secure database access!
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-shield-alt"></i> <strong>Secure Authentication Active:</strong>
+                    You're logged in via Supabase Auth with Row Level Security enabled.
+                    All operations are protected and audited.
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card stats-card">
+                <div class="row g-4">
+                    <div class="col-md-4 stats-card">
+                        <div class="card">
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
                                     <div class="stats-icon bg-primary">
@@ -125,8 +153,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="card stats-card">
+                    <div class="col-md-4 stats-card">
+                        <div class="card">
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
                                     <div class="stats-icon bg-success">
@@ -140,8 +168,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="card stats-card">
+                    <div class="col-md-4 stats-card">
+                        <div class="card">
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
                                     <div class="stats-icon bg-warning">
@@ -443,7 +471,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="saveBlog()">Save Blog</button>
+                    <button type="button" class="btn btn-primary" onclick="saveBlogWithValidation()">Save Blog</button>
                 </div>
             </div>
         </div>
@@ -465,10 +493,6 @@
                         <div class="card mb-4">
                             <div class="card-header">
                                 <h6 class="mb-0"><i class="fas fa-info-circle"></i> Basic Information</h6>
-                                <small class="text-warning">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                    Currently saving basic fields only. Run database migration for full functionality.
-                                </small>
                             </div>
                             <div class="card-body">
                                 <div class="row">
@@ -887,9 +911,10 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/secure-config.js"></script>
-    <script src="js/admin.js"></script>
+    <script src="../js/env-config.js"></script>
+    <!-- Old files removed - using admin-new.js instead -->
 
     <script>
         // Initialize Quill.js Rich Text Editor
@@ -914,6 +939,9 @@
                     ]
                 }
             });
+
+            // Expose globally so admin-new.js can access it
+            window.quillEditor = quillEditor;
 
             // Sync Quill content with hidden textarea
             quillEditor.on('text-change', function () {
@@ -1128,8 +1156,8 @@
             }
         });
 
-        // Enhanced blog saving function
-        function saveBlog() {
+        // Enhanced blog saving function - validates before calling admin.js handler
+        function saveBlogWithValidation() {
             // Get content from Quill editor
             const content = quillEditor.root.innerHTML;
 
@@ -1146,11 +1174,11 @@
                 return;
             }
 
-            // Call the original save function from admin.js
-            if (typeof window.adminPanel !== 'undefined' && window.adminPanel.saveBlog) {
-                window.adminPanel.saveBlog();
+            // Call the save function from admin.js
+            if (typeof window.saveBlog === 'function') {
+                window.saveBlog();
             } else {
-                console.error('Admin panel save function not found');
+                console.error('saveBlog function not found');
             }
         }
 
@@ -1174,6 +1202,66 @@
             // Clear image preview
             document.getElementById('blogImagePreview').style.display = 'none';
             document.getElementById('blogImageFile').value = '';
+        });
+
+        // Advertisement image URL — enable preview button + show thumbnail
+        document.getElementById('adImageUrl').addEventListener('input', function () {
+            const url = this.value.trim();
+            const btn = document.getElementById('previewAdBtn');
+            const preview = document.getElementById('adImagePreview');
+            if (url) {
+                btn.disabled = false;
+                if (preview) { preview.src = url; preview.style.display = 'block'; }
+            } else {
+                btn.disabled = true;
+                if (preview) preview.style.display = 'none';
+            }
+        });
+
+        // Advertisement popup preview
+        document.getElementById('previewAdBtn').addEventListener('click', function () {
+            const imageUrl = document.getElementById('adImageUrl').value.trim();
+            const title = document.getElementById('adTitle').value.trim() || 'Advertisement Preview';
+            if (!imageUrl) return;
+
+            // Remove any existing preview overlay
+            const existing = document.getElementById('adPreviewOverlay');
+            if (existing) existing.remove();
+
+            const overlay = document.createElement('div');
+            overlay.id = 'adPreviewOverlay';
+            overlay.style.cssText = `
+                position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+                display: flex; align-items: center; justify-content: center;
+                z-index: 99999; backdrop-filter: blur(6px);
+            `;
+            overlay.innerHTML = `
+                <div style="
+                    position: relative; max-width: 380px; width: 90%;
+                    background: linear-gradient(135deg, #1a1a2e, #16213e);
+                    border: 1px solid rgba(255,255,255,0.15); border-radius: 20px;
+                    overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+                ">
+                    <button onclick="document.getElementById('adPreviewOverlay').remove()" style="
+                        position: absolute; top: 12px; right: 12px; z-index: 2;
+                        background: rgba(0,0,0,0.6); border: none; color: #fff;
+                        width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
+                        font-size: 16px; display: flex; align-items: center; justify-content: center;
+                    ">✕</button>
+                    <img src="${imageUrl}" alt="${title}" style="
+                        width: 100%; display: block; aspect-ratio: 4/5; object-fit: cover;
+                    " onerror="this.style.display='none'">
+                    <div style="padding: 16px 20px; text-align: center;">
+                        <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin: 0;">
+                            Preview — actual popup may vary
+                        </p>
+                    </div>
+                </div>
+            `;
+            overlay.addEventListener('click', function (e) {
+                if (e.target === overlay) overlay.remove();
+            });
+            document.body.appendChild(overlay);
         });
 
         // Function to open blog modal (enhanced)

@@ -236,7 +236,7 @@
                 <li class="menu-item menu-item-type-custom menu-item-object-custom"><a
                         href="tel:+919999882696"><span>+91 9999882696</span></a></li>
                 <li class="menu-item menu-item-type-custom menu-item-object-custom"><a
-                        href="mailto:ecell@nfsutc.ac.in"><span>ecell@nfsutc.ac.in</span></a></li>
+                        href="mailto:ecellnfsutc@gmail.com"><span>ecellnfsutc@gmail.com</span></a></li>
             </ul>
         </div>
     </div>
@@ -408,7 +408,7 @@
                                 </div>
                                 <div class="contact-item mb-15">
                                     <i class="fas fa-envelope"></i>
-                                    <a href="mailto:ecell@nfsutc.ac.in">ecell@nfsutc.ac.in</a>
+                                    <a href="mailto:ecellnfsutc@gmail.com">ecellnfsutc@gmail.com</a>
                                 </div>
                             </div>
                         </div>
@@ -479,6 +479,10 @@
     <script src="js/gsap.min.js"></script>
     <script src="js/ScrollTrigger.min.js"></script>
     <script src="js/main.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/env-config.js"></script>
+    <script src="js/supabase-manager.js"></script>
     <script src="js/supabase-client.js"></script>
     <script src="js/advertisement-popup.js"></script>
 
@@ -486,8 +490,8 @@
         // Blog page specific functionality
         class BlogPageManager {
             constructor() {
-                this.supabaseUrl = "https://khxeesffponvgpgnszpz.supabase.co";
-                this.supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoeGVlc2ZmcG9udmdwZ25zenB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MjQ0OTcsImV4cCI6MjA4NTIwMDQ5N30.Nie54ajcJH6Ll51VBVTablRlZEETYUMOHxogWHbwThY";
+                this.supabaseUrl = window?.ECELL_ENV?.SUPABASE_URL || "";
+                this.supabaseKey = window?.ECELL_ENV?.SUPABASE_ANON_KEY || "";
                 this.client = null;
                 this.currentPage = 1;
                 this.postsPerPage = 6;
@@ -528,6 +532,13 @@
                 }
             }
 
+            escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.appendChild(document.createTextNode(String(text)));
+                return div.innerHTML;
+            }
+
             renderRecentPosts(posts) {
                 const container = document.getElementById('recent-posts-list');
 
@@ -542,7 +553,7 @@
 
                 container.innerHTML = posts.map(post => `
                     <li>
-                        <a href="blog-details.html?id=${post.id}">${post.title}</a>
+                        <a href="blog-details.html?id=${encodeURIComponent(post.id)}">${this.escapeHtml(post.title)}</a>
                         <span class="post-date">${this.formatDate(post.date)}</span>
                     </li>
                 `).join('');
@@ -631,25 +642,26 @@
 
             generateBlogHTML(blog) {
                 const formattedDate = this.formatDate(blog.date);
-                const excerpt = this.truncateText(blog.content, 200);
+                const excerpt = this.escapeHtml(this.truncateText(blog.content, 200));
                 const defaultImage = 'img/blog/inner_b1.jpg';
+                const safeId = encodeURIComponent(blog.id);
 
                 return `
                     <div class="bsingle__post mb-50">
                         <div class="bsingle__post-thumb">
-                            <img src="${blog.image || defaultImage}" alt="${blog.title}" onerror="this.src='${defaultImage}'">
+                            <img src="${this.escapeHtml(blog.image || defaultImage)}" alt="${this.escapeHtml(blog.title)}" onerror="this.src='${defaultImage}'">
                         </div>
                         <div class="bsingle__content">
                             <div class="meta-info">
                                 <ul>
-                                    <li><i class="fal fa-user"></i>By ${blog.author || 'E-Cell'}</li>
+                                    <li><i class="fal fa-user"></i>By ${this.escapeHtml(blog.author || 'E-Cell')}</li>
                                     <li><i class="fal fa-calendar-alt"></i> ${formattedDate}</li>
                                 </ul>
                             </div>
-                            <h2><a href="blog-details.html?id=${blog.id}">${blog.title}</a></h2>
+                            <h2><a href="blog-details.html?id=${safeId}">${this.escapeHtml(blog.title)}</a></h2>
                             <p>${excerpt}</p>
                             <div class="blog__btn">
-                                <a href="blog-details.html?id=${blog.id}" class="btn3">Read More <i class="fa-sharp fa-solid fa-arrow-up"></i></a>
+                                <a href="blog-details.html?id=${safeId}" class="btn3">Read More <i class="fa-sharp fa-solid fa-arrow-up"></i></a>
                             </div>
                         </div>
                     </div>
