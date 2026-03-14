@@ -64,6 +64,13 @@ class EcellDataManager {
         return div.innerHTML;
     }
 
+    stripHtml(html) {
+        if (!html) return '';
+        const div = document.createElement('div');
+        div.innerHTML = html;
+        return div.textContent || div.innerText || '';
+    }
+
     generateBlogHTML(blog) {
         return `
             <div class="single-post2 hover-zoomin mb-30 wow fadeInUp animated" data-animation="fadeInUp" data-delay=".4s">
@@ -117,7 +124,7 @@ class EcellDataManager {
                         </ul>
                     </div>
                     <h2><a href="blog-details.html?id=${encodeURIComponent(blog.id)}">${this.escapeHtml(blog.title)}</a></h2>
-                    <p>${this.escapeHtml(this.truncateText(blog.content, 200))}</p>
+                    <p>${this.truncateText(blog.excerpt || this.stripHtml(blog.content), 200)}</p>
                     <div class="blog__btn">
                         <a href="blog-details.html?id=${encodeURIComponent(blog.id)}" class="btn3">Read More <i class="fa-sharp fa-solid fa-arrow-up"></i></a>
                     </div>
